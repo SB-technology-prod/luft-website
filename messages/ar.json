@@ -1,0 +1,346 @@
+{
+  "common": {
+    "labels": {
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "newEmail": "البريد الإلكتروني الجديد",
+      "newPhone": "رقم الهاتف الجديد",
+      "password": "كلمة المرور",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "otp": "رمز التحقق",
+      "contact": "تواصل معنا",
+      "menu": "القائمة",
+      "message": "الرسالة"
+    },
+    "placeholders": {
+      "email": "أدخل عنوان بريدك الإلكتروني",
+      "newPassword": "أدخل كلمة المرور الجديدة",
+      "password": "أدخل كلمة المرور ",
+      "confirmPassword": "أكد كلمة المرور الجديدة",
+      "firstName": "أدخل اسمك الأول",
+      "lastName": "أدخل الاسم الأخير",
+      "phone": "أدخل رقم الهاتف",
+      "otp": "أدخل رمز التحقق"
+    },
+    "validations": {
+      "email": {
+        "required": "البريد الإلكتروني مطلوب",
+        "invalid": "البريد الإلكتروني غير صالح"
+      },
+      "password": {
+        "required": "كلمة المرور مطلوبة",
+        "length": "يجب أن تتكون كلمة المرور من 8 إلى 20 حرفًا",
+        "uppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+        "lowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
+        "number": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+        "specialCharacter": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل"
+      },
+      "confirmPassword": {
+        "required": "تأكيد كلمة المرور مطلوب",
+        "mismatch": "كلمتا المرور غير متطابقتين"
+      },
+      "firstName": {
+        "required": "الاسم الأول مطلوب",
+        "invalid": "يجب أن يحتوي الاسم الأول على حروف فقط",
+        "min": "يجب أن يكون الاسم الأول {min} أحرف على الأقل",
+        "max": "يجب أن يكون الاسم الأول {max} أحرف على الأكثر"
+      },
+      "lastName": {
+        "required": "الاسم الأخير مطلوب",
+        "invalid": "يجب أن يحتوي الاسم الأخير على حروف فقط",
+        "min": "يجب أن يكون الاسم الأخير {min} أحرف على الأقل",
+        "max": "يجب أن يكون الاسم الأخير {max} أحرف على الأكثر"
+      },
+      "otp": {
+        "required": "رمز التحقق مطلوب",
+        "invalidLength": "رمز التحقق غير مكتمل"
+      },
+      "phone": {
+        "invalid": "رقم هاتف غير صحيح"
+      },
+
+      "required": "الحقل مطلوب",
+      "lettersOnly": "يجب أن يحتوي الاسم على أحرف فقط",
+      "invalidInput": "القيمة المدخلة غير صحيحة",
+      "media": {
+        "notAllowedType": "نوع الملف غير مسموح",
+        "fileSizeMax": "يجب أن يكون حجم الملف أقل من أو يساوي {size} ميجابايت"
+      }
+    },
+    "buttons": {
+      "continue": "متابعة",
+      "backToLogin": "العودة إلى تسجيل الدخول",
+      "retrySignup": "التسجيل من جديد",
+      "login": "تسجيل الدخول",
+      "logout": "تسجيل الخروج",
+      "confirm": "تأكيد",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "refetch": "تحديث",
+      "change": "تغيير",
+      "exploreMore": "استكشف المزيد",
+      "next": "التالي",
+      "edit": "تعديل",
+      "add": "إضافة"
+    },
+    "toaster": {
+      "emailOtpSent": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+      "phoneOtpSent": "تم إرسال رمز التحقق إلى رقم هاتفك",
+      "failedToSendOtp": "فشل إرسال رمز التحقق، الرجاء المحاولة مرة أخرى",
+      "dataUpdatedSuccess": "تم تحديث البيانات بنجاح"
+    },
+    "loading": "جاري التحميل ...",
+    "failedToLoadData": "فشل تحميل البيانات",
+    "navLinks": {
+      "home": "الرئيسية",
+      "owners": "للملاك",
+      "about": "من نحن",
+      "contact": "تواصل معنا",
+      "settings": "إعدادات الحساب",
+      "reservations": "حجوزاتي",
+      "wishlist": "قائمة المفضلة"
+    },
+    "logout": "تسجيل الخروج",
+    "currency": "العملة",
+    "night": "/الليلة",
+    "mediaNotSupported": "الوسائط غير مدعومة",
+    "cantLoadMedia": "تعذّر تحميل الوسائط",
+    "noMediaUploaded": "لم يتم رفع أي وسائط",
+    "corruptedFile": "الملف تالف"
+  },
+  "auth": {
+    "banner": {
+      "description": "إقامات مميزة، عناية فائقة",
+      "ratedBy": "تم تقييمه بواسطة أكثر من {numOfGuests} ضيف على"
+    },
+    "login": {
+      "title": "تسجيل الدخول إلى حسابك",
+      "description": "مرحبًا، أدخل بياناتك لتسجيل الدخول إلى حسابك",
+      "buttonLabel": "تسجيل الدخول",
+      "forgetPasswordLink": "نسيت كلمة المرور؟",
+      "orLoginWith": "أو سجل الدخول عن طريق",
+      "dontHaveAccount": "ليس لديك حساب؟",
+      "signupLink": "أنشئ حساب"
+    },
+    "signup": {
+      "title": "إنشاء حساب",
+      "description": "بضع خطوات بسيطة لإنشاء حسابك.",
+      "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+      "loginLink": "تسجيل الدخول",
+      "setPassword": {
+        "title": "تعيين كلمة المرور",
+        "description": "تساعدك كلمة المرور على الحفاظ على أمان حسابك.",
+        "buttonLabel": "إنشاء حساب"
+      },
+      "havingTrouble": "هل واجهتك مشكلة في التسجيل ؟"
+    },
+    "forgetPassword": {
+      "title": "نسيت كلمة المرور",
+      "description": "أدخل عنوان البريد الإلكتروني المرتبط بحسابك لاستلام رابط إعادة تعيين كلمة المرور.",
+      "buttonLabel": "إرسال رابط إعادة التعيين",
+      "verifyOTP": "التحقق من رمز التحقق",
+      "setPassword": {
+        "title": "إنشاء كلمة مرور جديدة",
+        "description": "أدخل كلمة المرور الجديدة أدناه.",
+        "buttonLabel": "إعادة تعيين كلمة المرور"
+      }
+    },
+    "verifyOTP": {
+      "title": "تم إرسال رمز التحقق",
+      "description": "تم إرسال رمز تحقق مكوّن من {numOfDigits} أرقام إلى {userEmail}",
+      "buttonLabel": "إرسال رابط إعادة التعيين",
+      "resendBtn": "إعادة الإرسال",
+      "resendIn": "إعادة الإرسال خلال",
+      "didntGetCode": "لم يصلك الرمز؟"
+    },
+    "logout": {
+      "title": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+      "logBack": "يمكنك دائمًا تسجيل الدخول مرة أخرى في أي وقت"
+    }
+  },
+  "footer": {
+    "termsOfService": "شروط الاستخدام",
+    "allRightsReserved": "جميع الحقوق محفوظة © 2025 Luft Stay.",
+    "tagline": "إقامات مميزة — منازل مختارة بعناية، وخدمة مدروسة، ورعاية كونسيرج عند الحاجة."
+  },
+  "connection": {
+    "lost": "لا يوجد اتصال بالإنترنت",
+    "restored": "تم استعادة الاتصال بالإنترنت"
+  },
+  "settings": {
+    "title": "إعدادات الحساب",
+    "description": "قم بإعداد وتعديل ملفك الشخصي",
+    "titles": {
+      "changeEmail": "تغيير البريد الإلكتروني",
+      "changePhone": "تغيير رقم الهاتف",
+      "changePassword": "تغيير كلمة المرور",
+      "newEmailOtpSent": "تم إرسال رمز تحقق إلى بريدك الإلكتروني الجديد",
+      "newPhoneOtpSent": "تم إرسال رمز تحقق إلى رقم هاتفك الجديد",
+      "verifyPassword": "التحقق من كلمة المرور"
+    },
+    "descriptions": {
+      "otpSent": "تم إرسال رمز تحقق مكوّن من {numOfDigits} أرقام إلى {identifier}"
+    }
+  },
+  "toaster": {
+    "otpAlreadySent": "تم إرسال رمزالتحقق بالفعل، الرجاء ادخال الرمز المرسل إليك"
+  },
+  "bookFreeConsultation": "احجز استشارة مجانية",
+  "messageUs": "راسلنا",
+  "pages": {
+    "forOwners": {
+      "buttons": {
+        "startPartnership": "ابدأ شراكتك"
+      }
+    },
+    "propertyDetails": {
+      "about": {
+        "title": "عن هذا المكان",
+        "showMore": "عرض المزيد",
+        "showLess": "عرض أقل"
+      },
+      "amenities": {
+        "title": "ما يوفره هذا المكان",
+        "showAll": "عرض جميع المرافق",
+        "showLess": "عرض أقل"
+      },
+      "propertyInfo": {
+        "guests": "{count} ضيوف",
+        "bedrooms": "{count} غرف",
+        "bathrooms": "{count} حمامات"
+      },
+      "location": {
+        "title": "أين ستكون"
+      },
+      "reservation": {
+        "addDatesTitle": "أضف التواريخ للأسعار",
+        "addDatesSubtitle": "اختر تواريخك وعدد ضيوفك لتأمين هذه الإقامة.",
+        "forNights": "لمدة {count} ليالٍ",
+        "checkIn": "الوصول",
+        "checkOut": "المغادرة",
+        "addDate": "أضف تاريخاً",
+        "guests": "الضيوف",
+        "guestsCount": "{count} ضيوف",
+        "reserve": "احجز الآن"
+      },
+      "reviews": {
+        "showAll": "عرض جميع التقييمات",
+        "showLess": "عرض أقل"
+      },
+      "actions": {
+        "share": "مشاركة",
+        "wishlist": "المفضلة",
+        "linkCopied": "تم نسخ الرابط",
+        "shareProperty": "مشاركة هذا العقار"
+      },
+      "images": {
+        "title": "صور العقار",
+        "showAll": "عرض جميع الصور"
+      }
+    }
+  },
+  "sections": {
+    "testimonials": {
+      "title": "ماذا يقول ضيوفنا",
+      "subtitle": "محبوبون لراحتنا، نظافتنا، واهتمامنا الشخصي بخدمات الكونسيرج",
+      "ratedBy": "تم التقييم من قبل أكثر من {count} ضيف على airbnb",
+      "daysAgo": "منذ {days} أيام",
+      "stayedDays": "أقام لمدة {days} أيام",
+      "seeMore": "عرض المزيد",
+      "ratedOn": "تم التقييم على",
+      "dummyReviewLocation": "الزمالك - قمة العالم",
+      "dummyReviewText": "استمتعنا بإقامتنا. كانت الشقة مريحة ومجهزة تجهيزًا جيدًا وهادئة. حي رائع وموقع مركزي..."
+    },
+    "perfectStay": {
+      "buttons": {
+        "searchProperties": "بحث عن عقارات"
+      }
+    },
+    "sendMessage": {
+      "title": "راسلنا",
+      "buttons": {
+        "send": "إرسال"
+      },
+      "validations": {
+        "min": "يجب أن تكون الرسالة 10 أحرف على الأقل",
+        "max": "يجب أن تكون الرسالة {max} أحرف على الأكثر"
+      },
+      "toast": {
+        "success": "تم إرسال الرسالة بنجاح",
+        "error": "فشل إرسال الرسالة"
+      }
+    },
+    "homeSearch": {
+      "tabs": {
+        "stays": "إقامات",
+        "services": "خدمات"
+      },
+      "fields": {
+        "city": {
+          "label": "المدينة",
+          "placeholder": "اختر الوجهة"
+        },
+        "date": {
+          "label": "التاريخ",
+          "placeholder": "اختر التاريخ"
+        },
+        "guests": {
+          "label": "الضيوف",
+          "placeholder": "اختر عدد الضيوف"
+        }
+      },
+      "buttons": {
+        "search": "بحث"
+      },
+      "cities": {
+        "placeholder": "اختر الوجهة",
+        "newYork": "نيويورك",
+        "losAngeles": "لوس أنجلوس",
+        "chicago": "شيكاغو",
+        "miami": "ميامي",
+        "sanFrancisco": "سان فرانسيسكو"
+      },
+      "dates": {
+        "placeholder": "اختر التاريخ",
+        "today": "اليوم",
+        "tomorrow": "غداً",
+        "thisWeek": "هذا الأسبوع",
+        "nextWeek": "الأسبوع القادم",
+        "thisMonth": "هذا الشهر"
+      },
+      "guestCounts": {
+        "placeholder": "اختر عدد الضيوف",
+        "one": "ضيف واحد",
+        "two": "ضيفان",
+        "three": "3 ضيوف",
+        "four": "4 ضيوف",
+        "fivePlus": "+5 ضيوف"
+      }
+    },
+    "partners": {
+      "luftPartner": "شريك لوفت"
+    },
+    "recommendedProperties": {
+      "title": "إقامات موصى بها لك",
+      "subtitle": "مجموعة مختارة من شققنا الأكثر راحة والأعلى تقييماً.",
+      "card": {
+        "title": "ذا سيرين إسكيب",
+        "description": "ملاذ هادئ مع إطلالات خلابة."
+      }
+    }
+  },
+  "emptyStates": {
+    "notFound": {
+      "title": "عذراً، هذه الصفحة غير موجودة",
+      "description": "الصفحة التي تبحث عنها غير موجودة الآن."
+    },
+    "error": {
+      "title": "نواجه مشكلة حالياً",
+      "description": "خوادمنا غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى بعد قليل."
+    }
+  }
+}

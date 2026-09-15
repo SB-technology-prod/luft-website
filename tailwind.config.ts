@@ -1,0 +1,197 @@
+import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
+
+export default {
+  darkMode: ['class'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        switzer: ['var(--font-switzer)'],
+        tajwal: ['var(--font-tajwal)'],
+      },
+      screens: {
+        '2xs': '320px',
+        xs: '480px',
+        sm: '600px',
+        md: '768px',
+        lg: '1024px',
+        'xl-1200': '1200px',
+        xl: '1296px',
+        '2xl': '1350px',
+      },
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          '30': 'var(--primary-30)',
+          '50': 'var(--primary-50)',
+          '100': 'var(--primary-100)',
+          '200': 'var(--primary-200)',
+          '300': 'var(--primary-300)',
+          '400': 'var(--primary-400)',
+          '500': 'var(--primary-500)',
+          '600': 'var(--primary-600)',
+          '700': 'var(--primary-700)',
+          '800': 'var(--primary-800)',
+          '900': 'var(--primary-900)',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          '50': 'var(--secondary-50)',
+          '100': 'var(--secondary-100)',
+          '200': 'var(--secondary-200)',
+          '300': 'var(--secondary-300)',
+          '400': 'var(--secondary-400)',
+          '500': 'var(--secondary-500)',
+          '600': 'var(--secondary-600)',
+          '700': 'var(--secondary-700)',
+          '800': 'var(--secondary-800)',
+          '900': 'var(--secondary-900)',
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        grayish: {
+          '30': 'var(--ps-neutral-30)',
+          '50': 'var(--ps-neutral-50)',
+          '100': 'var(--ps-neutral-100)',
+          '200': 'var(--ps-neutral-200)',
+          '300': 'var(--ps-neutral-300)',
+          '400': 'var(--ps-neutral-400)',
+          '500': 'var(--ps-neutral-500)',
+          '600': 'var(--ps-neutral-600)',
+          '700': 'var(--ps-neutral-700)',
+          '800': 'var(--ps-neutral-800)',
+          '900': 'var(--ps-neutral-900)',
+        },
+        error: {
+          '50': 'var(--error-50)',
+          '100': 'var(--error-100)',
+          '200': 'var(--error-200)',
+          '300': 'var(--error-300)',
+          '400': 'var(--error-400)',
+          '500': 'var(--error-500)',
+          '600': 'var(--error-600)',
+          '700': 'var(--error-700)',
+          '800': 'var(--error-800)',
+          '900': 'var(--error-900)',
+        },
+        success: {
+          '50': 'var(--success-50)',
+          '100': 'var(--success-100)',
+          '200': 'var(--success-200)',
+          '300': 'var(--success-300)',
+          '400': 'var(--success-400)',
+          '500': 'var(--success-500)',
+          '600': 'var(--success-600)',
+          '700': 'var(--success-700)',
+          '800': 'var(--success-800)',
+          '900': 'var(--success-900)',
+        },
+        warning: {
+          '50': 'var(--warning-50)',
+          '100': 'var(--warning-100)',
+          '200': 'var(--warning-200)',
+          '300': 'var(--warning-300)',
+          '400': 'var(--warning-400)',
+          '500': 'var(--warning-500)',
+          '600': 'var(--warning-600)',
+          '700': 'var(--warning-700)',
+          '800': 'var(--warning-800)',
+          '900': 'var(--warning-900)',
+        },
+        info: {
+          '50': 'var(--info-50)',
+          '100': 'var(--info-100)',
+          '200': 'var(--info-200)',
+          '300': 'var(--info-300)',
+          '400': 'var(--info-400)',
+          '500': 'var(--info-500)',
+          '600': 'var(--info-600)',
+          '700': 'var(--info-700)',
+          '800': 'var(--info-800)',
+          '900': 'var(--info-900)',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          '1': 'hsl(var(--chart-1))',
+          '2': 'hsl(var(--chart-2))',
+          '3': 'hsl(var(--chart-3))',
+          '4': 'hsl(var(--chart-4))',
+          '5': 'hsl(var(--chart-5))',
+        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      boxShadow: {
+        sm: '0px 4px 20px 0px #1B1B1B12',
+        md: '0px 4px 20px 0px #1B1B1B1A',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+        'fade-in': {
+          from: {
+            opacity: '0',
+          },
+          to: {
+            opacity: '1',
+          },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        fade: 'fade-in 0.3s ease-in-out',
+      },
+    },
+  },
+  corePlugins: {
+    container: false,
+  },
+  plugins: [tailwindcssAnimate],
+} satisfies Config;

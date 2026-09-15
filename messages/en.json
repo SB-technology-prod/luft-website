@@ -1,0 +1,343 @@
+{
+  "common": {
+    "labels": {
+      "email": "Email",
+      "newEmail": "New Email",
+      "phone": "Phone Number",
+      "newPhone": "New Phone",
+      "password": "Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "contact": "Contact Us",
+      "menu": "Menu",
+      "message": "Message"
+    },
+    "placeholders": {
+      "email": "Enter your email Address",
+      "newPassword": "Enter your new password",
+      "password": "Enter your password",
+      "confirmPassword": "confirm your new password",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "phone": "Enter your Phone Number"
+    },
+    "validations": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Email is not valid"
+      },
+      "password": {
+        "required": "Password is required",
+        "length": "Password must be 8 to 20 characters",
+        "uppercase": "Password must include one uppercase letter",
+        "lowercase": "Password must include one lowercase letter",
+        "number": "Password must include one number",
+        "specialCharacter": "Password must include one special character"
+      },
+      "confirmPassword": {
+        "required": "Confirm password is required",
+        "mismatch": "Passwords do not match"
+      },
+      "firstName": {
+        "required": "First name is required",
+        "invalid": "First name must contain letters only",
+        "min": "First name must be at least {min} characters",
+        "max": "First name must be at most {max} characters"
+      },
+      "lastName": {
+        "required": "Last name is required",
+        "invalid": "Last name must contain letters only",
+        "min": "Last name must be at least {min} characters",
+        "max": "Last name must be at most {max} characters"
+      },
+      "otp": {
+        "required": "OTP is required",
+        "invalidLength": "OTP must be complete"
+      },
+      "phone": {
+        "invalid": "Invalid phone number"
+      },
+      "required": "Required Field",
+      "lettersOnly": "Name must contain letters only",
+      "invalidInput": "Invalid Input",
+      "media": {
+        "notAllowedType": "Not allowed type",
+        "fileSizeMax": "File size must be less than or equal {size}MB"
+      }
+    },
+    "buttons": {
+      "continue": "Continue",
+      "backToLogin": "Back to Log in",
+      "retrySignup": "Retry Signup",
+      "login": "Login",
+      "logout": "Logout",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "save": "Save",
+      "refetch": "Refetch",
+      "change": "Change",
+      "exploreMore": "Explore More",
+      "next": "Next",
+      "edit": "Edit",
+      "add": "Add"
+    },
+    "toaster": {
+      "emailOtpSent": "OTP is sent to your email",
+      "phoneOtpSent": "OTP is sent to your phone number",
+      "failedToSendOtp": "Failed to send OTP please try again",
+      "dataUpdatedSuccess": "Data updated successfully"
+    },
+    "loading": "Loading...",
+    "failedToLoadData": "Failed to load data",
+    "navLinks": {
+      "home": "Home",
+      "owners": "For Owners",
+      "about": "About Us",
+      "contact": "Contact Us",
+      "settings": "Account Settings",
+      "reservations": "My Reservations",
+      "wishlist": "Wishlist"
+    },
+    "logout": "Logout",
+    "currency": "Currency",
+    "night": "/night",
+    "mediaNotSupported": "Media not supported",
+    "cantLoadMedia": "Can't load media",
+    "noMediaUploaded": "No media uploaded",
+    "corruptedFile": "Corrupted File"
+  },
+  "auth": {
+    "banner": {
+      "description": "Special stays, thoughtful care",
+      "ratedBy": "rated by {numOfGuests}+ Guests on"
+    },
+    "login": {
+      "title": "Log in to your account",
+      "description": "Hey, Enter your details to get sign into your account",
+      "buttonLabel": "Log in",
+      "forgetPasswordLink": "Forget Password",
+      "orLoginWith": "Or Log in with",
+      "dontHaveAccount": "Don't have an account?",
+      "signupLink": "Sign up"
+    },
+    "signup": {
+      "title": "Create account",
+      "description": "Just a few details to create your account.",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "setPassword": {
+        "title": "Set your password",
+        "description": "Your password helps keep your account secure.",
+        "buttonLabel": "Create account"
+      },
+      "havingTrouble": "having trouble signing up?"
+    },
+    "forgetPassword": {
+      "title": "Forgot Password",
+      "description": "Enter the email address associated with your account to receive a password reset link.",
+      "buttonLabel": "Send Reset Link",
+      "verifyOTP": "Verify OTP",
+      "setPassword": {
+        "title": "Create a New Password",
+        "description": "Enter a new password below. ",
+        "buttonLabel": "Reset Password"
+      }
+    },
+    "verifyOTP": {
+      "title": "OTP Sent",
+      "description": "A {numOfDigits}-digit verification code was sent to {userEmail}",
+      "buttonLabel": "Send Reset Link",
+      "resendBtn": "Resend",
+      "resendIn": "Resend in",
+      "didntGetCode": "Didn’t get the code?"
+    },
+    "logout": {
+      "title": "Are you sure you want to log out?",
+      "logBack": "You can always log back in at any time"
+    }
+  },
+  "footer": {
+    "termsOfService": "Terms of service",
+    "allRightsReserved": "All Rights Reserved © 2025 Luft Stay .",
+    "tagline": "Stays made special — curated homes, thoughtful service, and concierge care when you need it."
+  },
+  "connection": {
+    "lost": "No internet connection",
+    "restored": "Connection restored"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "description": "Setup and edit your account profile",
+    "titles": {
+      "changeEmail": "Change Email",
+      "changePhone": "Change phone number",
+      "changePassword": "Change Password",
+      "newEmailOtpSent": "Verify your new email address",
+      "newPhoneOtpSent": "Verify your new phone number",
+      "verifyPassword": "Verify Your Password"
+    },
+    "descriptions": {
+      "otpSent": "A {numOfDigits}-digit verification code was sent to {identifier}"
+    }
+  },
+  "toaster": {
+    "otpAlreadySent": "Otp already sent, please enter the code sent to you below"
+  },
+  "bookFreeConsultation": "Book Free Consultation",
+  "messageUs": "Message Us",
+  "pages": {
+    "forOwners": {
+      "buttons": {
+        "startPartnership": "Start your partnership"
+      }
+    },
+    "propertyDetails": {
+      "about": {
+        "title": "About this Place",
+        "showMore": "Show more",
+        "showLess": "Show less"
+      },
+      "amenities": {
+        "title": "What this place offers",
+        "showAll": "Show all amenities",
+        "showLess": "Show less"
+      },
+      "propertyInfo": {
+        "guests": "{count} Guests",
+        "bedrooms": "{count} Rooms",
+        "bathrooms": "{count} Bathrooms"
+      },
+      "location": {
+        "title": "Where you'll be"
+      },
+      "reservation": {
+        "addDatesTitle": "Add dates for prices",
+        "addDatesSubtitle": "Choose your dates and guests to secure this stay.",
+        "forNights": "for {count} nights",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
+        "addDate": "Add Date",
+        "guests": "Guests",
+        "guestsCount": "{count} Guests",
+        "reserve": "Reserve"
+      },
+      "reviews": {
+        "showAll": "Show all reviews",
+        "showLess": "Show less"
+      },
+      "actions": {
+        "share": "Share",
+        "wishlist": "Wishlist",
+        "linkCopied": "Link copied to clipboard",
+        "shareProperty": "Share this property"
+      },
+      "images": {
+        "title": "Property Images",
+        "showAll": "Show All photos"
+      }
+    }
+  },
+  "sections": {
+    "testimonials": {
+      "title": "What Our Guests Say",
+      "subtitle": "Loved for comfort, cleanliness, and our personalized concierge care",
+      "ratedBy": "rated by {count}+ Guests on airbnb",
+      "daysAgo": "{days} days ago",
+      "stayedDays": "Stayed {days} days",
+      "seeMore": "See more",
+      "ratedOn": "Rated on",
+      "dummyReviewLocation": "El Zamalek - Top of the world",
+      "dummyReviewText": "We enjoyed our stay. The apartment was comfortable, well appointed, and peaceful. Great neighborhood and centrally located. T..."
+    },
+    "perfectStay": {
+      "buttons": {
+        "searchProperties": "Search Properties"
+      }
+    },
+    "sendMessage": {
+      "title": "Send us a message",
+      "buttons": {
+        "send": "Send"
+      },
+      "validations": {
+        "min": "Message must be at least 10 characters",
+        "max": "Message must be at most {max} characters"
+      },
+      "toast": {
+        "success": "Message sent successfully",
+        "error": "Failed to send message"
+      }
+    },
+    "homeSearch": {
+      "tabs": {
+        "stays": "Stays",
+        "services": "Services"
+      },
+      "fields": {
+        "city": {
+          "label": "City",
+          "placeholder": "Select destination"
+        },
+        "date": {
+          "label": "Date",
+          "placeholder": "Select date"
+        },
+        "guests": {
+          "label": "Guests",
+          "placeholder": "Select guests number"
+        }
+      },
+      "buttons": {
+        "search": "Search"
+      },
+      "cities": {
+        "placeholder": "Select destination",
+        "newYork": "New York",
+        "losAngeles": "Los Angeles",
+        "chicago": "Chicago",
+        "miami": "Miami",
+        "sanFrancisco": "San Francisco"
+      },
+      "dates": {
+        "placeholder": "Select date",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "thisWeek": "This Week",
+        "nextWeek": "Next Week",
+        "thisMonth": "This Month"
+      },
+      "guestCounts": {
+        "placeholder": "Select guests number",
+        "one": "1 Guest",
+        "two": "2 Guests",
+        "three": "3 Guests",
+        "four": "4 Guests",
+        "fivePlus": "5+ Guests"
+      }
+    },
+    "partners": {
+      "luftPartner": "Luftstay Partner"
+    },
+    "recommendedProperties": {
+      "title": "Stays Recommended For You",
+      "subtitle": "A curated pick of our most comfortable, best-rated apartments.",
+      "card": {
+        "title": "The Serene Escape",
+        "description": "A peaceful retreat with stunning views."
+      }
+    }
+  },
+  "emptyStates": {
+    "notFound": {
+      "title": "Well… this is awkward",
+      "description": "The page you’re looking for isn’t here anymore."
+    },
+    "error": {
+      "title": "We’re having trouble right now",
+      "description": "Our servers are temporarily unavailable. Please try again in a moment."
+    }
+  }
+}
