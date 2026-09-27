@@ -238,6 +238,11 @@
         "title": "Property Images",
         "showAll": "Show All photos"
       }
+    },
+    "wishlist": {
+      "title": "Your Wishlist",
+      "emptyTitle": "Your wishlist is empty",
+      "emptyDescription": "Browse our homes and save your favorites for later."
     }
   },
   "sections": {
