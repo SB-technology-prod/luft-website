@@ -171,6 +171,11 @@
   "settings": {
     "title": "Account Settings",
     "description": "Setup and edit your account profile",
+    "deleteAccount": "Delete Account",
+    "deleteAccountConfirm": {
+      "title": "Are you sure you want to delete your account?",
+      "description": "Deleting your account will remove all your data and access. Ensure there are no active reservations or pending payments before continuing."
+    },
     "titles": {
       "changeEmail": "Change Email",
       "changePhone": "Change phone number",

@@ -13,6 +13,7 @@ type ConfirmModalProps = {
   onConfirm: () => void;
   onCancel: () => void;
   isActionsDisabled?: boolean;
+  variant?: 'default' | 'destructive';
 };
 
 export default function ConfirmModal({
@@ -20,6 +21,7 @@ export default function ConfirmModal({
   onConfirm,
   onCancel,
   isActionsDisabled,
+  variant = 'default',
   ...modalProps
 }: ConfirmModalProps & ModalProps) {
   const t = useTranslations('common.buttons');
@@ -42,6 +44,7 @@ export default function ConfirmModal({
             onClick={onConfirm}
             type='button'
             isSubmitting={isActionsDisabled}
+            variant={variant}
           >
             {t('confirm')}
           </SubmitButton>

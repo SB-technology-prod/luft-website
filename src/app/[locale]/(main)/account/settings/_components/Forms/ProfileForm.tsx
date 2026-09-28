@@ -34,6 +34,7 @@ import { updateSession } from '@/utils/events';
 
 import { getProfileData, updateUserProfile } from '@/api/settings';
 import { zodResolver } from '@hookform/resolvers/zod';
+import DeleteAccountBtn from '../DeleteAccountBtn';
 
 export default function ProfileForm() {
   const tCommon = useTranslations('common');
@@ -126,11 +127,14 @@ export default function ProfileForm() {
         className='flex flex-col gap-4'
       >
         <div className='flex flex-col gap-6 sm:gap-8 md:gap-12'>
-          <ProfileImgInput
-            isLoading={isFetching || isPending}
-            image={userData?.profilePicture}
-            className='w-fit max-sm:mx-auto'
-          />
+          <div className='flex items-center justify-between'>
+            <ProfileImgInput
+              isLoading={isFetching || isPending}
+              image={userData?.profilePicture}
+              className='w-fit max-sm:mx-auto'
+            />
+            <DeleteAccountBtn />
+          </div>
 
           <div className='flex w-full flex-wrap gap-6'>
             <CustomInput
