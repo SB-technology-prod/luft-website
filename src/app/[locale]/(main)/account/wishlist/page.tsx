@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserWishlist, wishlistQueryKey } from '@/api/wishlist';
 import StatusLayout from '@/components/shared/StatusLayout';
 import PropertyWishlistCard from './_components/PropertyWishlistCard';
-import Loader from '@/components/shared/Loader';
+import PropertyWishlistCardSkeleton from './_components/PropertyWishlistCardSkeleton';
 
 import { useTranslations } from 'next-intl';
 
 export default function WishlistPage() {
   const t = useTranslations('pages.wishlist');
 
-  const { data, isFetching, isError } = useQuery({
+  const { data, isFetching, isError, isLoading } = useQuery({
     queryKey: [wishlistQueryKey],
     queryFn: getUserWishlist,
   });
@@ -33,7 +33,11 @@ export default function WishlistPage() {
         {t('title')}
       </h3>
       {isFetching ? (
-        <Loader />
+        <div className='grid grid-cols-3 gap-2 md:gap-6'>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <PropertyWishlistCardSkeleton key={index} />
+          ))}
+        </div>
       ) : (
         <div className='grid grid-cols-3 gap-2 md:gap-6'>
           {items.map((item) => (

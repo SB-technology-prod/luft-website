@@ -13,6 +13,7 @@ import { Star } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
+import { PropertyWishlistCardSkeleton } from './PropertyWishlistCardSkeleton';
 
 interface PropertyWishlistCardProps {
   item: wishlistItemApi;
@@ -142,3 +143,8 @@ export default function PropertyWishlistCard({
     </div>
   );
 }
+
+export { PropertyWishlistCardSkeleton };
+PropertyWishlistCard.Skeleton = PropertyWishlistCardSkeleton;
+
+
