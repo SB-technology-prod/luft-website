@@ -1,5 +1,6 @@
-import { apiFetch } from '@/utils/api';
 import { wishlistApiResponse } from '@/types/wishlist';
+
+import { apiFetch } from '@/utils/api';
 
 export const wishlistQueryKey = 'wishlist';
 

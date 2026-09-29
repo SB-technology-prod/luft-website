@@ -2,9 +2,10 @@ import { getTranslations } from 'next-intl/server';
 
 import { MapPin } from 'lucide-react';
 
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
+
 import SectionTitle from './SectionTitle';
 import ShareBtn from './ShareBtn';
-import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 
 type PropertyInfoProps = {
   title: string;

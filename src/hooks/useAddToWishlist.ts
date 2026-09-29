@@ -1,7 +1,9 @@
+import { toast } from 'sonner';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { addToWishlist } from '@/api/wishlist';
 import { wishlistQueryKey } from '@/api/wishlist';
-import { toast } from 'sonner';
 
 export function useAddToWishlist() {
   const queryClient = useQueryClient();

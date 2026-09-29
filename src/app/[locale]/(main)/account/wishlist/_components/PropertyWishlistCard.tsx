@@ -1,19 +1,24 @@
 'use client';
+import { useCallback, useEffect, useState } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import { Star } from 'lucide-react';
+
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
+import MediaPreview from '@/components/shared/MediaPreview/MediaPreview';
 import {
   Carousel,
+  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
 } from '@/components/ui/carousel';
-import MediaPreview from '@/components/shared/MediaPreview/MediaPreview';
-import { wishlistItemApi } from '@/types/wishlist';
-import { Star } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useState } from 'react';
-import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
+
 import { PropertyWishlistCardSkeleton } from './PropertyWishlistCardSkeleton';
+
+import { wishlistItemApi } from '@/types/wishlist';
 
 interface PropertyWishlistCardProps {
   item: wishlistItemApi;

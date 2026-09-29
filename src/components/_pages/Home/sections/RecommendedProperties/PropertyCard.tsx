@@ -2,10 +2,11 @@ import { useTranslations } from 'next-intl';
 
 import { Star } from 'lucide-react';
 
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
+
 import MediaPreview from '../../../../shared/MediaPreview/MediaPreview';
 
 import { Link } from '@/i18n/routing';
-import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 
 type PropertyCardProps = {
   image: string;

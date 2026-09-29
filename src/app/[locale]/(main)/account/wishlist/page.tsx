@@ -1,12 +1,15 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useQuery } from '@tanstack/react-query';
-import { getUserWishlist, wishlistQueryKey } from '@/api/wishlist';
+
 import StatusLayout from '@/components/shared/StatusLayout';
+
 import PropertyWishlistCard from './_components/PropertyWishlistCard';
 import PropertyWishlistCardSkeleton from './_components/PropertyWishlistCardSkeleton';
 
-import { useTranslations } from 'next-intl';
+import { getUserWishlist, wishlistQueryKey } from '@/api/wishlist';
 
 export default function WishlistPage() {
   const t = useTranslations('pages.wishlist');

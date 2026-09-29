@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { ChevronLeft, Grip } from 'lucide-react';
 
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 import { Modal } from '@/components/shared/Modal';
 import {
   Carousel,
@@ -19,7 +20,6 @@ import {
 import ShareBtn from './ShareBtn';
 
 import type { PropertyImage } from '@/types/properties';
-import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 
 type PropertyImagesProps = {
   images: PropertyImage[];

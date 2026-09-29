@@ -1,8 +1,10 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
+
 import { useTranslations } from 'next-intl';
+
 import ConfirmModal from '@/components/shared/ConfirmModal';
+import { Button } from '@/components/ui/button';
 export default function DeleteAccountBtn() {
   const t = useTranslations('settings');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
