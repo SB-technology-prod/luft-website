@@ -17,6 +17,7 @@ import SubmitButton from '@/components/shared/SubmitButton';
 import { Form } from '@/components/ui/form';
 
 import { updateUserCookieAction } from '../../actions';
+import DeleteAccountBtn from '../DeleteAccountBtn';
 import EditableField from '../EditableField';
 import ProfileImgInput from '../ProfileImgInput';
 
@@ -34,7 +35,6 @@ import { updateSession } from '@/utils/events';
 
 import { getProfileData, updateUserProfile } from '@/api/settings';
 import { zodResolver } from '@hookform/resolvers/zod';
-import DeleteAccountBtn from '../DeleteAccountBtn';
 
 export default function ProfileForm() {
   const tCommon = useTranslations('common');

@@ -4,9 +4,10 @@ import { useTranslations } from 'next-intl';
 
 import { Heart } from 'lucide-react';
 
-import useSession from '@/hooks/useSession';
 import { useAddToWishlist } from '@/hooks/useAddToWishlist';
 import { useRemoveFromWishlist } from '@/hooks/useRemoveFromWishlist';
+import useSession from '@/hooks/useSession';
+
 import { cn } from '@/lib/utils';
 
 type AddToWishlistBtnProps = {
