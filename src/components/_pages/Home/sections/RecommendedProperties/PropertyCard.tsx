@@ -5,6 +5,7 @@ import { Star } from 'lucide-react';
 import MediaPreview from '../../../../shared/MediaPreview/MediaPreview';
 
 import { Link } from '@/i18n/routing';
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 
 type PropertyCardProps = {
   image: string;
@@ -15,6 +16,7 @@ type PropertyCardProps = {
   newPrice: number;
   numOfReviews: number;
   id: string;
+  isWishlisted?: boolean;
 };
 
 export default function PropertyCard({
@@ -26,14 +28,22 @@ export default function PropertyCard({
   newPrice,
   numOfReviews,
   id,
+  isWishlisted = false,
 }: PropertyCardProps) {
   const t = useTranslations('common');
 
   return (
     <Link
       href={`/properties/${id}`}
-      className='flex w-[13rem] select-none flex-col gap-4 overflow-hidden md:w-[22.375rem] lg:w-[26rem]'
+      className='relative flex w-[13rem] select-none flex-col gap-4 overflow-hidden md:w-[22.375rem] lg:w-[26rem]'
     >
+      <AddToWishlistBtn
+        variant='icon'
+        className='absolute end-6 top-6 z-50'
+        isWishlisted={isWishlisted}
+        propertyId={id}
+      />
+
       <MediaPreview
         url={image}
         className='h-[12.875rem] w-full rounded-3xl object-cover md:h-[25rem]'

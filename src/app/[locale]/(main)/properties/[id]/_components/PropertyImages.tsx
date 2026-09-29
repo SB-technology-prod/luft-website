@@ -16,10 +16,10 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
-import AddToWishlistBtn from './AddToWishlistBtn';
 import ShareBtn from './ShareBtn';
 
 import type { PropertyImage } from '@/types/properties';
+import AddToWishlistBtn from '@/components/shared/AddToWishlistBtn';
 
 type PropertyImagesProps = {
   images: PropertyImage[];
