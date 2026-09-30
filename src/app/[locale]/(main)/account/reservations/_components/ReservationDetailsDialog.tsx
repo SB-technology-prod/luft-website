@@ -14,39 +14,13 @@ import {
 } from '@/components/ui/dialog';
 import { useReservationDetails } from '@/hooks/useReservationDetails';
 import { cn } from '@/lib/utils';
-
-export type ReservationStatus =
-  'upcoming' | 'ongoing' | 'completed' | 'canceled';
-
-export interface ReservationItem {
-  id: string;
-  title: string;
-  location: string;
-  description: string;
-  rating: number;
-  reviewsCount: number;
-  imageUrl: string;
-  checkIn: string;
-  checkOut: string;
-  checkInDisplay: string;
-  checkOutDisplay: string;
-  submittedOn: string;
-  status: ReservationStatus;
-  guests: number;
-  nightlyRate: number;
-  nights: number;
-  breakfastCount: number;
-  earlyCheckIn: boolean;
-  taxes: number;
-  paymentMethod: {
-    brand: string;
-    last4: string;
-    expDate: string;
-  };
-}
+import {
+  type ReservationListItem,
+  type ReservationDetails,
+} from '@/types/reservations';
 
 const statusConfig: Record<
-  ReservationStatus,
+  string,
   { label: string; className: string }
 > = {
   upcoming: {
@@ -67,8 +41,8 @@ const statusConfig: Record<
   },
 };
 
-function StatusBadge({ status }: { status: ReservationStatus }) {
-  const config = statusConfig[status];
+function StatusBadge({ status }: { status: string }) {
+  const config = statusConfig[status.toLowerCase()] || statusConfig['upcoming'];
   return (
     <span
       className={cn(
@@ -81,43 +55,34 @@ function StatusBadge({ status }: { status: ReservationStatus }) {
   );
 }
 
-function MastercardIcon() {
-  return (
-    <svg
-      width='38'
-      height='24'
-      viewBox='0 0 38 24'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-    >
-      <rect
-        width='38'
-        height='24'
-        rx='4'
-        fill='#F9FAFB'
-      />
-      <circle
-        cx='15'
-        cy='12'
-        r='7'
-        fill='#EB001B'
-      />
-      <circle
-        cx='23'
-        cy='12'
-        r='7'
-        fill='#F79E1B'
-      />
-      <path
-        d='M19 6.8C20.5 7.9 21.5 9.35 21.5 12C21.5 14.65 20.5 16.1 19 17.2C17.5 16.1 16.5 14.65 16.5 12C16.5 9.35 17.5 7.9 19 6.8Z'
-        fill='#FF5F00'
-      />
-    </svg>
-  );
+/**
+ * Format a date string like "2026-10-13" into "13th October"
+ */
+function formatDateDisplay(dateStr: string): string {
+  const date = new Date(dateStr + 'T00:00:00');
+  const day = date.getDate();
+  const month = date.toLocaleString('en-US', { month: 'long' });
+
+  const suffix = getDaySuffix(day);
+  return `${day}${suffix} ${month}`;
+}
+
+function getDaySuffix(day: number): string {
+  if (day >= 11 && day <= 13) return 'th';
+  switch (day % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
+      return 'th';
+  }
 }
 
 interface ReservationDetailsDialogProps {
-  reservation: ReservationItem;
+  reservation: ReservationListItem;
   trigger: React.ReactNode;
 }
 
@@ -128,35 +93,51 @@ export default function ReservationDetailsDialog({
   const [isOpen, setIsOpen] = useState(false);
 
   const { data, isLoading, isError } = useReservationDetails(
-    reservation.id,
+    reservation.reservationId,
     isOpen,
   );
 
-  // Use detailed data if available, otherwise fallback to the basic reservation info
-  const details = data?.data || data || reservation;
+  const details: ReservationDetails | undefined = data?.result;
 
-  const {
-    title,
-    description,
-    rating,
-    reviewsCount,
-    imageUrl,
-    checkInDisplay,
-    checkOutDisplay,
-    status,
-    guests,
-    nightlyRate,
-    nights,
-    breakfastCount,
-    earlyCheckIn,
-    taxes,
-    paymentMethod,
-  } = details;
+  // Fallback values from list item when details haven't loaded yet
+  const propertyName = details?.property?.name ?? reservation.propertyName;
+  const propertyImage =
+    details?.property?.imageUrl ?? reservation.propertyImageUrl;
+  const description = details?.property?.description ?? '';
+  const rating = details?.property?.rating ?? 0;
+  const reviewsCount = details?.property?.reviewsCount ?? 0;
+  const status = details?.status ?? reservation.status;
 
-  const nightsTotal = nightlyRate * nights;
-  const breakfastTotal = nightlyRate * breakfastCount;
-  const earlyCheckInTotal = earlyCheckIn ? nightlyRate : 0;
-  const finalPrice = nightsTotal + breakfastTotal + earlyCheckInTotal + taxes;
+  const checkInDate = details?.stay?.checkInDate ?? reservation.checkInDate;
+  const checkOutDate = details?.stay?.checkOutDate ?? reservation.checkOutDate;
+
+  const totalGuests = details?.guests?.total ?? 0;
+
+  const priceSummaryItems = details?.priceSummary?.items ?? [];
+  const taxes = details?.priceSummary?.taxes ?? 0;
+  const finalPrice = details?.priceSummary?.finalPrice ?? 0;
+  const currency = details?.priceSummary?.currency ?? '';
+
+  const paymentStatus = details?.payment?.status ?? '';
+  const paidAmount = details?.payment?.paidAmount ?? 0;
+
+  const canCancel = details?.cancellation?.canCancel ?? false;
+
+  /**
+   * Build description text for a price summary item.
+   * For ReservePrice: "100 EGP × 3 nights"
+   * For Fee: "Cleaning Fee"
+   */
+  function formatPriceItemLabel(item: (typeof priceSummaryItems)[0]): string {
+    if (item.type === 'ReservePrice' && item.pricePerNight != null) {
+      return `${item.pricePerNight} ${currency} × ${item.quantity} night${item.quantity !== 1 ? 's' : ''}`;
+    }
+    // For fees and other types, show quantity if > 1
+    if (item.quantity > 1) {
+      return `${item.description} × ${item.quantity}`;
+    }
+    return item.description;
+  }
 
   return (
     <Dialog
@@ -185,24 +166,28 @@ export default function ReservationDetailsDialog({
             <div className='flex gap-4'>
               <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
                 <Image
-                  src={imageUrl}
-                  alt={title}
+                  src={propertyImage}
+                  alt={propertyName}
                   fill
                   className='object-cover'
                   sizes='144px'
                 />
               </div>
               <div className='flex flex-col gap-1'>
-                <div className='flex items-center gap-1'>
-                  <Star className='size-4 fill-amber-400 stroke-amber-400' />
-                  <span className='text-sm font-medium text-grayish-900'>
-                    {rating} ({reviewsCount})
-                  </span>
-                </div>
+                {reviewsCount > 0 && (
+                  <div className='flex items-center gap-1'>
+                    <Star className='size-4 fill-amber-400 stroke-amber-400' />
+                    <span className='text-sm font-medium text-grayish-900'>
+                      {rating} ({reviewsCount})
+                    </span>
+                  </div>
+                )}
                 <h3 className='text-lg font-semibold text-grayish-900'>
-                  {title}
+                  {propertyName}
                 </h3>
-                <p className='text-sm text-grayish-500'>{description}</p>
+                {description && (
+                  <p className='text-sm text-grayish-500'>{description}</p>
+                )}
                 <div className='mt-1'>
                   <StatusBadge status={status} />
                 </div>
@@ -219,7 +204,8 @@ export default function ReservationDetailsDialog({
               <div className='flex items-center gap-2 text-grayish-600'>
                 <CalendarIcon className='size-4 shrink-0' />
                 <span className='text-sm'>
-                  {checkInDisplay} To {checkOutDisplay}
+                  {formatDateDisplay(checkInDate)} To{' '}
+                  {formatDateDisplay(checkOutDate)}
                 </span>
               </div>
             </div>
@@ -231,7 +217,9 @@ export default function ReservationDetailsDialog({
               <p className='font-medium text-grayish-900'>Guests</p>
               <div className='flex items-center gap-2 text-grayish-600'>
                 <Users className='size-4 shrink-0' />
-                <span className='text-sm'>{guests} Guests</span>
+                <span className='text-sm'>
+                  {totalGuests} Guest{totalGuests !== 1 ? 's' : ''}
+                </span>
               </div>
             </div>
 
@@ -241,27 +229,22 @@ export default function ReservationDetailsDialog({
             <div className='flex flex-col gap-3'>
               <p className='font-medium text-grayish-900'>Summary</p>
               <div className='flex flex-col gap-2'>
-                <div className='flex items-center justify-between text-sm text-grayish-700'>
-                  <span>
-                    $ {nightlyRate} × {nights} nights
-                  </span>
-                  <span>$ {nightsTotal}</span>
-                </div>
-                <div className='flex items-center justify-between text-sm text-grayish-700'>
-                  <span>
-                    $ {nightlyRate} × {breakfastCount} Breakfast
-                  </span>
-                  <span>$ {breakfastTotal}</span>
-                </div>
-                {earlyCheckIn && (
-                  <div className='flex items-center justify-between text-sm text-grayish-700'>
-                    <span>$ {nightlyRate} × Early Check-In</span>
-                    <span>$ {earlyCheckInTotal}</span>
+                {priceSummaryItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className='flex items-center justify-between text-sm text-grayish-700'
+                  >
+                    <span>{formatPriceItemLabel(item)}</span>
+                    <span>
+                      {item.total} {currency}
+                    </span>
                   </div>
-                )}
+                ))}
                 <div className='flex items-center justify-between text-sm text-grayish-700'>
                   <span>Taxes</span>
-                  <span>$ {taxes}</span>
+                  <span>
+                    {taxes} {currency}
+                  </span>
                 </div>
               </div>
             </div>
@@ -272,31 +255,35 @@ export default function ReservationDetailsDialog({
             <div className='flex items-center justify-between'>
               <span className='font-medium text-grayish-900'>Final Price</span>
               <span className='font-semibold text-grayish-900'>
-                $ {finalPrice}
+                {finalPrice} {currency}
               </span>
             </div>
 
             <div className='my-4 h-px bg-grayish-100' />
 
-            {/* Payment Method */}
+            {/* Payment Status */}
             <div className='flex flex-col gap-3'>
-              <p className='font-medium text-grayish-900'>Payment Method</p>
-              <div className='flex items-center gap-3'>
-                <MastercardIcon />
-                <span className='text-sm text-grayish-700'>
-                  {paymentMethod.brand} **** {paymentMethod.last4}
+              <p className='font-medium text-grayish-900'>Payment</p>
+              <div className='flex items-center justify-between text-sm text-grayish-700'>
+                <span>Status</span>
+                <span className='font-medium'>{paymentStatus}</span>
+              </div>
+              <div className='flex items-center justify-between text-sm text-grayish-700'>
+                <span>Paid Amount</span>
+                <span>
+                  {paidAmount} {currency}
                 </span>
               </div>
-              <p className='text-sm text-grayish-600'>
-                EXP Date: {paymentMethod.expDate}
-              </p>
             </div>
 
-            <div className='mt-4'>
-              <button className='text-sm text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'>
-                Cancel Reservation
-              </button>
-            </div>
+            {/* Cancel Reservation */}
+            {canCancel && (
+              <div className='mt-4'>
+                <button className='text-sm text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'>
+                  Cancel Reservation
+                </button>
+              </div>
+            )}
           </>
         )}
       </DialogContent>

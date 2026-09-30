@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useMyReservations } from '@/hooks/useMyReservations';
 
 import ReservationCard from './ReservationCard';
-import { type ReservationItem } from './ReservationDetailsDialog';
 
 /** Wraps everything in the shared Tabs context */
 export function ReservationsTabsProvider({
@@ -15,13 +14,13 @@ export function ReservationsTabsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  return <Tabs defaultValue='stays'>{children}</Tabs>;
+  return <Tabs defaultValue='stays' className='w-full'>{children}</Tabs>;
 }
 
 /** The tab switcher — place under the title in the left column */
 export function ReservationsTabsList() {
   return (
-    <TabsList className='mt-4 h-auto gap-0 rounded-full bg-[#f0ede8] p-1'>
+    <TabsList className=' h-auto gap-0 rounded-full bg-transparent  flex md:flex-col justify-start  items-start  p-1'>
       <TabsTrigger
         value='stays'
         className='flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
@@ -43,14 +42,12 @@ export function ReservationsTabsList() {
 /** The tab panels — place in the right content column */
 export function ReservationsTabsContent() {
   const { data, isLoading, isError } = useMyReservations();
-
-  const reservations = Array.isArray(data)
-    ? data
-    : data?.items || data?.data || [];
+  const reservations = data?.result?.items || [];
+  console.log("🚀 ~ ReservationsTabsContent ~ reservations:", reservations)
 
   return (
     <>
-      <TabsContent value='stays'>
+      <TabsContent value='stays' className='w-full'>
         <div className='flex flex-col gap-6'>
           {isLoading && <p>Loading...</p>}
           {isError && <p>Error loading reservations</p>}
@@ -59,16 +56,16 @@ export function ReservationsTabsContent() {
           )}
           {!isLoading &&
             !isError &&
-            reservations.map((reservation: any) => (
+            reservations.map((reservation) => (
               <ReservationCard
-                key={reservation.id}
+                key={reservation.reservationId}
                 reservation={reservation}
               />
             ))}
         </div>
       </TabsContent>
 
-      <TabsContent value='services'>
+      <TabsContent value='services' >
         <div className='flex flex-col items-center justify-center py-16 text-grayish-400'>
           <WrenchIcon className='mb-3 size-10 stroke-1' />
           <p className='text-sm'>No services reservations yet</p>

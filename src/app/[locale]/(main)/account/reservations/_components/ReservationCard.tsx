@@ -6,18 +6,19 @@ import { CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-import ReservationDetailsDialog, {
-  type ReservationItem,
+import ReservationDetailsDialog from './ReservationDetailsDialog';
+import {
+  type ReservationListItem,
   type ReservationStatus,
-} from './ReservationDetailsDialog';
+} from '@/types/reservations';
 
 const statusConfig: Record<
-  ReservationStatus,
+  string,
   { label: string; className: string }
 > = {
   upcoming: {
     label: 'Upcoming',
-    className: 'border border-grayish-900 text-grayish-900 bg-transparent',
+    className: 'border border-grayish-900 text-grayish-900 bg-neutral-50',
   },
   ongoing: {
     label: 'Ongoing',
@@ -33,8 +34,8 @@ const statusConfig: Record<
   },
 };
 
-function StatusBadge({ status }: { status: ReservationStatus }) {
-  const config = statusConfig[status];
+function StatusBadge({ status }: { status: string }) {
+  const config = statusConfig[status.toLowerCase()] || statusConfig['upcoming'];
   return (
     <span
       className={cn(
@@ -48,18 +49,20 @@ function StatusBadge({ status }: { status: ReservationStatus }) {
 }
 
 interface ReservationCardProps {
-  reservation: ReservationItem;
+  reservation: ReservationListItem;
 }
 
 export default function ReservationCard({ reservation }: ReservationCardProps) {
   const {
-    title,
-    imageUrl,
-    checkInDisplay,
-    checkOutDisplay,
-    submittedOn,
+    propertyName,
+    propertyImageUrl,
+    checkInDate,
+    checkOutDate,
+    submittedAt,
     status,
   } = reservation;
+
+  const formattedSubmitted = new Date(submittedAt).toLocaleDateString();
 
   return (
     <ReservationDetailsDialog
@@ -72,8 +75,8 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
           {/* Image */}
           <div className='relative h-[7.5rem] w-[8.5rem] shrink-0 overflow-hidden rounded-xl sm:h-28 sm:w-36'>
             <Image
-              src={imageUrl}
-              alt={title}
+              src={propertyImageUrl}
+              alt={propertyName}
               fill
               className='object-cover'
               sizes='(max-width: 600px) 136px, 144px'
@@ -83,16 +86,16 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
           {/* Info */}
           <div className='flex flex-col gap-1.5 pt-1'>
             <h3 className='text-base font-semibold text-grayish-900 sm:text-lg'>
-              {title}
+              {propertyName}
             </h3>
             <div className='flex items-center gap-1.5 text-grayish-500'>
               <CalendarIcon className='size-4 shrink-0' />
               <span className='text-sm'>
-                {checkInDisplay} To {checkOutDisplay}
+                {checkInDate} To {checkOutDate}
               </span>
             </div>
             <p className='text-sm text-grayish-500'>
-              Submitted on: {submittedOn}
+              Submitted on: {formattedSubmitted}
             </p>
             <div className='mt-0.5'>
               <StatusBadge status={status} />
