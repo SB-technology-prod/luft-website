@@ -5,7 +5,6 @@ import { CircleChevronLeftIcon, CircleChevronRightIcon } from 'lucide-react';
 
 import ProfileForm from './_components/Forms/ProfileForm';
 
-
 export default async function SettingsPage({
   params,
 }: {

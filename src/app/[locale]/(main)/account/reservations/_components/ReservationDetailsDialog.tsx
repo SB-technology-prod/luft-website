@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 
-import { CalendarIcon, Star, Users } from 'lucide-react';
+import { CalendarIcon, Star, Users, Loader2 } from 'lucide-react';
 
 import {
   Dialog,
@@ -11,9 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useReservationDetails } from '@/hooks/useReservationDetails';
 import { cn } from '@/lib/utils';
 
-export type ReservationStatus = 'upcoming' | 'ongoing' | 'completed' | 'canceled';
+export type ReservationStatus =
+  'upcoming' | 'ongoing' | 'completed' | 'canceled';
 
 export interface ReservationItem {
   id: string;
@@ -87,9 +90,24 @@ function MastercardIcon() {
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
     >
-      <rect width='38' height='24' rx='4' fill='#F9FAFB' />
-      <circle cx='15' cy='12' r='7' fill='#EB001B' />
-      <circle cx='23' cy='12' r='7' fill='#F79E1B' />
+      <rect
+        width='38'
+        height='24'
+        rx='4'
+        fill='#F9FAFB'
+      />
+      <circle
+        cx='15'
+        cy='12'
+        r='7'
+        fill='#EB001B'
+      />
+      <circle
+        cx='23'
+        cy='12'
+        r='7'
+        fill='#F79E1B'
+      />
       <path
         d='M19 6.8C20.5 7.9 21.5 9.35 21.5 12C21.5 14.65 20.5 16.1 19 17.2C17.5 16.1 16.5 14.65 16.5 12C16.5 9.35 17.5 7.9 19 6.8Z'
         fill='#FF5F00'
@@ -107,6 +125,16 @@ export default function ReservationDetailsDialog({
   reservation,
   trigger,
 }: ReservationDetailsDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { data, isLoading, isError } = useReservationDetails(
+    reservation.id,
+    isOpen,
+  );
+
+  // Use detailed data if available, otherwise fallback to the basic reservation info
+  const details = data?.data || data || reservation;
+
   const {
     title,
     description,
@@ -123,7 +151,7 @@ export default function ReservationDetailsDialog({
     earlyCheckIn,
     taxes,
     paymentMethod,
-  } = reservation;
+  } = details;
 
   const nightsTotal = nightlyRate * nights;
   const breakfastTotal = nightlyRate * breakfastCount;
@@ -131,7 +159,10 @@ export default function ReservationDetailsDialog({
   const finalPrice = nightsTotal + breakfastTotal + earlyCheckInTotal + taxes;
 
   return (
-    <Dialog>
+    <Dialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='max-h-[90vh] w-full max-w-[42.5rem] overflow-y-auto rounded-2xl bg-white p-6 sm:rounded-2xl'>
         <DialogHeader className='mb-4'>
@@ -140,116 +171,134 @@ export default function ReservationDetailsDialog({
           </DialogTitle>
         </DialogHeader>
 
-        {/* Property Info */}
-        <div className='flex gap-4'>
-          <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              className='object-cover'
-              sizes='144px'
-            />
+        {isLoading ? (
+          <div className='flex h-40 items-center justify-center'>
+            <Loader2 className='size-8 animate-spin text-grayish-400' />
           </div>
-          <div className='flex flex-col gap-1'>
-            <div className='flex items-center gap-1'>
-              <Star className='size-4 fill-amber-400 stroke-amber-400' />
-              <span className='text-sm font-medium text-grayish-900'>
-                {rating} ({reviewsCount})
-              </span>
-            </div>
-            <h3 className='text-lg font-semibold text-grayish-900'>{title}</h3>
-            <p className='text-sm text-grayish-500'>{description}</p>
-            <div className='mt-1'>
-              <StatusBadge status={status} />
-            </div>
+        ) : isError ? (
+          <div className='flex h-40 items-center justify-center text-error-500'>
+            Failed to load reservation details.
           </div>
-        </div>
-
-        <div className='my-4 h-px bg-grayish-100' />
-
-        {/* Check In - Check Out */}
-        <div className='flex flex-col gap-2'>
-          <p className='font-medium text-grayish-900'>Check-in - Check-out</p>
-          <div className='flex items-center gap-2 text-grayish-600'>
-            <CalendarIcon className='size-4 shrink-0' />
-            <span className='text-sm'>
-              {checkInDisplay} To {checkOutDisplay}
-            </span>
-          </div>
-        </div>
-
-        <div className='my-4 h-px bg-grayish-100' />
-
-        {/* Guests */}
-        <div className='flex flex-col gap-2'>
-          <p className='font-medium text-grayish-900'>Guests</p>
-          <div className='flex items-center gap-2 text-grayish-600'>
-            <Users className='size-4 shrink-0' />
-            <span className='text-sm'>{guests} Guests</span>
-          </div>
-        </div>
-
-        <div className='my-4 h-px bg-grayish-100' />
-
-        {/* Summary */}
-        <div className='flex flex-col gap-3'>
-          <p className='font-medium text-grayish-900'>Summary</p>
-          <div className='flex flex-col gap-2'>
-            <div className='flex items-center justify-between text-sm text-grayish-700'>
-              <span>
-                $ {nightlyRate} × {nights} nights
-              </span>
-              <span>$ {nightsTotal}</span>
-            </div>
-            <div className='flex items-center justify-between text-sm text-grayish-700'>
-              <span>
-                $ {nightlyRate} × {breakfastCount} Breakfast
-              </span>
-              <span>$ {breakfastTotal}</span>
-            </div>
-            {earlyCheckIn && (
-              <div className='flex items-center justify-between text-sm text-grayish-700'>
-                <span>$ {nightlyRate} × Early Check-In</span>
-                <span>$ {earlyCheckInTotal}</span>
+        ) : (
+          <>
+            {/* Property Info */}
+            <div className='flex gap-4'>
+              <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
+                <Image
+                  src={imageUrl}
+                  alt={title}
+                  fill
+                  className='object-cover'
+                  sizes='144px'
+                />
               </div>
-            )}
-            <div className='flex items-center justify-between text-sm text-grayish-700'>
-              <span>Taxes</span>
-              <span>$ {taxes}</span>
+              <div className='flex flex-col gap-1'>
+                <div className='flex items-center gap-1'>
+                  <Star className='size-4 fill-amber-400 stroke-amber-400' />
+                  <span className='text-sm font-medium text-grayish-900'>
+                    {rating} ({reviewsCount})
+                  </span>
+                </div>
+                <h3 className='text-lg font-semibold text-grayish-900'>
+                  {title}
+                </h3>
+                <p className='text-sm text-grayish-500'>{description}</p>
+                <div className='mt-1'>
+                  <StatusBadge status={status} />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className='my-4 h-px bg-grayish-100' />
+            <div className='my-4 h-px bg-grayish-100' />
 
-        {/* Final Price */}
-        <div className='flex items-center justify-between'>
-          <span className='font-medium text-grayish-900'>Final Price</span>
-          <span className='font-semibold text-grayish-900'>$ {finalPrice}</span>
-        </div>
+            {/* Check In - Check Out */}
+            <div className='flex flex-col gap-2'>
+              <p className='font-medium text-grayish-900'>
+                Check-in - Check-out
+              </p>
+              <div className='flex items-center gap-2 text-grayish-600'>
+                <CalendarIcon className='size-4 shrink-0' />
+                <span className='text-sm'>
+                  {checkInDisplay} To {checkOutDisplay}
+                </span>
+              </div>
+            </div>
 
-        <div className='my-4 h-px bg-grayish-100' />
+            <div className='my-4 h-px bg-grayish-100' />
 
-        {/* Payment Method */}
-        <div className='flex flex-col gap-3'>
-          <p className='font-medium text-grayish-900'>Payment Method</p>
-          <div className='flex items-center gap-3'>
-            <MastercardIcon />
-            <span className='text-sm text-grayish-700'>
-              {paymentMethod.brand} **** {paymentMethod.last4}
-            </span>
-          </div>
-          <p className='text-sm text-grayish-600'>
-            EXP Date: {paymentMethod.expDate}
-          </p>
-        </div>
+            {/* Guests */}
+            <div className='flex flex-col gap-2'>
+              <p className='font-medium text-grayish-900'>Guests</p>
+              <div className='flex items-center gap-2 text-grayish-600'>
+                <Users className='size-4 shrink-0' />
+                <span className='text-sm'>{guests} Guests</span>
+              </div>
+            </div>
 
-        <div className='mt-4'>
-          <button className='text-sm text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'>
-            Cancel Reservation
-          </button>
-        </div>
+            <div className='my-4 h-px bg-grayish-100' />
+
+            {/* Summary */}
+            <div className='flex flex-col gap-3'>
+              <p className='font-medium text-grayish-900'>Summary</p>
+              <div className='flex flex-col gap-2'>
+                <div className='flex items-center justify-between text-sm text-grayish-700'>
+                  <span>
+                    $ {nightlyRate} × {nights} nights
+                  </span>
+                  <span>$ {nightsTotal}</span>
+                </div>
+                <div className='flex items-center justify-between text-sm text-grayish-700'>
+                  <span>
+                    $ {nightlyRate} × {breakfastCount} Breakfast
+                  </span>
+                  <span>$ {breakfastTotal}</span>
+                </div>
+                {earlyCheckIn && (
+                  <div className='flex items-center justify-between text-sm text-grayish-700'>
+                    <span>$ {nightlyRate} × Early Check-In</span>
+                    <span>$ {earlyCheckInTotal}</span>
+                  </div>
+                )}
+                <div className='flex items-center justify-between text-sm text-grayish-700'>
+                  <span>Taxes</span>
+                  <span>$ {taxes}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className='my-4 h-px bg-grayish-100' />
+
+            {/* Final Price */}
+            <div className='flex items-center justify-between'>
+              <span className='font-medium text-grayish-900'>Final Price</span>
+              <span className='font-semibold text-grayish-900'>
+                $ {finalPrice}
+              </span>
+            </div>
+
+            <div className='my-4 h-px bg-grayish-100' />
+
+            {/* Payment Method */}
+            <div className='flex flex-col gap-3'>
+              <p className='font-medium text-grayish-900'>Payment Method</p>
+              <div className='flex items-center gap-3'>
+                <MastercardIcon />
+                <span className='text-sm text-grayish-700'>
+                  {paymentMethod.brand} **** {paymentMethod.last4}
+                </span>
+              </div>
+              <p className='text-sm text-grayish-600'>
+                EXP Date: {paymentMethod.expDate}
+              </p>
+            </div>
+
+            <div className='mt-4'>
+              <button className='text-sm text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'>
+                Cancel Reservation
+              </button>
+            </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

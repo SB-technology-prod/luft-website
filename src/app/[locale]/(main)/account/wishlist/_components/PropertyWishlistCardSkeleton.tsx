@@ -11,7 +11,7 @@ export function PropertyWishlistCardSkeleton({
     <div
       className={cn(
         'flex w-[10.94rem] flex-col gap-4 overflow-hidden md:w-[23.8rem] lg:w-[21.75rem]',
-        className
+        className,
       )}
     >
       {/* Image Skeleton */}

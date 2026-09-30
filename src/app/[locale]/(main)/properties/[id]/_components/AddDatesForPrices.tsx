@@ -21,9 +21,7 @@ export default async function AddDatesForPrices({
         <h6 className='text-xl font-medium lg:text-2xl'>
           {t('addDatesTitle')}
         </h6>
-        <p className='leading-5 text-grayish-400'>
-          {t('addDatesSubtitle')}
-        </p>
+        <p className='leading-5 text-grayish-400'>{t('addDatesSubtitle')}</p>
       </div>
       <div className='flex flex-col gap-4'>
         <div className='text-grayish-400'>

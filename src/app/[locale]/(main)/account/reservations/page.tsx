@@ -21,7 +21,10 @@ export default async function ReservationsPage({
       <div className='container mb-[9.875rem] mt-6 flex w-full gap-8 max-lg:flex-col max-md:gap-6 md:mb-44 md:mt-20 xl:mb-48 xl:ms-[4.5rem] xl:mt-28 xl:w-[60.375rem]'>
         {/* Left column: back arrow + title + tab switcher */}
         <div className='flex gap-4 max-lg:items-start lg:flex-col xl:-mt-16'>
-          <Link href='/' className='w-fit max-sm:hidden'>
+          <Link
+            href='/'
+            className='w-fit max-sm:hidden'
+          >
             {isRtl ? (
               <CircleChevronRightIcon className='size-10 stroke-1 text-grayish-900' />
             ) : (
@@ -44,4 +47,3 @@ export default async function ReservationsPage({
     </ReservationsTabsProvider>
   );
 }
-

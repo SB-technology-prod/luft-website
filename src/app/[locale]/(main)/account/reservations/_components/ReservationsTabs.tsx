@@ -4,107 +4,10 @@ import { HomeIcon, WrenchIcon } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { useMyReservations } from '@/hooks/useMyReservations';
+
 import ReservationCard from './ReservationCard';
 import { type ReservationItem } from './ReservationDetailsDialog';
-
-// Mock apartment image (placeholder using a public URL)
-const APARTMENT_IMG =
-  'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80';
-
-const MOCK_RESERVATIONS: ReservationItem[] = [
-  {
-    id: '1',
-    title: 'Apartment in Alexandria, Egypt',
-    location: 'Alexandria, Egypt',
-    description:
-      'Enjoy a stylish experience at this centrally-located apartment with stunning Nile views.',
-    rating: 4.95,
-    reviewsCount: 44,
-    imageUrl: APARTMENT_IMG,
-    checkIn: '2024-03-15',
-    checkOut: '2024-03-18',
-    checkInDisplay: '15th March',
-    checkOutDisplay: '18th March',
-    submittedOn: '4 may 2024',
-    status: 'upcoming',
-    guests: 4,
-    nightlyRate: 120,
-    nights: 3,
-    breakfastCount: 1,
-    earlyCheckIn: true,
-    taxes: 36,
-    paymentMethod: { brand: 'Master Card', last4: '4471', expDate: '07/28' },
-  },
-  {
-    id: '2',
-    title: 'Apartment in Alexandria, Egypt',
-    location: 'Alexandria, Egypt',
-    description:
-      'Enjoy a stylish experience at this centrally-located apartment with stunning Nile views.',
-    rating: 4.95,
-    reviewsCount: 44,
-    imageUrl: APARTMENT_IMG,
-    checkIn: '2024-03-15',
-    checkOut: '2024-03-18',
-    checkInDisplay: '15th March',
-    checkOutDisplay: '18th March',
-    submittedOn: '4 may 2024',
-    status: 'ongoing',
-    guests: 2,
-    nightlyRate: 120,
-    nights: 3,
-    breakfastCount: 1,
-    earlyCheckIn: false,
-    taxes: 36,
-    paymentMethod: { brand: 'Master Card', last4: '4471', expDate: '07/28' },
-  },
-  {
-    id: '3',
-    title: 'Apartment in Alexandria, Egypt',
-    location: 'Alexandria, Egypt',
-    description:
-      'Enjoy a stylish experience at this centrally-located apartment with stunning Nile views.',
-    rating: 4.95,
-    reviewsCount: 44,
-    imageUrl: APARTMENT_IMG,
-    checkIn: '2024-03-15',
-    checkOut: '2024-03-18',
-    checkInDisplay: '15th March',
-    checkOutDisplay: '18th March',
-    submittedOn: '4 may 2024',
-    status: 'completed',
-    guests: 3,
-    nightlyRate: 120,
-    nights: 3,
-    breakfastCount: 1,
-    earlyCheckIn: true,
-    taxes: 36,
-    paymentMethod: { brand: 'Master Card', last4: '4471', expDate: '07/28' },
-  },
-  {
-    id: '4',
-    title: 'Apartment in Alexandria, Egypt',
-    location: 'Alexandria, Egypt',
-    description:
-      'Enjoy a stylish experience at this centrally-located apartment with stunning Nile views.',
-    rating: 4.95,
-    reviewsCount: 44,
-    imageUrl: APARTMENT_IMG,
-    checkIn: '2024-03-15',
-    checkOut: '2024-03-18',
-    checkInDisplay: '15th March',
-    checkOutDisplay: '18th March',
-    submittedOn: '4 may 2024',
-    status: 'canceled',
-    guests: 2,
-    nightlyRate: 120,
-    nights: 3,
-    breakfastCount: 1,
-    earlyCheckIn: false,
-    taxes: 36,
-    paymentMethod: { brand: 'Master Card', last4: '4471', expDate: '07/28' },
-  },
-];
 
 /** Wraps everything in the shared Tabs context */
 export function ReservationsTabsProvider({
@@ -139,13 +42,29 @@ export function ReservationsTabsList() {
 
 /** The tab panels — place in the right content column */
 export function ReservationsTabsContent() {
+  const { data, isLoading, isError } = useMyReservations();
+
+  const reservations = Array.isArray(data)
+    ? data
+    : data?.items || data?.data || [];
+
   return (
     <>
       <TabsContent value='stays'>
         <div className='flex flex-col gap-6'>
-          {MOCK_RESERVATIONS.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
-          ))}
+          {isLoading && <p>Loading...</p>}
+          {isError && <p>Error loading reservations</p>}
+          {!isLoading && !isError && reservations.length === 0 && (
+            <p className='text-grayish-500'>No reservations found.</p>
+          )}
+          {!isLoading &&
+            !isError &&
+            reservations.map((reservation: any) => (
+              <ReservationCard
+                key={reservation.id}
+                reservation={reservation}
+              />
+            ))}
         </div>
       </TabsContent>
 
@@ -158,4 +77,3 @@ export function ReservationsTabsContent() {
     </>
   );
 }
-

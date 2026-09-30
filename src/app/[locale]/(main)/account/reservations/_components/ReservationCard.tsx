@@ -52,8 +52,14 @@ interface ReservationCardProps {
 }
 
 export default function ReservationCard({ reservation }: ReservationCardProps) {
-  const { title, imageUrl, checkInDisplay, checkOutDisplay, submittedOn, status } =
-    reservation;
+  const {
+    title,
+    imageUrl,
+    checkInDisplay,
+    checkOutDisplay,
+    submittedOn,
+    status,
+  } = reservation;
 
   return (
     <ReservationDetailsDialog
@@ -85,7 +91,9 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
                 {checkInDisplay} To {checkOutDisplay}
               </span>
             </div>
-            <p className='text-sm text-grayish-500'>Submitted on: {submittedOn}</p>
+            <p className='text-sm text-grayish-500'>
+              Submitted on: {submittedOn}
+            </p>
             <div className='mt-0.5'>
               <StatusBadge status={status} />
             </div>

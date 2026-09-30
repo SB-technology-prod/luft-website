@@ -42,7 +42,7 @@ function MobileNavSheet({
       <SheetTrigger>
         <Menu className='size-6' />
       </SheetTrigger>
-      <SheetContent className='flex w-10/12 min-w-fit flex-col justify-between overflow-auto bg-white p-0 sm:max-w-full [&>button]:rtl:left-4 [&>button]:rtl:right-auto [&>button]:w-fit'>
+      <SheetContent className='flex w-10/12 min-w-fit flex-col justify-between overflow-auto bg-white p-0 sm:max-w-full [&>button]:w-fit [&>button]:rtl:left-4 [&>button]:rtl:right-auto'>
         <div className='flex flex-col gap-4 px-4 pt-4'>
           <div className='flex flex-col gap-4'>
             {navLinks.map(({ title, id }) => (
