@@ -2,48 +2,44 @@
 
 import Image from 'next/image';
 
-import { CalendarIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
+import CalenderDateRangeIcon from '@/components/icons/CalenderDateRangeIcon';
 import { cn } from '@/lib/utils';
 
 import ReservationDetailsDialog from './ReservationDetailsDialog';
 import {
   type ReservationListItem,
-  type ReservationStatus,
 } from '@/types/reservations';
 
-const statusConfig: Record<
-  string,
-  { label: string; className: string }
-> = {
-  upcoming: {
-    label: 'Upcoming',
-    className: 'border border-grayish-900 text-grayish-900 bg-neutral-50',
-  },
-  ongoing: {
-    label: 'Ongoing',
-    className: 'border border-warning-500 text-warning-600 bg-transparent',
-  },
-  completed: {
-    label: 'Completed',
-    className: 'border border-success-500 text-success-600 bg-transparent',
-  },
-  canceled: {
-    label: 'Canceled',
-    className: 'border border-error-500 text-error-500 bg-transparent',
-  },
+const statusStyles: Record<string, string> = {
+  upcoming: 'border border-grayish-900 text-grayish-900 bg-neutral-50',
+  ongoing: 'border border-warning-500 text-warning-600 bg-transparent',
+  completed: 'border border-success-500 text-success-600 bg-transparent',
+  canceled: 'border border-error-500 text-error-500 bg-transparent',
 };
 
 function StatusBadge({ status }: { status: string }) {
-  const config = statusConfig[status.toLowerCase()] || statusConfig['upcoming'];
+  const t = useTranslations('reservations.status');
+  const key = status.toLowerCase() as keyof typeof statusStyles;
+  const style = statusStyles[key] ?? statusStyles['upcoming'];
+  const label =
+    key === 'upcoming'
+      ? t('upcoming')
+      : key === 'ongoing'
+        ? t('ongoing')
+        : key === 'completed'
+          ? t('completed')
+          : t('canceled');
+
   return (
     <span
       className={cn(
         'inline-flex items-center rounded-full px-3 py-1 text-sm font-medium',
-        config.className,
+        style,
       )}
     >
-      {config.label}
+      {label}
     </span>
   );
 }
@@ -53,6 +49,7 @@ interface ReservationCardProps {
 }
 
 export default function ReservationCard({ reservation }: ReservationCardProps) {
+  const t = useTranslations('reservations');
   const {
     propertyName,
     propertyImageUrl,
@@ -89,13 +86,13 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
               {propertyName}
             </h3>
             <div className='flex items-center gap-1.5 text-grayish-500'>
-              <CalendarIcon className='size-4 shrink-0' />
+              <CalenderDateRangeIcon className='size-4 shrink-0' />
               <span className='text-sm'>
-                {checkInDate} To {checkOutDate}
+                {checkInDate} — {checkOutDate}
               </span>
             </div>
             <p className='text-sm text-grayish-500'>
-              Submitted on: {formattedSubmitted}
+              {t('submittedOn', { date: formattedSubmitted })}
             </p>
             <div className='mt-0.5'>
               <StatusBadge status={status} />

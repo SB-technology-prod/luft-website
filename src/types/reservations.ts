@@ -58,9 +58,16 @@ export type ReservationPriceSummary = {
   currency: string;
 };
 
+export type ReservationPaymentCard = {
+  type: string;
+  lastFourDigits: string;
+  expiryDate: string;
+};
+
 export type ReservationPayment = {
   status: string;
   paidAmount: number;
+  card?: ReservationPaymentCard;
 };
 
 export type ReservationCancellation = {

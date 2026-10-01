@@ -352,5 +352,46 @@
       "title": "نواجه مشكلة حالياً",
       "description": "خوادمنا غير متاحة مؤقتاً. يرجى المحاولة مرة أخرى بعد قليل."
     }
+  },
+  "reservations": {
+    "title": "حجوزاتي",
+    "tabs": {
+      "stays": "الإقامات",
+      "services": "الخدمات"
+    },
+    "loading": "جاري تحميل الحجوزات...",
+    "error": "فشل تحميل الحجوزات",
+    "empty": "لا توجد حجوزات.",
+    "emptyServices": "لا توجد حجوزات خدمات حتى الآن",
+    "submittedOn": "تاريخ الحجز: {date}",
+    "details": {
+      "title": "تفاصيل الحجز",
+      "loadError": "فشل تحميل تفاصيل الحجز.",
+      "reviews": "{rating} ({count})",
+      "checkInOut": "الوصول - المغادرة",
+      "checkInOutValue": "{checkIn} إلى {checkOut}",
+      "guests": "الضيوف",
+      "guestsCount": "{count} ضيف",
+      "guestsCountPlural": "{count} ضيوف",
+      "summary": "ملخص الحجز",
+      "reservePrice": "{price} {currency} x {nights} ليلة",
+      "reservePricePlural": "{price} {currency} x {nights} ليالٍ",
+      "feeWithQuantity": "{description} x {quantity}",
+      "taxes": "الضرائب",
+      "priceWithCurrency": "{amount} {currency}",
+      "finalPrice": "السعر الإجمالي",
+      "payment": "طريقة الدفع",
+      "paymentStatus": "الحالة",
+      "paidAmount": "المبلغ المدفوع",
+      "paymentMethod": "{cardType} **** {lastFour}",
+      "paymentExpiry": "تاريخ الانتهاء: {expiry}",
+      "cancelReservation": "إلغاء الحجز"
+    },
+    "status": {
+      "upcoming": "قادم",
+      "ongoing": "جارٍ",
+      "completed": "مكتمل",
+      "canceled": "ملغى"
+    }
   }
 }
