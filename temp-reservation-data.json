@@ -1,0 +1,22 @@
+[
+  {
+    "reservationId": "835a11e4-f80c-4879-8ff2-224022c53702",
+    "propertyId": "c5e07712-c55d-4421-a749-630e4d834612",
+    "propertyName": "Frequently Asked Questions",
+    "propertyImageUrl": "https://fm-api.luft-dev.appsindexco.net/Uploads/properties/03efa337-bfcd-4ae6-a0ed-0096b4019f51.png",
+    "checkInDate": "2026-10-13",
+    "checkOutDate": "2026-10-16",
+    "submittedAt": "2026-09-29T13:23:06.1814619Z",
+    "status": "Upcoming"
+  },
+  {
+    "reservationId": "40e87142-48c3-4d7f-8829-825daab18bd7",
+    "propertyId": "525c5cae-ae2c-4539-9adb-eff5f92fcd97",
+    "propertyName": "hjgj",
+    "propertyImageUrl": "https://fm-api.luft-dev.appsindexco.net//Uploads/properties/fe56a99f-8cb8-4456-8340-fca4c20d8967.jpg",
+    "checkInDate": "2027-09-11",
+    "checkOutDate": "2027-09-13",
+    "submittedAt": "2026-09-29T09:06:18.2197258Z",
+    "status": "Upcoming"
+  }
+]

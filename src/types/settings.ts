@@ -15,8 +15,8 @@ export type ProfileFormData = {
 };
 
 export enum IDENTIFIER_TYPE {
-  'Email' = 1,
-  'Phone' = 2,
+  Email = 1,
+  Phone = 2,
 }
 
 export enum OTP_PURPOSE {
