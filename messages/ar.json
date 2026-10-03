@@ -362,6 +362,12 @@
     "loading": "جاري تحميل الحجوزات...",
     "error": "فشل تحميل الحجوزات",
     "empty": "لا توجد حجوزات.",
+    "emptyState": {
+      "title": "لا توجد حجوزات حتى الآن",
+      "description": "يبدو أنك لم تقم بأي حجز بعد. هل أنت جاهز لبدء التخطيط؟",
+      "backToHome": "العودة إلى الرئيسية",
+      "imageAlt": "رسم توضيحي لعدم وجود حجوزات"
+    },
     "emptyServices": "لا توجد حجوزات خدمات حتى الآن",
     "submittedOn": "تاريخ الحجز: {date}",
     "details": {
@@ -385,7 +391,10 @@
       "paidAmount": "المبلغ المدفوع",
       "paymentMethod": "{cardType} **** {lastFour}",
       "paymentExpiry": "تاريخ الانتهاء: {expiry}",
-      "cancelReservation": "إلغاء الحجز"
+      "cancelReservation": "إلغاء الحجز",
+      "cancelReservationConfirm": {
+        "title": "هل أنت متأكد من إلغاء هذا الحجز؟"
+      }
     },
     "status": {
       "upcoming": "قادم",

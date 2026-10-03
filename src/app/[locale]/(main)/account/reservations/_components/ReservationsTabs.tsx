@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
+import StatusLayout from '@/components/shared/StatusLayout';
 import {
   Tabs,
   TabsContent,
@@ -9,9 +10,9 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
-import { useMyReservations } from '@/hooks/useMyReservations';
-
 import ReservationCard from './ReservationCard';
+
+import { useMyReservations } from '@/hooks/useMyReservations';
 
 // ─── Home / Stays icon ─────────────────────────────────────────────────────────
 
@@ -77,6 +78,18 @@ function ReservationCardSkeleton() {
   );
 }
 
+function EmptyReservationsState() {
+  const t = useTranslations('reservations.emptyState');
+
+  return (
+    <StatusLayout
+      title={t('title')}
+      paragraph={t('description')}
+      mainImageSrc='/svg/noReservation.svg'
+    />
+  );
+}
+
 // ─── Tabs provider ─────────────────────────────────────────────────────────────
 
 export function ReservationsTabsProvider({
@@ -121,7 +134,7 @@ export function ReservationsTabsList() {
 
 export function ReservationsTabsContent() {
   const t = useTranslations('reservations');
-  const { data, isLoading, isError } = useMyReservations();
+  const { data, isFetching, isError } = useMyReservations();
 
   const reservations = data?.result?.items || [];
 
@@ -129,7 +142,7 @@ export function ReservationsTabsContent() {
     <>
       <TabsContent value='stays' className='w-full'>
         <div className='flex flex-col gap-6'>
-          {isLoading && (
+          {isFetching && (
             <>
               <ReservationCardSkeleton />
               <ReservationCardSkeleton />
@@ -137,15 +150,11 @@ export function ReservationsTabsContent() {
             </>
           )}
 
-          {isError && (
-            <p className='text-sm text-error-500'>{t('error')}</p>
+          {!isFetching && (isError || reservations.length === 0) && (
+            <EmptyReservationsState />
           )}
 
-          {!isLoading && !isError && reservations.length === 0 && (
-            <p className='text-sm text-grayish-500'>{t('empty')}</p>
-          )}
-
-          {!isLoading &&
+          {!isFetching &&
             !isError &&
             reservations.map((reservation) => (
               <ReservationCard

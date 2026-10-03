@@ -359,6 +359,12 @@
     "loading": "Loading reservations...",
     "error": "Error loading reservations",
     "empty": "No reservations found.",
+    "emptyState": {
+      "title": "No Reservation Yet",
+      "description": "It looks like you haven't made any bookings yet. Ready to start planning?",
+      "backToHome": "Back to home",
+      "imageAlt": "No reservation illustration"
+    },
     "emptyServices": "No services reservations yet",
     "submittedOn": "Submitted on: {date}",
     "details": {
@@ -382,7 +388,10 @@
       "paidAmount": "Paid Amount",
       "paymentMethod": "{cardType} **** {lastFour}",
       "paymentExpiry": "EXP Date: {expiry}",
-      "cancelReservation": "Cancel Reservation"
+      "cancelReservation": "Cancel Reservation",
+      "cancelReservationConfirm": {
+        "title": "Are you sure you want to cancel this reservation?"
+      }
     },
     "status": {
       "upcoming": "Upcoming",

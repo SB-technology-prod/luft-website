@@ -1,8 +1,9 @@
-import { apiFetch } from '@/utils/api';
 import {
   GetMyReservationsApiResponse,
   GetReservationDetailsApiResponse,
 } from '@/types/reservations';
+
+import { apiFetch } from '@/utils/api';
 
 export const reservationsQueryKeys = {
   all: ['reservations'] as const,

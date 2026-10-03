@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
+import CalenderDateRangeIcon from '@/components/icons/CalenderDateRangeIcon';
+import StarIcon from '@/components/icons/StarIcon';
+import UsersIcon from '@/components/icons/UsersIcon';
+import ConfirmModal from '@/components/shared/ConfirmModal';
 import {
   Dialog,
   DialogContent,
@@ -12,15 +16,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import CalenderDateRangeIcon from '@/components/icons/CalenderDateRangeIcon';
-import StarIcon from '@/components/icons/StarIcon';
-import UsersIcon from '@/components/icons/UsersIcon';
+
 import { useReservationDetails } from '@/hooks/useReservationDetails';
-import { cn } from '@/lib/utils';
+
 import {
-  type ReservationListItem,
   type ReservationDetails,
+  type ReservationListItem,
+  type ReservationStatus,
 } from '@/types/reservations';
+
+import { cn } from '@/lib/utils';
 
 // ─── Mastercard Icon ───────────────────────────────────────────────────────────
 
@@ -33,9 +38,24 @@ function MastercardIcon({ className }: { className?: string }) {
       role='img'
       aria-label='Mastercard'
     >
-      <rect width='38' height='24' rx='4' fill='#252525' />
-      <circle cx='15' cy='12' r='7' fill='#EB001B' />
-      <circle cx='23' cy='12' r='7' fill='#F79E1B' />
+      <rect
+        width='38'
+        height='24'
+        rx='4'
+        fill='#252525'
+      />
+      <circle
+        cx='15'
+        cy='12'
+        r='7'
+        fill='#EB001B'
+      />
+      <circle
+        cx='23'
+        cy='12'
+        r='7'
+        fill='#F79E1B'
+      />
       <path
         d='M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z'
         fill='#FF5F00'
@@ -55,7 +75,12 @@ function VisaIcon({ className }: { className?: string }) {
       role='img'
       aria-label='Visa'
     >
-      <rect width='38' height='24' rx='4' fill='#1A1F71' />
+      <rect
+        width='38'
+        height='24'
+        rx='4'
+        fill='#1A1F71'
+      />
       <text
         x='19'
         y='17'
@@ -72,13 +97,7 @@ function VisaIcon({ className }: { className?: string }) {
   );
 }
 
-function CardIcon({
-  type,
-  className,
-}: {
-  type: string;
-  className?: string;
-}) {
+function CardIcon({ type, className }: { type: string; className?: string }) {
   const lower = type.toLowerCase();
   if (lower.includes('visa')) return <VisaIcon className={className} />;
   return <MastercardIcon className={className} />;
@@ -187,6 +206,10 @@ export default function ReservationDetailsDialog({
   trigger,
 }: ReservationDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
+  const [localStatus, setLocalStatus] = useState<ReservationStatus | null>(
+    null,
+  );
   const t = useTranslations('reservations.details');
 
   const { data, isLoading, isError } = useReservationDetails(
@@ -203,7 +226,7 @@ export default function ReservationDetailsDialog({
   const description = details?.property?.description ?? '';
   const rating = details?.property?.rating ?? 0;
   const reviewsCount = details?.property?.reviewsCount ?? 0;
-  const status = details?.status ?? reservation.status;
+  const status = localStatus ?? details?.status ?? reservation.status;
 
   const checkInDate = details?.stay?.checkInDate ?? reservation.checkInDate;
   const checkOutDate = details?.stay?.checkOutDate ?? reservation.checkOutDate;
@@ -226,14 +249,27 @@ export default function ReservationDetailsDialog({
     return `${amount} ${symbol}`;
   }
 
-  const canCancel = details?.cancellation?.canCancel ?? false;
+  const canCancel =
+    status.toLowerCase() !== 'canceled' &&
+    (details?.cancellation?.canCancel ?? false);
 
-  function formatPriceItemLabel(
+  function handleCancelReservation() {
+    setLocalStatus('Canceled');
+    setIsCancelConfirmOpen(false);
+  }
+
+  function getPriceSummaryItemTotal(
     item: (typeof priceSummaryItems)[0],
-  ): string {
+  ): number {
     if (item.type === 'ReservePrice' && item.pricePerNight != null) {
-      const key =
-        item.quantity === 1 ? 'reservePrice' : 'reservePricePlural';
+      return item.pricePerNight * item.quantity;
+    }
+    return item.total;
+  }
+
+  function formatPriceItemLabel(item: (typeof priceSummaryItems)[0]): string {
+    if (item.type === 'ReservePrice' && item.pricePerNight != null) {
+      const key = item.quantity === 1 ? 'reservePrice' : 'reservePricePlural';
       return t(key, {
         price: item.pricePerNight,
         currency,
@@ -250,181 +286,207 @@ export default function ReservationDetailsDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <>
+      <Dialog
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-      <DialogContent className='max-h-[90vh] w-full max-w-[42.5rem] overflow-y-auto rounded-2xl bg-white p-6 sm:rounded-2xl'>
-        <DialogHeader className='mb-4'>
-          <DialogTitle className='text-xl font-semibold text-grayish-900'>
-            {t('title')}
-          </DialogTitle>
-        </DialogHeader>
+        <DialogContent className='max-h-[90vh] w-full max-w-[42.5rem] overflow-y-auto rounded-2xl bg-white p-6 sm:rounded-2xl [&>button>svg]:!text-neutral-900'>
+          <DialogHeader className='mb-4'>
+            <DialogTitle className='text-xl font-semibold text-grayish-900'>
+              {t('title')}
+            </DialogTitle>
+          </DialogHeader>
 
-        {isLoading ? (
-          <div className='flex h-40 items-center justify-center'>
-            <Spinner />
-          </div>
-        ) : isError ? (
-          <div className='flex h-40 items-center justify-center text-error-500'>
-            {t('loadError')}
-          </div>
-        ) : (
-          <div className='flex flex-col gap-4'>
-            {/* ── Property Info ─────────────────────────────── */}
-            <div className='flex gap-4'>
-              <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
-                <Image
-                  src={propertyImage}
-                  alt={propertyName}
-                  fill
-                  className='object-cover'
-                  sizes='144px'
-                />
-              </div>
+          {isLoading ? (
+            <div className='flex h-40 items-center justify-center'>
+              <Spinner />
+            </div>
+          ) : isError ? (
+            <div className='flex h-40 items-center justify-center text-error-500'>
+              {t('loadError')}
+            </div>
+          ) : (
+            <div className='flex flex-col gap-4'>
+              {/* ── Property Info ─────────────────────────────── */}
+              <div className='flex gap-4'>
+                <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
+                  <Image
+                    src={propertyImage}
+                    alt={propertyName}
+                    fill
+                    className='object-cover'
+                    sizes='144px'
+                  />
+                </div>
 
-              <div className='flex flex-col gap-1.5'>
-                {reviewsCount > 0 && (
+                <div className='flex flex-col gap-1.5'>
                   <div className='flex items-center gap-1'>
-                    <StarIcon className='size-4 fill-amber-400' fill='#FBBF24' />
+                    <StarIcon
+                      className='size-4 fill-neutral-400'
+                      fill='currentColor'
+                    />
                     <span className='text-sm font-medium text-grayish-900'>
                       {t('reviews', { rating, count: reviewsCount })}
                     </span>
                   </div>
-                )}
-                <h3 className='text-lg font-semibold text-grayish-900'>
-                  {propertyName}
-                </h3>
-                {description && (
-                  <p className='text-sm leading-relaxed text-grayish-500'>
-                    {description}
-                  </p>
-                )}
-                <div className='mt-1'>
-                  <StatusBadge status={status} />
-                </div>
-              </div>
-            </div>
-
-            <Divider />
-
-            {/* ── Check-in / Check-out ──────────────────────── */}
-            <div className='flex flex-col gap-2'>
-              <p className='font-medium text-grayish-900'>
-                {t('checkInOut')}
-              </p>
-              <div className='flex items-center gap-2 text-grayish-600'>
-                <CalenderDateRangeIcon className='size-5 shrink-0' />
-                <span className='text-sm'>
-                  {t('checkInOutValue', {
-                    checkIn: formatDateDisplay(checkInDate),
-                    checkOut: formatDateDisplay(checkOutDate),
-                  })}
-                </span>
-              </div>
-            </div>
-
-            <Divider />
-
-            {/* ── Guests ────────────────────────────────────── */}
-            <div className='flex flex-col gap-2'>
-              <p className='font-medium text-grayish-900'>{t('guests')}</p>
-              <div className='flex items-center gap-2 text-grayish-600'>
-                <UsersIcon className='size-5 shrink-0' />
-                <span className='text-sm'>
-                  {totalGuests === 1
-                    ? t('guestsCount', { count: totalGuests })
-                    : t('guestsCountPlural', { count: totalGuests })}
-                </span>
-              </div>
-            </div>
-
-            <Divider />
-
-            {/* ── Price Summary ─────────────────────────────── */}
-            <div className='flex flex-col gap-3'>
-              <p className='font-medium text-grayish-900'>{t('summary')}</p>
-              <div className='flex flex-col gap-2'>
-                {priceSummaryItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className='flex items-center justify-between text-sm text-grayish-700'
-                  >
-                    <span>{formatPriceItemLabel(item)}</span>
-                    <span>{formatCurrency(item.total, currency)}</span>
+                  <h3 className='text-lg font-semibold text-grayish-900'>
+                    {propertyName}
+                  </h3>
+                  {description && (
+                    <p className='text-sm leading-relaxed text-grayish-500'>
+                      {description}
+                    </p>
+                  )}
+                  <div className='mt-1'>
+                    <StatusBadge status={status} />
                   </div>
-                ))}
-                <div className='flex items-center justify-between text-sm text-grayish-700'>
-                  <span>{t('taxes')}</span>
-                  <span>{formatCurrency(taxes, currency)}</span>
                 </div>
               </div>
-            </div>
 
-            <Divider />
+              <Divider />
 
-            {/* ── Final Price ───────────────────────────────── */}
-            <div className='flex items-center justify-between'>
-              <span className='font-medium text-grayish-900'>
-                {t('finalPrice')}
-              </span>
-              <span className='font-semibold text-grayish-900'>
-                {formatCurrency(finalPrice, currency)}
-              </span>
-            </div>
-
-            <Divider />
-
-            {/* ── Payment ──────────────────────────────────── */}
-            <div className='flex flex-col gap-3'>
-              <p className='font-medium text-grayish-900'>{t('payment')}</p>
+              {/* ── Check-in / Check-out ──────────────────────── */}
               <div className='flex flex-col gap-2'>
-                {paymentCard ? (
-                  <>
-                    <div className='flex items-center gap-2.5'>
-                      <CardIcon
-                        type={paymentCard.type}
-                        className='h-6 w-9 shrink-0 rounded'
-                      />
-                      <span className='text-sm font-medium text-grayish-900'>
-                        {t('paymentMethod', {
-                          cardType: paymentCard.type,
-                          lastFour: paymentCard.lastFourDigits,
-                        })}
+                <p className='font-medium text-grayish-900'>
+                  {t('checkInOut')}
+                </p>
+                <div className='flex items-center gap-2 text-grayish-600'>
+                  <CalenderDateRangeIcon className='size-5 shrink-0' />
+                  <span className='text-sm'>
+                    {t('checkInOutValue', {
+                      checkIn: formatDateDisplay(checkInDate),
+                      checkOut: formatDateDisplay(checkOutDate),
+                    })}
+                  </span>
+                </div>
+              </div>
+
+              <Divider />
+
+              {/* ── Guests ────────────────────────────────────── */}
+              <div className='flex flex-col gap-2'>
+                <p className='font-medium text-grayish-900'>{t('guests')}</p>
+                <div className='flex items-center gap-2 text-grayish-600'>
+                  <UsersIcon className='size-5 shrink-0' />
+                  <span className='text-sm'>
+                    {totalGuests === 1
+                      ? t('guestsCount', { count: totalGuests })
+                      : t('guestsCountPlural', { count: totalGuests })}
+                  </span>
+                </div>
+              </div>
+
+              <Divider />
+
+              {/* ── Price Summary ─────────────────────────────── */}
+              <div className='flex flex-col gap-3'>
+                <p className='font-medium text-grayish-900'>{t('summary')}</p>
+                <div className='flex flex-col gap-2'>
+                  {priceSummaryItems.map((item, index) => (
+                    <div
+                      key={index}
+                      className='flex items-center justify-between text-sm text-grayish-700'
+                    >
+                      <span>{formatPriceItemLabel(item)}</span>
+                      <span>
+                        {formatCurrency(
+                          getPriceSummaryItemTotal(item),
+                          currency,
+                        )}
                       </span>
                     </div>
-                    <p className='text-sm text-grayish-500'>
-                      {t('paymentExpiry', { expiry: paymentCard.expiryDate })}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <div className='flex items-center justify-between text-sm text-grayish-700'>
-                      <span>{t('paymentStatus')}</span>
-                      <span className='font-medium'>{paymentStatus}</span>
-                    </div>
-                    <div className='flex items-center justify-between text-sm text-grayish-700'>
-                      <span>{t('paidAmount')}</span>
-                      <span>{formatCurrency(paidAmount, currency)}</span>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* ── Cancel Reservation ───────────────────────── */}
-            {canCancel && (
-              <>
-                <Divider />
-                <div>
-                  <button className='text-sm font-medium text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'>
-                    {t('cancelReservation')}
-                  </button>
+                  ))}
+                  <div className='flex items-center justify-between text-sm text-grayish-700'>
+                    <span>{t('taxes')}</span>
+                    <span>{formatCurrency(taxes, currency)}</span>
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+              </div>
+
+              <Divider />
+
+              {/* ── Final Price ───────────────────────────────── */}
+              <div className='flex items-center justify-between'>
+                <span className='text-grayish-900'>{t('finalPrice')}</span>
+                <span className='text-grayish-900'>
+                  {formatCurrency(finalPrice, currency)}
+                </span>
+              </div>
+
+              <Divider />
+
+              {/* ── Payment ──────────────────────────────────── */}
+              <div className='flex flex-col gap-3'>
+                <p className='font-medium text-grayish-900'>{t('payment')}</p>
+                <div className='flex flex-col gap-2'>
+                  {paymentCard ? (
+                    <>
+                      <div className='flex items-center gap-2.5'>
+                        <CardIcon
+                          type={paymentCard.type}
+                          className='h-6 w-9 shrink-0 rounded'
+                        />
+                        <span className='text-sm font-medium text-grayish-900'>
+                          {t('paymentMethod', {
+                            cardType: paymentCard.type,
+                            lastFour: paymentCard.lastFourDigits,
+                          })}
+                        </span>
+                      </div>
+                      <p className='text-sm text-grayish-500'>
+                        {t('paymentExpiry', { expiry: paymentCard.expiryDate })}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className='flex items-center justify-between text-sm text-grayish-700'>
+                        <span>{t('paymentStatus')}</span>
+                        <span className='font-medium'>{paymentStatus}</span>
+                      </div>
+                      <div className='flex items-center justify-between text-sm text-grayish-700'>
+                        <span>{t('paidAmount')}</span>
+                        <span>{formatCurrency(paidAmount, currency)}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* ── Cancel Reservation ───────────────────────── */}
+              {canCancel && (
+                <>
+                  <Divider />
+                  <div>
+                    <button
+                      type='button'
+                      className='text-sm font-medium text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'
+                      onClick={() => setIsCancelConfirmOpen(true)}
+                    >
+                      {t('cancelReservation')}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <ConfirmModal
+        isOpen={isCancelConfirmOpen}
+        onCancel={() => setIsCancelConfirmOpen(false)}
+        onConfirm={handleCancelReservation}
+        variant='destructive'
+      >
+        <div className='flex flex-col items-center gap-2 text-center'>
+          <h6 className='text-xl font-medium'>
+            {t('cancelReservationConfirm.title')}
+          </h6>
+        </div>
+      </ConfirmModal>
+    </>
   );
 }

@@ -1,16 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-
 import { useTranslations } from 'next-intl';
 
 import CalenderDateRangeIcon from '@/components/icons/CalenderDateRangeIcon';
-import { cn } from '@/lib/utils';
 
 import ReservationDetailsDialog from './ReservationDetailsDialog';
+
 import {
   type ReservationListItem,
 } from '@/types/reservations';
+
+import { cn } from '@/lib/utils';
 
 const statusStyles: Record<string, string> = {
   upcoming: 'border border-grayish-900 text-grayish-900 bg-neutral-50',
