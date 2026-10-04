@@ -17,6 +17,7 @@ import SubmitButton from '@/components/shared/SubmitButton';
 import { Form } from '@/components/ui/form';
 
 import { updateUserCookieAction } from '../../actions';
+import DeleteAccountBtn from '../DeleteAccountBtn';
 import EditableField from '../EditableField';
 import ProfileImgInput from '../ProfileImgInput';
 
@@ -126,11 +127,14 @@ export default function ProfileForm() {
         className='flex flex-col gap-4'
       >
         <div className='flex flex-col gap-6 sm:gap-8 md:gap-12'>
-          <ProfileImgInput
-            isLoading={isFetching || isPending}
-            image={userData?.profilePicture}
-            className='w-fit max-sm:mx-auto'
-          />
+          <div className='flex items-center justify-between'>
+            <ProfileImgInput
+              isLoading={isFetching || isPending}
+              image={userData?.profilePicture}
+              className='w-fit max-sm:mx-auto'
+            />
+            <DeleteAccountBtn />
+          </div>
 
           <div className='flex w-full flex-wrap gap-6'>
             <CustomInput

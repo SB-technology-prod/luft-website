@@ -17,7 +17,7 @@ export default function NotFound() {
                 height={568}
                 className='w-[568px] object-cover'
               />
-              <p className='mb-4 text-3xl font-bold tracking-tight text-grayish-50 md:text-5xl ltr:font-Unna'>
+              <p className='ltr:font-Unna mb-4 text-3xl font-bold tracking-tight text-grayish-50 md:text-5xl'>
                 It Look Like Some Thing Went Wrong
               </p>
               <p className='mb-4 text-lg font-light text-grayish-100'>

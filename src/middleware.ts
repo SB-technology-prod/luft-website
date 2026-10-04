@@ -6,15 +6,19 @@ import { routing } from './i18n/routing';
 import { AuthUserApiResponse } from '@/types/auth';
 
 const AUTH_ROUTES = ['login', 'signup', 'forget-password'];
-const PROTECTED_ROUTES = ['account/settings'];
+const PROTECTED_ROUTES = [
+  'account/settings',
+  'account/wishlist',
+  'account/reservations',
+];
 
 // Using Regex avoids recreating arrays and string manipulation (split/slice/join) on every request.
 // Matches optional locale /en/ or /ar/ prefix.
 const AUTH_ROUTES_REGEX = new RegExp(
-  `^/(?:(?:en|ar)/)?(${AUTH_ROUTES.join('|')})(?:/|$)`
+  `^/(?:(?:en|ar)/)?(${AUTH_ROUTES.join('|')})(?:/|$)`,
 );
 const PROTECTED_ROUTES_REGEX = new RegExp(
-  `^/(?:(?:en|ar)/)?(${PROTECTED_ROUTES.join('|')})(?:/|$)`
+  `^/(?:(?:en|ar)/)?(${PROTECTED_ROUTES.join('|')})(?:/|$)`,
 );
 
 /** Deletes all auth cookies from a response (used on forced sign-out). */
@@ -33,7 +37,10 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
-function applyRefreshedCookies(response: NextResponse, data: AuthUserApiResponse) {
+function applyRefreshedCookies(
+  response: NextResponse,
+  data: AuthUserApiResponse,
+) {
   const accessExpiry = new Date(data.accessTokenExpiresAt);
   const refreshExpiry = new Date(data.refreshTokenExpiresAt);
 
@@ -71,7 +78,9 @@ export default async function middleware(request: NextRequest) {
   // Read auth state directly from request cookies (Edge Runtime safe).
   const accessToken = request.cookies.get('accessToken')?.value;
   const refreshToken = request.cookies.get('refreshToken')?.value;
-  const accessTokenExpiresAt = request.cookies.get('accessTokenExpiresAt')?.value;
+  const accessTokenExpiresAt = request.cookies.get(
+    'accessTokenExpiresAt',
+  )?.value;
 
   let accessExpired = !accessToken;
   if (accessToken && accessTokenExpiresAt) {

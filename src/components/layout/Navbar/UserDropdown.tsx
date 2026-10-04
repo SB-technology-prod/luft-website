@@ -41,14 +41,12 @@ export default function UserDropdown({ dir }: UserDropdownProps) {
     },
     {
       label: t('navLinks.reservations'),
-      disabled: true,
-      onClick: () => {},
+      onClick: () => router.push('/account/reservations'),
       icon: <KeyIcon className='!size-5' />,
     },
     {
       label: t('navLinks.wishlist'),
-      disabled: true,
-      onClick: () => {},
+      onClick: () => router.push('/account/wishlist'),
       icon: <Heart className='!size-5 fill-grayish-900' />,
     },
     {
