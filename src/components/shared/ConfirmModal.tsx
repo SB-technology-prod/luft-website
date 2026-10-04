@@ -30,16 +30,18 @@ export default function ConfirmModal({
     <Modal
       {...modalProps}
       className={cn(
-        'w-4/12 min-w-fit gap-0 p-6 max-sm:w-full',
+        'w-[calc(100vw-2rem)] max-w-[28rem] min-w-0 gap-0 p-4 sm:p-6',
         modalProps.className,
       )}
       onClose={onCancel}
     >
-      <div className='flex w-full flex-col items-center gap-7'>
-        <div>{children}</div>
+      <div className='flex w-full min-w-0 flex-col items-center gap-7 overflow-hidden'>
+        <div className='w-full min-w-0 overflow-hidden break-words text-center'>
+          {children}
+        </div>
         <div className='flex w-full items-center gap-3 py-1 max-sm:flex-col'>
           <SubmitButton
-            className='w-24 min-w-fit flex-1 font-medium max-sm:w-full'
+            className='min-w-0 flex-1 font-medium max-sm:w-full'
             disabled={isActionsDisabled}
             onClick={onConfirm}
             type='button'
@@ -49,7 +51,7 @@ export default function ConfirmModal({
             {t('confirm')}
           </SubmitButton>
           <Button
-            className='w-24 min-w-fit flex-1 font-medium max-sm:w-full'
+            className='min-w-0 flex-1 font-medium max-sm:w-full'
             disabled={isActionsDisabled}
             variant='outline'
             onClick={onCancel}

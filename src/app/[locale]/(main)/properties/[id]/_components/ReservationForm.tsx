@@ -25,7 +25,9 @@ function ReservationForm({
       <div className='flex flex-col gap-4'>
         <div className='flex h-16 w-full justify-between rounded-full border border-grayish-100'>
           <div className='flex flex-col justify-center ps-4 lg:px-6 lg:py-2.5'>
-            <span className='text-sm leading-6 text-grayish-900'>{t('checkIn')}</span>
+            <span className='text-sm leading-6 text-grayish-900'>
+              {t('checkIn')}
+            </span>
             <span className='leading-5 text-grayish-400'>{t('addDate')}</span>
           </div>
           <span className='h-full w-px bg-grayish-50' />
@@ -69,7 +71,9 @@ function ReservationForm({
             </button>
           </div>
         </div>
-        <Button className='h-14 text-base text-grayish-50'>{t('reserve')}</Button>
+        <Button className='h-14 text-base text-grayish-50'>
+          {t('reserve')}
+        </Button>
       </div>
     );
 

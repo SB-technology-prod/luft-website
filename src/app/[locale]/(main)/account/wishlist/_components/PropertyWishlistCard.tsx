@@ -151,5 +151,3 @@ export default function PropertyWishlistCard({
 
 export { PropertyWishlistCardSkeleton };
 PropertyWishlistCard.Skeleton = PropertyWishlistCardSkeleton;
-
-

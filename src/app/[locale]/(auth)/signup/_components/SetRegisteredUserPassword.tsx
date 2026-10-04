@@ -22,7 +22,10 @@ export default function SetRegisteredUserPassword({
       description={t('setPassword.description')}
       submitBtnLabel={t('setPassword.buttonLabel')}
       onSubmit={async ({ password }) => {
-        const result = await setRegisteredUserPasswordAction({ password, registrationKey });
+        const result = await setRegisteredUserPasswordAction({
+          password,
+          registrationKey,
+        });
         if (!result.success) {
           throw new Error(result.error);
         }

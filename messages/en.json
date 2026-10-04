@@ -349,5 +349,55 @@
       "title": "We’re having trouble right now",
       "description": "Our servers are temporarily unavailable. Please try again in a moment."
     }
+  },
+  "reservations": {
+    "title": "My Reservations",
+    "tabs": {
+      "stays": "Stays",
+      "services": "Services"
+    },
+    "loading": "Loading reservations...",
+    "error": "Error loading reservations",
+    "empty": "No reservations found.",
+    "emptyState": {
+      "title": "No Reservation Yet",
+      "description": "It looks like you haven't made any bookings yet. Ready to start planning?",
+      "backToHome": "Back to home",
+      "imageAlt": "No reservation illustration"
+    },
+    "emptyServices": "No services reservations yet",
+    "submittedOn": "Submitted on: {date}",
+    "details": {
+      "title": "Reservation Details",
+      "loadError": "Failed to load reservation details.",
+      "reviews": "{rating} ({count})",
+      "checkInOut": "Check-in - Check-out",
+      "checkInOutValue": "{checkIn} To {checkOut}",
+      "guests": "Guests",
+      "guestsCount": "{count} Guest",
+      "guestsCountPlural": "{count} Guests",
+      "summary": "Summary",
+      "reservePrice": "{price} {currency} x {nights} night",
+      "reservePricePlural": "{price} {currency} x {nights} nights",
+      "feeWithQuantity": "{description} x {quantity}",
+      "taxes": "Taxes",
+      "priceWithCurrency": "{amount} {currency}",
+      "finalPrice": "Final Price",
+      "payment": "Payment Method",
+      "paymentStatus": "Status",
+      "paidAmount": "Paid Amount",
+      "paymentMethod": "{cardType} **** {lastFour}",
+      "paymentExpiry": "EXP Date: {expiry}",
+      "cancelReservation": "Cancel Reservation",
+      "cancelReservationConfirm": {
+        "title": "Are you sure you want to cancel this reservation?"
+      }
+    },
+    "status": {
+      "upcoming": "Upcoming",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "canceled": "Canceled"
+    }
   }
 }
