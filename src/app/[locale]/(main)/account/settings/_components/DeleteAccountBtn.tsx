@@ -3,17 +3,43 @@ import React, { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { toast } from 'sonner';
+
+import { useMutation } from '@tanstack/react-query';
+
 import ConfirmModal from '@/components/shared/ConfirmModal';
 import { Button } from '@/components/ui/button';
-export default function DeleteAccountBtn() {
+
+import { signOut } from '@/utils/session';
+
+import { deleteUserAccount } from '@/api/settings';
+import { cn } from '@/lib/utils';
+
+export default function DeleteAccountBtn({
+  className,
+}: {
+  className?: string;
+}) {
   const t = useTranslations('settings');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteUserAccount,
+    onSuccess: async (res: { message?: string }) => {
+      toast.success(res?.message);
+      await signOut();
+    },
+    onError: (error: Error) => {
+      setIsConfirmOpen(false);
+      toast.error(error.message);
+    },
+  });
 
   return (
     <>
       <Button
         variant={'link'}
-        className='text-error-500 underline'
+        className={cn('text-error-500 underline', className)}
         type='button'
         onClick={() => setIsConfirmOpen(true)}
       >
@@ -23,7 +49,8 @@ export default function DeleteAccountBtn() {
       <ConfirmModal
         isOpen={isConfirmOpen}
         onCancel={() => setIsConfirmOpen(false)}
-        onConfirm={() => setIsConfirmOpen(false)}
+        onConfirm={() => mutate()}
+        isActionsDisabled={isPending}
         variant='destructive'
       >
         <div className='flex flex-col items-center gap-6 text-center'>
