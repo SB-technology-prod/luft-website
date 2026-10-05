@@ -17,6 +17,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+import StatusBadge from './StatusBadge';
+
 import { useReservationDetails } from '@/hooks/useReservationDetails';
 
 import {
@@ -24,8 +26,6 @@ import {
   type ReservationListItem,
   type ReservationStatus,
 } from '@/types/reservations';
-
-import { cn } from '@/lib/utils';
 
 // ─── Mastercard Icon ───────────────────────────────────────────────────────────
 
@@ -127,40 +127,6 @@ function Spinner() {
         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'
       />
     </svg>
-  );
-}
-
-// ─── Status badge ──────────────────────────────────────────────────────────────
-
-const statusStyles: Record<string, string> = {
-  upcoming: 'border border-neutral-900 text-neutral-900 bg-neutral-50',
-  ongoing: 'border border-warning-500 text-warning-600 bg-warning-50',
-  completed: 'border border-success-500 text-success-600 bg-success-50',
-  canceled: 'border border-error-500 text-error-500 bg-error-50',
-};
-
-function StatusBadge({ status }: { status: string }) {
-  const t = useTranslations('reservations.status');
-  const key = status.toLowerCase() as keyof typeof statusStyles;
-  const style = statusStyles[key] ?? statusStyles['upcoming'];
-  const label =
-    key === 'upcoming'
-      ? t('upcoming')
-      : key === 'ongoing'
-        ? t('ongoing')
-        : key === 'completed'
-          ? t('completed')
-          : t('canceled');
-
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-3 py-1 text-sm font-medium',
-        style,
-      )}
-    >
-      {label}
-    </span>
   );
 }
 

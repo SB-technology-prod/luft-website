@@ -64,15 +64,15 @@ function ServicesIcon({ className }: { className?: string }) {
 
 function ReservationCardSkeleton() {
   return (
-    <div className='flex w-full items-start gap-4 rounded-xl p-2'>
+    <div className='flex w-full items-start gap-3 py-4 sm:gap-4'>
       {/* Image placeholder */}
-      <div className='h-[7.5rem] w-[8.5rem] shrink-0 animate-pulse rounded-xl bg-grayish-100 sm:h-28 sm:w-36' />
+      <div className='h-[5.75rem] w-[7.75rem] shrink-0 animate-pulse rounded-xl bg-grayish-100 sm:h-28 sm:w-36' />
       {/* Text placeholders */}
       <div className='flex flex-1 flex-col gap-2.5 pt-1'>
-        <div className='h-5 w-2/3 animate-pulse rounded-md bg-grayish-100' />
+        <div className='h-4 w-2/3 animate-pulse rounded-md bg-grayish-100' />
         <div className='h-4 w-1/2 animate-pulse rounded-md bg-grayish-100' />
         <div className='h-4 w-1/3 animate-pulse rounded-md bg-grayish-100' />
-        <div className='h-6 w-20 animate-pulse rounded-full bg-grayish-100' />
+        <div className='h-5 w-16 animate-pulse rounded-full bg-grayish-100' />
       </div>
     </div>
   );
@@ -141,7 +141,7 @@ export function ReservationsTabsContent() {
   return (
     <>
       <TabsContent value='stays' className='w-full'>
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col divide-y divide-grayish-50'>
           {isFetching && (
             <>
               <ReservationCardSkeleton />
