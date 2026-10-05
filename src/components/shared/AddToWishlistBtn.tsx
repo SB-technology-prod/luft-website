@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { useTranslations } from 'next-intl';
 
 import { Heart } from 'lucide-react';
@@ -30,7 +32,14 @@ export default function AddToWishlistBtn({
   const { mutate: removeFromWishlist, isPending: isRemoving } =
     useRemoveFromWishlist();
 
+  const [isInWishlist, setIsInWishlist] = useState(isWishlisted);
+
+  useEffect(() => {
+    setIsInWishlist(isWishlisted);
+  }, [isWishlisted]);
+
   const isPending = isAdding || isRemoving;
+  const isActive = isAdding ? true : isRemoving ? false : isInWishlist;
 
   if (!session) return null;
 
@@ -38,10 +47,14 @@ export default function AddToWishlistBtn({
     e.stopPropagation();
     e.preventDefault();
     if (!propertyId || isPending) return;
-    if (isWishlisted) {
-      removeFromWishlist(propertyId);
+    if (isInWishlist) {
+      removeFromWishlist(propertyId, {
+        onSuccess: () => setIsInWishlist(false),
+      });
     } else {
-      addToWishlist(propertyId);
+      addToWishlist(propertyId, {
+        onSuccess: () => setIsInWishlist(true),
+      });
     }
   };
 
@@ -55,7 +68,7 @@ export default function AddToWishlistBtn({
       <Heart
         className={cn(
           'size-6 transition-colors',
-          isWishlisted
+          isActive
             ? 'fill-error-500 stroke-white'
             : 'fill-grayish-500 stroke-white',
         )}

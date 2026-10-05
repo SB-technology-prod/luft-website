@@ -10,6 +10,7 @@ export type PropertyApiRes = {
   reviewCount: number;
   coverImageUrl: string;
   images: string[];
+  isWishlisted: boolean;
 };
 
 export type PropertyImage = {
@@ -78,6 +79,7 @@ export type PropertyDetailsApiRes = {
   averageRating: number;
   reviewCount: number;
   reviews: PropertyReview[];
+  isWishlisted: boolean;
 };
 
 export type RecommendedPropertiesApiRes = ApiResponse<PropertyApiRes[]>;
