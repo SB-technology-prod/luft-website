@@ -58,6 +58,7 @@ export default async function PropertyPage({
           </div>
           {/* Booking section */}
           <AddDatesForPrices
+            propertyId={id}
             maxGuests={maximumGuests}
             pricePerNight={pricePerNight}
           />
@@ -79,7 +80,9 @@ export default async function PropertyPage({
       </div>
       <div className='max-h-fit md:hidden'>
         <ReservationForm
+          propertyId={id}
           maxGuests={maximumGuests}
+          pricePerNight={pricePerNight}
           variant='mobile'
         />
       </div>

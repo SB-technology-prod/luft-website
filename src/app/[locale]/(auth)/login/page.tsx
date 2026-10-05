@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -11,7 +13,10 @@ export default function Page() {
 
   return (
     <div className='flex flex-col'>
-      <LoginForm />
+      {/* LoginForm reads the redirect search param */}
+      <Suspense>
+        <LoginForm />
+      </Suspense>
       <TextBetweenLine className='mb-2 mt-4'>
         {t('orLoginWith')}
       </TextBetweenLine>

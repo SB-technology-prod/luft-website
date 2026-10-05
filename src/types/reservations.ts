@@ -1,6 +1,10 @@
 import { ApiResponse } from './index';
 
-export type ReservationStatus = 'Upcoming' | 'Ongoing' | 'Completed' | 'Canceled';
+export type ReservationStatus =
+  | 'Upcoming'
+  | 'Ongoing'
+  | 'Completed'
+  | 'Canceled';
 
 export type ReservationListItem = {
   reservationId: string;
@@ -86,5 +90,36 @@ export type ReservationDetails = {
   cancellation: ReservationCancellation;
 };
 
-export type GetReservationDetailsApiResponse =
-  ApiResponse<ReservationDetails>;
+export type GetReservationDetailsApiResponse = ApiResponse<ReservationDetails>;
+
+// --- Booking widget types ---
+
+export type BookedDates = {
+  propertyId: string;
+  source: string;
+  from: string;
+  to: string;
+  totalBookedDays: number;
+  // Booked nights in yyyy-MM-dd format
+  bookedDates: string[];
+};
+
+export type GetBookedDatesApiResponse = ApiResponse<BookedDates>;
+
+export type ReservationQuoteRequest = {
+  checkInDate: string;
+  checkOutDate: string;
+};
+
+export type ReservationQuote = {
+  totalAmount: number;
+};
+
+export type GetQuoteTotalApiResponse = ApiResponse<ReservationQuote>;
+
+export type ReserveRequest = ReservationQuoteRequest & {
+  propertyId: string;
+  numberOfGuests: number;
+};
+
+export type ReserveApiResponse = ApiResponse<{ reservationId?: string } | null>;

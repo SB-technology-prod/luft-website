@@ -3,10 +3,12 @@ import { getTranslations } from 'next-intl/server';
 import ReservationForm from './ReservationForm';
 
 type AddDatesForPricesProps = {
+  propertyId: string;
   maxGuests: number;
   pricePerNight: number;
 };
 export default async function AddDatesForPrices({
+  propertyId,
   maxGuests,
   pricePerNight,
 }: AddDatesForPricesProps) {
@@ -23,16 +25,12 @@ export default async function AddDatesForPrices({
         </h6>
         <p className='leading-5 text-grayish-400'>{t('addDatesSubtitle')}</p>
       </div>
-      <div className='flex flex-col gap-4'>
-        <div className='text-grayish-400'>
-          <span className='text-[1.75rem] font-medium leading-9 text-grayish-900 lg:text-[2rem] lg:leading-10'>
-            ${pricePerNight}
-          </span>
-          &nbsp; {t('forNights', { count: 2 })}
-        </div>
-        {/* Reservations form */}
-        <ReservationForm maxGuests={maxGuests} />
-      </div>
+      {/* Reservations form (includes the live price) */}
+      <ReservationForm
+        propertyId={propertyId}
+        maxGuests={maxGuests}
+        pricePerNight={pricePerNight}
+      />
     </div>
   );
 }

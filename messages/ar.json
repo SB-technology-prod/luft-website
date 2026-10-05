@@ -62,7 +62,6 @@
       "phone": {
         "invalid": "رقم هاتف غير صحيح"
       },
-
       "required": "الحقل مطلوب",
       "lettersOnly": "يجب أن يحتوي الاسم على أحرف فقط",
       "invalidInput": "القيمة المدخلة غير صحيحة",
@@ -230,7 +229,22 @@
         "addDate": "أضف تاريخاً",
         "guests": "الضيوف",
         "guestsCount": "{count} ضيوف",
-        "reserve": "احجز الآن"
+        "reserve": "احجز الآن",
+        "perNight": "لليلة",
+        "retry": "إعادة المحاولة",
+        "success": "تم إرسال حجزك بنجاح",
+        "errors": {
+          "selectDatesAndGuests": "يرجى اختيار التواريخ وعدد الضيوف",
+          "datesUnavailable": "التواريخ المختارة لم تعد متاحة",
+          "availabilityCheckFailed": "تعذر التأكد من التوفر. يرجى المحاولة مرة أخرى.",
+          "availabilityLoadFailed": "تعذر تحميل التوفر"
+        },
+        "loginRequired": {
+          "title": "سجّل الدخول للحجز",
+          "description": "يجب تسجيل الدخول لإتمام حجزك. سنعيدك إلى هذه الصفحة مع حفظ تواريخك.",
+          "login": "تسجيل الدخول",
+          "cancel": "إلغاء"
+        }
       },
       "reviews": {
         "showAll": "عرض جميع التقييمات",

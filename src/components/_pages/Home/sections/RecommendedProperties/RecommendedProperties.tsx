@@ -10,7 +10,6 @@ export default async function RecommendedProperties() {
 
   try {
     const { result: properties } = await getRecommendedProperties();
-    console.log(properties);
 
     return (
       <div className='flex flex-col items-center gap-6 md:gap-8 lg:gap-12'>

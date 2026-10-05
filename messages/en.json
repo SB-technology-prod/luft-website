@@ -227,7 +227,22 @@
         "addDate": "Add Date",
         "guests": "Guests",
         "guestsCount": "{count} Guests",
-        "reserve": "Reserve"
+        "reserve": "Reserve",
+        "perNight": "per night",
+        "retry": "Retry",
+        "success": "Your reservation has been submitted successfully",
+        "errors": {
+          "selectDatesAndGuests": "Please select dates and number of guests",
+          "datesUnavailable": "Selected dates are no longer available",
+          "availabilityCheckFailed": "We couldn’t confirm availability. Please try again.",
+          "availabilityLoadFailed": "Couldn’t load availability"
+        },
+        "loginRequired": {
+          "title": "Sign in to reserve",
+          "description": "You need to sign in to complete your reservation. We’ll bring you right back here with your dates saved.",
+          "login": "Log in",
+          "cancel": "Cancel"
+        }
       },
       "reviews": {
         "showAll": "Show all reviews",
