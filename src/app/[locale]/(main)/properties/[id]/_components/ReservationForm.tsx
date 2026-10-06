@@ -280,19 +280,22 @@ function ReservationForm({
 
   const dateLocale = locale === 'ar' ? ar : enUS;
   const formatDate = (date: Date) =>
-    format(date, 'd MMM yyyy', { locale: dateLocale });
+    format(date, 'd/M/yyyy', { locale: dateLocale });
 
   const priceSummary = (
     <div className='flex flex-wrap items-baseline gap-x-2 text-grayish-400'>
+      {/* Original price comes first, struck through, when a discount applies */}
+      {!isQuoteLoading && nights > 0 && total < baseTotal && (
+        <span className='text-[1.75rem] font-medium leading-9 line-through lg:text-[2rem] lg:leading-10'>
+          {formatPrice(baseTotal)}
+        </span>
+      )}
       {isQuoteLoading ? (
         <Spinner className='size-7 border-[3px]' />
       ) : (
         <span className='text-[1.75rem] font-medium leading-9 text-grayish-900 lg:text-[2rem] lg:leading-10'>
           {formatPrice(nights > 0 ? total : pricePerNight)}
         </span>
-      )}
-      {!isQuoteLoading && nights > 0 && total < baseTotal && (
-        <span className='line-through'>{formatPrice(baseTotal)}</span>
       )}
       <span>
         {nights > 0 ? t('forNights', { count: nights }) : t('perNight')}
