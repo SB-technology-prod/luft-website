@@ -262,7 +262,9 @@
     "wishlist": {
       "title": "Your Wishlist",
       "emptyTitle": "Your wishlist is empty",
-      "emptyDescription": "Browse our homes and save your favorites for later."
+      "emptyDescription": "Browse our homes and save your favorites for later.",
+      "discoverHomes": "Discover Homes",
+      "updateFailed": "We couldn’t update your wishlist. Please try again."
     }
   },
   "sections": {

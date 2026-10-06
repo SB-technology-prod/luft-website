@@ -27,6 +27,7 @@ export default function WishlistPage() {
         title={t('emptyTitle')}
         paragraph={t('emptyDescription')}
         mainImageSrc='/svg/emptyWishlist.svg'
+        buttonLabel={t('discoverHomes')}
       />
     );
 
