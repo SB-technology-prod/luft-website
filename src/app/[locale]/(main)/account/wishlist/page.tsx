@@ -31,26 +31,22 @@ export default function WishlistPage() {
     );
 
   return (
-    <div className='mx-4 my-6 flex flex-col items-center gap-6 md:mx-6 md:my-2 md:gap-8 lg:mx-auto lg:my-16 lg:gap-16'>
-      <h3 className='text-center text-3xl font-medium text-grayish-900 md:text-3xl lg:text-5xl lg:leading-[3.625rem]'>
+    <div className='mx-auto my-6 flex w-full max-w-[68.25rem] flex-col items-center gap-6 px-4 md:my-8 md:gap-8 md:px-6 lg:my-16 lg:gap-12 xl:px-0'>
+      <h3 className='text-center text-3xl font-medium text-grayish-900 lg:text-5xl lg:leading-[3.625rem]'>
         {t('title')}
       </h3>
-      {isFetching ? (
-        <div className='grid grid-cols-3 gap-2 md:gap-6'>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <PropertyWishlistCardSkeleton key={index} />
-          ))}
-        </div>
-      ) : (
-        <div className='grid grid-cols-3 gap-2 md:gap-6'>
-          {items.map((item) => (
-            <PropertyWishlistCard
-              key={item.propertyId}
-              item={item}
-            />
-          ))}
-        </div>
-      )}
+      <div className='grid w-full grid-cols-2 gap-x-2 gap-y-4 md:gap-x-6 md:gap-y-8 lg:grid-cols-3 lg:gap-y-12'>
+        {isFetching
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <PropertyWishlistCardSkeleton key={index} />
+            ))
+          : items.map((item) => (
+              <PropertyWishlistCard
+                key={item.propertyId}
+                item={item}
+              />
+            ))}
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ type PropertyCardProps = {
   newPrice: number;
   numOfReviews: number;
   id: string;
-  isWishlisted?: boolean;
+  isWishlisted: boolean;
 };
 
 export default function PropertyCard({
@@ -29,7 +29,7 @@ export default function PropertyCard({
   newPrice,
   numOfReviews,
   id,
-  isWishlisted = false,
+  isWishlisted,
 }: PropertyCardProps) {
   const t = useTranslations('common');
 

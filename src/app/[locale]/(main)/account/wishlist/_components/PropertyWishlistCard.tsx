@@ -57,91 +57,88 @@ export default function PropertyWishlistCard({
   }, [api, onSelect]);
 
   return (
-    <div className='relative flex w-[10.94rem] flex-col gap-4 overflow-hidden md:w-[23.8rem] lg:w-[21.75rem]'>
+    <div className='relative flex w-full min-w-0 flex-col gap-4'>
       <AddToWishlistBtn
         variant='icon'
-        className='absolute end-6 top-6 z-50'
+        className='absolute end-3 top-3 z-20 md:end-6 md:top-6'
         isWishlisted={isWishlisted}
         propertyId={propertyId}
       />
       {/* Carousel */}
-      <div className='relative h-[8.94rem] w-full md:h-[17.94rem]'>
-        <Carousel
-          setApi={setApi}
-          opts={{ loop: true }}
-          className='h-full w-full overflow-hidden rounded-3xl'
+      <Carousel
+        setApi={setApi}
+        opts={{ loop: true }}
+        className='w-full overflow-hidden rounded-3xl'
+      >
+        <CarouselContent
+          className='aspect-[175/143] md:aspect-auto md:h-[17.94rem]'
+          style={{ marginLeft: 0 }}
         >
-          <CarouselContent
-            className='h-[8.94rem] md:h-[17.94rem]'
-            style={{ marginLeft: 0 }}
-          >
-            {images.map((img) => (
-              <CarouselItem
-                key={img.url}
-                className='min-w-full basis-full pl-0'
-              >
-                <MediaPreview
-                  url={img.url}
-                  className='h-full w-full rounded-3xl object-cover'
-                />
-              </CarouselItem>
+          {images.map((img) => (
+            <CarouselItem
+              key={img.url}
+              className='min-w-full basis-full pl-0'
+            >
+              <MediaPreview
+                url={img.url}
+                className='h-full w-full rounded-3xl object-cover'
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Arrows — mobile only */}
+        {images.length > 1 && (
+          <>
+            <CarouselPrevious className='left-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5' />
+            <CarouselNext className='right-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5' />
+          </>
+        )}
+
+        {/* Circle dot indicators */}
+        {images.length > 1 && (
+          <div className='absolute bottom-2 left-1/2 z-10 flex max-w-[calc(100%-1rem)] -translate-x-1/2 items-center gap-1 overflow-hidden rounded-full bg-grayish-900 px-1 py-[1.5px] md:bottom-6 md:p-1'>
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => api?.scrollTo(i)}
+                aria-label={`Go to image ${i + 1}`}
+                className={`size-[9px] shrink-0 rounded-full transition-all duration-300 ${
+                  i === activeIndex ? 'bg-white' : 'bg-grayish-300'
+                }`}
+              />
             ))}
-          </CarouselContent>
-
-          {/* Arrows — small screens only */}
-          {images.length > 1 && (
-            <>
-              <CarouselPrevious className='left-2 size-7 border-none bg-grayish-900 text-grayish-50 backdrop-blur-sm sm:hidden [&>svg]:!size-7' />
-              <CarouselNext className='right-2 size-7 border-none bg-grayish-900 text-grayish-50 backdrop-blur-sm sm:hidden [&>svg]:!size-7' />
-            </>
-          )}
-
-          {/* Circle dot indicators */}
-          {images.length > 1 && (
-            <div className='absolute bottom-2.5 left-1/2 z-10 flex h-[17px] max-w-full -translate-x-1/2 items-center gap-1.5 rounded-lg bg-grayish-900 px-1'>
-              {images.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => api?.scrollTo(i)}
-                  aria-label={`Go to image ${i + 1}`}
-                  className={`size-[9px] rounded-full transition-all duration-300 ${
-                    i === activeIndex ? 'bg-white' : 'bg-grayish-300'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </Carousel>
-      </div>
+          </div>
+        )}
+      </Carousel>
 
       {/* Info */}
       <div className='flex w-full flex-col gap-2'>
         <h5
           title={name}
-          className='line-clamp-2 font-medium leading-5 text-grayish-900 md:text-lg lg:text-xl'
+          className='line-clamp-2 text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'
         >
           {name}
         </h5>
         <p
           title={description}
-          className='line-clamp-1 leading-5 text-grayish-400'
+          className='truncate leading-[1.3125rem] text-grayish-400'
         >
           {description}
         </p>
         {/* price and rating */}
-        <div className='flex items-center gap-1 text-grayish-400 max-sm:flex-col max-sm:items-start max-sm:gap-1.5'>
-          <div className='flex items-center gap-1 font-medium leading-5 text-grayish-400 md:text-lg lg:text-xl'>
-            <span className='line-clamp-1 text-grayish-900'>
+        <div className='flex flex-wrap items-center gap-x-1 whitespace-nowrap text-grayish-400'>
+          <div className='flex items-center gap-1'>
+            <span className='text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'>
               ${pricePerNight}
             </span>
-            <span className='text-base font-normal leading-5'>
-              {t('night')}
-            </span>
+            <span className='leading-[1.3125rem]'>{t('night')} ,</span>
           </div>
-          <span className='max-sm:hidden'>,</span>
-          <div className='flex items-center text-lg leading-5'>
-            <Star className='size-5 fill-grayish-400' /> &nbsp; {rating} &nbsp;
-            <span className='leading-5'>({reviewsCount})</span>
+          <div className='flex items-center gap-1 text-lg leading-[1.6875rem]'>
+            <Star className='size-5 shrink-0 fill-grayish-400' />
+            <span>
+              {rating} ({reviewsCount})
+            </span>
           </div>
         </div>
       </div>
