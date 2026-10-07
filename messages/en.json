@@ -221,12 +221,12 @@
       "reservation": {
         "addDatesTitle": "Add dates for prices",
         "addDatesSubtitle": "Choose your dates and guests to secure this stay.",
-        "forNights": "for {count} nights",
+        "forNights": "for {count, plural, one {# night} other {# nights}}",
         "checkIn": "Check-in",
         "checkOut": "Check-out",
         "addDate": "Add Date",
         "guests": "Guests",
-        "guestsCount": "{count} Guests",
+        "guestsCount": "{count, plural, one {# Guest} other {# Guests}}",
         "reserve": "Reserve",
         "perNight": "per night",
         "retry": "Retry",
@@ -262,7 +262,9 @@
     "wishlist": {
       "title": "Your Wishlist",
       "emptyTitle": "Your wishlist is empty",
-      "emptyDescription": "Browse our homes and save your favorites for later."
+      "emptyDescription": "Browse our homes and save your favorites for later.",
+      "discoverHomes": "Discover Homes",
+      "updateFailed": "We couldn’t update your wishlist. Please try again."
     }
   },
   "sections": {
