@@ -20,6 +20,8 @@ import { PropertyWishlistCardSkeleton } from './PropertyWishlistCardSkeleton';
 
 import { wishlistItemApi } from '@/types/wishlist';
 
+import { Link } from '@/i18n/routing';
+
 interface PropertyWishlistCardProps {
   item: wishlistItemApi;
 }
@@ -56,8 +58,14 @@ export default function PropertyWishlistCard({
     };
   }, [api, onSelect]);
 
+  // Carousel controls live inside the card link — keep them from navigating
+  const preventNavigation = (e: React.MouseEvent) => e.preventDefault();
+
   return (
-    <div className='relative flex w-full min-w-0 flex-col gap-4'>
+    <Link
+      href={`/properties/${propertyId}`}
+      className='relative flex w-full min-w-0 flex-col gap-4'
+    >
       <AddToWishlistBtn
         variant='icon'
         className='absolute end-3 top-3 z-20 md:end-6 md:top-6'
@@ -90,8 +98,14 @@ export default function PropertyWishlistCard({
         {/* Arrows — mobile only */}
         {images.length > 1 && (
           <>
-            <CarouselPrevious className='left-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5' />
-            <CarouselNext className='right-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5' />
+            <CarouselPrevious
+              onClickCapture={preventNavigation}
+              className='left-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5'
+            />
+            <CarouselNext
+              onClickCapture={preventNavigation}
+              className='right-4 size-7 border-none bg-grayish-900 text-grayish-50 hover:bg-grayish-900 hover:text-grayish-50 md:hidden [&>svg]:!size-5'
+            />
           </>
         )}
 
@@ -101,7 +115,10 @@ export default function PropertyWishlistCard({
             {images.map((_, i) => (
               <button
                 key={i}
-                onClick={() => api?.scrollTo(i)}
+                onClick={(e) => {
+                  preventNavigation(e);
+                  api?.scrollTo(i);
+                }}
                 aria-label={`Go to image ${i + 1}`}
                 className={`size-[9px] shrink-0 rounded-full transition-all duration-300 ${
                   i === activeIndex ? 'bg-white' : 'bg-grayish-300'
@@ -142,7 +159,7 @@ export default function PropertyWishlistCard({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
