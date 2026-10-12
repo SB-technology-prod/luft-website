@@ -11,10 +11,10 @@ const statusBadgeVariants = cva(
   {
     variants: {
       variant: {
-        upcoming: 'border-neutral-900 text-neutral-900',
-        ongoing: 'border-warning-500 text-warning-700',
-        completed: 'border-success-500 text-success-600',
-        canceled: 'border-error-500 text-error-600',
+        upcoming: 'border-neutral-900 text-neutral-900 bg-neutral-50',
+        ongoing: 'border-warning-500 text-warning-700 bg-warning-50',
+        completed: 'border-success-500 text-success-600 bg-success-50',
+        canceled: 'border-error-500 text-error-600 bg-error-50',
       },
     },
     defaultVariants: {

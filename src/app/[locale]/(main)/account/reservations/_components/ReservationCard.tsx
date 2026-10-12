@@ -106,30 +106,32 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
       trigger={
         <button
           type='button'
-          className='flex w-full cursor-pointer items-start gap-3 py-4 text-start transition-colors hover:bg-grayish-50 active:bg-grayish-100 sm:gap-4'
+          className='flex flex-col md:flex-row w-full cursor-pointer items-start gap-3 py-4 text-start transition-colors hover:bg-grayish-50 active:bg-grayish-100 sm:gap-4'
         >
-          <div className='relative h-[5.75rem] w-[7.75rem] shrink-0 overflow-hidden rounded-xl sm:h-28 sm:w-36'>
+          <div className='relative h-44 w-full shrink-0 overflow-hidden rounded-xl sm:h-56 md:h-28 md:w-36'>
             <Image
               src={propertyImageUrl}
               alt={propertyName}
               fill
               className='object-cover'
-              sizes='(max-width: 600px) 124px, 144px'
+              sizes='(max-width: 767px) 100vw, 144px'
             />
           </div>
-
-          <div className='flex min-w-0 flex-col gap-1 pt-1'>
-            <h3 className='line-clamp-1 text-sm font-semibold text-grayish-900 sm:text-base'>
-              {propertyName}
-            </h3>
-            <div className='flex items-center gap-1 text-grayish-500'>
-              <CalenderDateRangeIcon className='size-3.5 shrink-0' />
-              <span className='line-clamp-1 text-sm'>{formattedStayDates}</span>
+          {/* content  */}
+          <div className='flex w-full items-start justify-between gap-3 pt-1 md:flex-col md:justify-start md:gap-1'>
+            <div className='flex min-w-0 flex-col gap-1'>
+              <h3 className='line-clamp-1 text-sm font-semibold text-grayish-900 sm:text-base'>
+                {propertyName}
+              </h3>
+              <div className='flex items-center gap-1 text-grayish-500'>
+                <CalenderDateRangeIcon className='size-3.5 shrink-0' />
+                <span className='line-clamp-1 text-sm'>{formattedStayDates}</span>
+              </div>
+              <p className='text-sm text-grayish-500'>
+                {t('submittedOn', { date: formattedSubmitted })}
+              </p>
             </div>
-            <p className='text-sm text-grayish-500'>
-              {t('submittedOn', { date: formattedSubmitted })}
-            </p>
-            <div className='mt-1'>
+            <div className='mt-1 shrink-0'>
               <StatusBadge status={status} />
             </div>
           </div>
