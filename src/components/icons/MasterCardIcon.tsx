@@ -2,7 +2,7 @@ import React from 'react';
 
 import { IconProps } from '@/types';
 
-export default function MasterCardIcon({ className }: IconProps) {
+export default function MastercardIcon({ className }: IconProps) {
   return (
     <svg className={className} width="28" height="18" viewBox="0 0 28 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M25 0H3C1.34315 0 0 1.34315 0 3V15C0 16.6569 1.34315 18 3 18H25C26.6569 18 28 16.6569 28 15V3C28 1.34315 26.6569 0 25 0Z" fill="black" />

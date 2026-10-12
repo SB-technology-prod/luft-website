@@ -6,47 +6,11 @@ import {
   ReservationsTabsList,
   ReservationsTabsProvider,
 } from './_components/ReservationsTabs';
+import CircleChevronLeftIcon from '@/components/icons/CircleChevronLeftIcon';
+import CircleChevronRightIcon from '@/components/icons/CircleChevronRightIcon';
 
-// Inline circle-chevron SVGs so we don't need lucide
-function CircleChevronLeft() {
-  return (
-    <svg
-      width='40'
-      height='40'
-      viewBox='0 0 24 24'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-      className='text-grayish-900'
-      stroke='currentColor'
-      strokeWidth='1'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      <circle cx='12' cy='12' r='10' />
-      <polyline points='13 16 9 12 13 8' />
-    </svg>
-  );
-}
 
-function CircleChevronRight() {
-  return (
-    <svg
-      width='40'
-      height='40'
-      viewBox='0 0 24 24'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-      className='text-grayish-900'
-      stroke='currentColor'
-      strokeWidth='1'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      <circle cx='12' cy='12' r='10' />
-      <polyline points='11 8 15 12 11 16' />
-    </svg>
-  );
-}
+
 
 export default async function ReservationsPage({
   params,
@@ -66,7 +30,7 @@ export default async function ReservationsPage({
         {/* Top: back arrow + title */}
         <div className='flex flex-col gap-3'>
           <Link href='/' className='w-fit max-sm:hidden'>
-            {isRtl ? <CircleChevronRight /> : <CircleChevronLeft />}
+            {isRtl ? <CircleChevronRightIcon /> : <CircleChevronLeftIcon />}
           </Link>
 
           <h6 className='text-2xl font-medium text-grayish-900 sm:text-[1.75rem] lg:text-[2rem]'>
