@@ -6,11 +6,11 @@ import { toast } from 'sonner';
 
 export default function ShareBtn() {
   const t = useTranslations('pages.propertyDetails.actions');
-  const currentUrl = window.location.href;
-
   return (
     <button
       onClick={() => {
+        // Read the URL on click; window is not available during server rendering
+        const currentUrl = window.location.href;
         if (navigator.share) {
           navigator
             .share({

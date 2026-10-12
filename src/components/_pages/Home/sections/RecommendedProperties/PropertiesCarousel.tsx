@@ -47,6 +47,7 @@ export default function PropertiesCarousel({
               rating,
               reviewCount,
               coverImageUrl,
+              isWishlisted,
             }) => (
               <CarouselItem
                 key={id}
@@ -60,6 +61,7 @@ export default function PropertiesCarousel({
                   rating={rating}
                   newPrice={price}
                   numOfReviews={reviewCount}
+                  isWishlisted={isWishlisted}
                 />
               </CarouselItem>
             ),

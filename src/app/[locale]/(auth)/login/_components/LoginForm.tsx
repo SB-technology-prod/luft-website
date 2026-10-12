@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { useForm } from 'react-hook-form';
@@ -26,6 +27,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 export default function LoginForm() {
   const [serverError, setServerError] = useState<string | undefined>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Only allow same-site paths to avoid open redirects
+  const redirectParam = searchParams.get('redirect');
+  const redirectTo =
+    redirectParam?.startsWith('/') && !/^\/[/\\]/.test(redirectParam)
+      ? redirectParam
+      : '/';
   const tCommon = useTranslations('common');
   const t = useTranslations('auth.login');
 
@@ -59,8 +67,8 @@ export default function LoginForm() {
       setServerError(undefined);
     },
     onSuccess: () => {
-      // Redirect to home
-      router.push('/');
+      // Redirect back to where the user came from (defaults to home)
+      router.push(redirectTo);
     },
     onError: (error: Error) => {
       setServerError(error.message);

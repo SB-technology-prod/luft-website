@@ -81,3 +81,12 @@ export const verifyUserPassword = (password: string) => {
     },
   });
 };
+
+export const deleteUserAccount = () => {
+  return apiFetch(
+    'api/auth/delete-account',
+    { method: 'DELETE' },
+    true,
+    false,
+  );
+};

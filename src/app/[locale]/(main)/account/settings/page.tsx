@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { CircleChevronLeftIcon, CircleChevronRightIcon } from 'lucide-react';
 
+import DeleteAccountBtn from './_components/DeleteAccountBtn';
 import ProfileForm from './_components/Forms/ProfileForm';
 
 export default async function SettingsPage({
@@ -34,6 +35,7 @@ export default async function SettingsPage({
           <p className='text-grayish-400 md:text-lg lg:hidden'>
             {t('description')}
           </p>
+          <DeleteAccountBtn className='mt-2 w-fit p-0 sm:hidden' />
         </div>
       </div>
 

@@ -22,10 +22,16 @@ import ShareBtn from './ShareBtn';
 import type { PropertyImage } from '@/types/properties';
 
 type PropertyImagesProps = {
+  propertyId: string;
+  isWishlisted: boolean;
   images: PropertyImage[];
 };
 
-export default function PropertyImages({ images }: PropertyImagesProps) {
+export default function PropertyImages({
+  propertyId,
+  isWishlisted,
+  images,
+}: PropertyImagesProps) {
   const t = useTranslations('pages.propertyDetails.images');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
@@ -156,7 +162,10 @@ export default function PropertyImages({ images }: PropertyImagesProps) {
         </Link>
         <div className='absolute end-4 top-2 z-20 flex items-center gap-2'>
           <div className='flex size-10 items-center justify-center rounded-full bg-grayish-50'>
-            <AddToWishlistBtn />
+            <AddToWishlistBtn
+            propertyId={propertyId}
+            isWishlisted={isWishlisted}
+          />
           </div>
           <div className='flex size-10 items-center justify-center rounded-full bg-grayish-50'>
             <ShareBtn />

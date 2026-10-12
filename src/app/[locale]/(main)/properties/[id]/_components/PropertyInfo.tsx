@@ -8,6 +8,8 @@ import SectionTitle from './SectionTitle';
 import ShareBtn from './ShareBtn';
 
 type PropertyInfoProps = {
+  propertyId: string;
+  isWishlisted: boolean;
   title: string;
   subtitle: string;
   maximumGuests: number;
@@ -18,6 +20,8 @@ type PropertyInfoProps = {
 };
 
 async function PropertyInfo({
+  propertyId,
+  isWishlisted,
   title,
   subtitle,
   maximumGuests,
@@ -34,7 +38,10 @@ async function PropertyInfo({
         <SectionTitle className='line-clamp-2'>{title}</SectionTitle>
         <div className='flex items-center gap-4 max-md:hidden'>
           <ShareBtn />
-          <AddToWishlistBtn />
+          <AddToWishlistBtn
+            propertyId={propertyId}
+            isWishlisted={isWishlisted}
+          />
         </div>
       </div>
       <p className='mt-4 line-clamp-2 font-medium leading-5 text-grayish-900 md:text-xl xl:text-xl'>
