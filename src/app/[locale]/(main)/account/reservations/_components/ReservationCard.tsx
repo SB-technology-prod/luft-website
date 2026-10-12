@@ -106,7 +106,7 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
       trigger={
         <button
           type='button'
-          className='flex flex-col md:flex-row w-full cursor-pointer items-start gap-3 py-4 text-start transition-colors hover:bg-grayish-50 active:bg-grayish-100 sm:gap-4'
+          className='flex flex-col md:flex-row w-full cursor-pointer items-start gap-3 py-4 text-start transition-colors hover:bg-grayish-50 p-2 rounded active:bg-grayish-100 sm:gap-4'
         >
           <div className='relative h-44 w-full shrink-0 overflow-hidden rounded-xl sm:h-56 md:h-28 md:w-36'>
             <Image
