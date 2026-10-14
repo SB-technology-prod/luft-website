@@ -269,7 +269,7 @@ function ReservationForm({
       {
         onSuccess: (res) => {
           toast.success(res?.message || t('success'));
-          router.push('/account/reservations');
+          router.push('/reservation-confirmed');
         },
         onError: (err) => {
           setSubmitError(err.message);
