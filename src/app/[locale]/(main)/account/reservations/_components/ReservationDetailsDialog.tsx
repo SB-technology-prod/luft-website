@@ -10,7 +10,7 @@ import CardIcon from '@/components/icons/CardIcon';
 import Spinner from '@/components/icons/Spinner';
 import StarIcon from '@/components/icons/StarIcon';
 import UsersIcon from '@/components/icons/UsersIcon';
-import ConfirmModal from '@/components/shared/ConfirmModal';
+// import ConfirmModal from '@/components/shared/ConfirmModal';
 import {
   Dialog,
   DialogContent,
@@ -141,10 +141,10 @@ export default function ReservationDetailsDialog({
     status.toLowerCase() !== 'canceled' &&
     (details?.cancellation?.canCancel ?? false);
 
-  function handleCancelReservation() {
-    setLocalStatus('Canceled');
-    setIsCancelConfirmOpen(false);
-  }
+  // function handleCancelReservation() {
+  //   setLocalStatus('Canceled');
+  //   setIsCancelConfirmOpen(false);
+  // }
 
   function getPriceSummaryItemTotal(
     item: (typeof priceSummaryItems)[0],
@@ -380,7 +380,7 @@ export default function ReservationDetailsDialog({
         </DialogContent>
       </Dialog>
 
-      <ConfirmModal
+      {/* <ConfirmModal
         isOpen={isCancelConfirmOpen}
         onCancel={() => setIsCancelConfirmOpen(false)}
         onConfirm={handleCancelReservation}
@@ -391,7 +391,12 @@ export default function ReservationDetailsDialog({
             {t('cancelReservationConfirm.title')}
           </h6>
         </div>
-      </ConfirmModal>
+      </ConfirmModal> */}
+      <div className='flex flex-col items-center gap-2 text-center'>
+        <h6 className='text-xl font-medium'>
+          {t('cancelReservationConfirm.title')}
+        </h6>
+      </div>
     </>
   );
 }
