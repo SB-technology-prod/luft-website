@@ -6,6 +6,8 @@ export type ReservationStatus =
   | 'Completed'
   | 'Canceled';
 
+export type ReservationStatusId = 1 | 2 | 3 | 4 | 5 | 6;
+
 export type ReservationListItem = {
   reservationId: string;
   propertyId: string;
@@ -15,6 +17,7 @@ export type ReservationListItem = {
   checkOutDate: string;
   submittedAt: string;
   status: ReservationStatus;
+  statusId: ReservationStatusId;
 };
 
 export type PaginatedReservations = {
@@ -83,6 +86,7 @@ export type ReservationDetails = {
   reservationNumber: string;
   property: ReservationProperty;
   status: ReservationStatus;
+  statusId: ReservationStatusId;
   stay: ReservationStay;
   guests: ReservationGuests;
   priceSummary: ReservationPriceSummary;

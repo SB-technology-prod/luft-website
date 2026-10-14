@@ -90,7 +90,7 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
     checkInDate,
     checkOutDate,
     submittedAt,
-    status,
+    statusId,
   } = reservation;
 
   const formattedStayDates = formatStayDateRange(
@@ -132,7 +132,7 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
               </p>
             </div>
             <div className='mt-1 shrink-0'>
-              <StatusBadge status={status} />
+              <StatusBadge statusId={statusId} />
             </div>
           </div>
         </button>
