@@ -1,16 +1,14 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
+import CircleChevronLeftIcon from '@/components/icons/CircleChevronLeftIcon';
+import CircleChevronRightIcon from '@/components/icons/CircleChevronRightIcon';
+
 import {
   ReservationsTabsContent,
   ReservationsTabsList,
   ReservationsTabsProvider,
 } from './_components/ReservationsTabs';
-import CircleChevronLeftIcon from '@/components/icons/CircleChevronLeftIcon';
-import CircleChevronRightIcon from '@/components/icons/CircleChevronRightIcon';
-
-
-
 
 export default async function ReservationsPage({
   params,
