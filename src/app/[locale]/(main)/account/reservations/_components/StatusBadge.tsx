@@ -6,6 +6,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+import { type ReservationStatusId } from '@/types/reservations';
+
 const statusBadgeVariants = cva(
   'inline-flex items-center rounded-full border bg-white px-2 py-0.5 text-xs font-medium leading-5',
   {
@@ -34,21 +36,30 @@ const statusLabels: Record<StatusBadgeVariant, string> = {
   canceled: 'canceled',
 };
 
+const statusIdBadgeVariants: Record<ReservationStatusId, StatusBadgeVariant> = {
+  1: 'upcoming',
+  2: 'upcoming',
+  3: 'ongoing',
+  4: 'completed',
+  5: 'canceled',
+  6: 'upcoming',
+};
+
 interface StatusBadgeProps {
-  status: string;
+  statusId?: ReservationStatusId | number | null;
   className?: string;
 }
 
-export default function StatusBadge({ status, className }: StatusBadgeProps) {
+export default function StatusBadge({ statusId, className }: StatusBadgeProps) {
   const t = useTranslations('reservations.status');
-  const variant = status.toLowerCase() as StatusBadgeVariant;
-  const safeVariant = statusLabels[variant] ? variant : 'upcoming';
+  const variant =
+    statusIdBadgeVariants[statusId as ReservationStatusId] ?? 'upcoming';
 
   return (
     <span
-      className={cn(statusBadgeVariants({ variant: safeVariant }), className)}
+      className={cn(statusBadgeVariants({ variant }), className)}
     >
-      {t(statusLabels[safeVariant])}
+      {t(statusLabels[variant])}
     </span>
   );
 }

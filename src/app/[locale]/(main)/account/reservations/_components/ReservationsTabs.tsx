@@ -92,6 +92,7 @@ export function ReservationsTabsContent() {
   const { data, isFetching, isError } = useMyReservations();
 
   const reservations = data?.result?.items || [];
+  console.log("🚀 ~ ReservationsTabsContent ~ reservations:", reservations)
 
   return (
     <>

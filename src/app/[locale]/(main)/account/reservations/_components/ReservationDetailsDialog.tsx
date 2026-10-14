@@ -26,7 +26,7 @@ import { useReservationDetails } from '@/hooks/useReservationDetails';
 import {
   type ReservationDetails,
   type ReservationListItem,
-  type ReservationStatus,
+  type ReservationStatusId,
 } from '@/types/reservations';
 
 // ─── Date formatting ───────────────────────────────────────────────────────────
@@ -80,9 +80,8 @@ export default function ReservationDetailsDialog({
 }: ReservationDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
-  const [localStatus, setLocalStatus] = useState<ReservationStatus | null>(
-    null,
-  );
+  const [localStatusId, setLocalStatusId] =
+    useState<ReservationStatusId | null>(null);
   const locale = useLocale();
   const t = useTranslations('reservations.details');
 
@@ -100,7 +99,7 @@ export default function ReservationDetailsDialog({
   const description = details?.property?.description ?? '';
   const rating = details?.property?.rating ?? 0;
   const reviewsCount = details?.property?.reviewsCount ?? 0;
-  const status = localStatus ?? details?.status ?? reservation.status;
+  const statusId = localStatusId ?? details?.statusId ?? reservation.statusId;
 
   const checkInDate = details?.stay?.checkInDate ?? reservation.checkInDate;
   const checkOutDate = details?.stay?.checkOutDate ?? reservation.checkOutDate;
@@ -138,7 +137,7 @@ export default function ReservationDetailsDialog({
   }
 
   const canCancel =
-    status.toLowerCase() !== 'canceled' &&
+    statusId !== 5 &&
     (details?.cancellation?.canCancel ?? false);
 
   // function handleCancelReservation() {
@@ -238,7 +237,7 @@ export default function ReservationDetailsDialog({
                   )}
                   <div className='mt-1'>
                     <StatusBadge
-                      status={status}
+                      statusId={statusId}
                       className='px-3 py-1 text-base leading-6 md:px-2 md:py-0.5 md:text-xs md:leading-5'
                     />
                   </div>
