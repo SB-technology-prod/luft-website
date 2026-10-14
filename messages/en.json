@@ -168,6 +168,12 @@
     "lost": "No internet connection",
     "restored": "Connection restored"
   },
+  "reservationConfirmed": {
+    "title": "Reservation Confirmed",
+    "description": "Your reservation is confirmed. At Luft, we'll take care of everything--just relax and enjoy.",
+    "backToHome": "Back to home",
+    "imageAlt": "Reservation confirmed illustration"
+  },
   "settings": {
     "title": "Account Settings",
     "description": "Setup and edit your account profile",
