@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 
+import HandBellIcon from '@/components/icons/HandBellIcon';
+import HomeIcon from '@/components/icons/HomeIcon';
 import StatusLayout from '@/components/shared/StatusLayout';
 import {
   Tabs,
@@ -13,9 +15,6 @@ import {
 import ReservationCard from './ReservationCard';
 
 import { useMyReservations } from '@/hooks/useMyReservations';
-import HandBellIcon from '@/components/icons/HandBellIcon';
-import HomeIcon from '@/components/icons/HomeIcon';
-
 
 function ReservationCardSkeleton() {
   return (

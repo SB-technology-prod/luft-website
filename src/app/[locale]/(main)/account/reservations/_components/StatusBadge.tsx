@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from '@/lib/utils';
-
 import { type ReservationStatusId } from '@/types/reservations';
+
+import { cn } from '@/lib/utils';
 
 const statusBadgeVariants = cva(
   'inline-flex items-center rounded-full border bg-white px-2 py-0.5 text-xs font-medium leading-5',
