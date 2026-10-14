@@ -29,6 +29,7 @@ type CustomInputProps = {
   label: string;
   placeholder: string;
   className?: string;
+  lableClassName?: string;
   formItemClassName?: string;
   disabled?: boolean;
   required?: boolean;
@@ -43,6 +44,7 @@ function CustomSelect({
   label,
   placeholder,
   className = '',
+  lableClassName = '',
   formItemClassName = '',
   disabled = false,
   required,
@@ -62,7 +64,7 @@ function CustomSelect({
 
         return (
           <FormItem className={formItemClassName}>
-            <FormLabel className={cn('ms-4 text-sm text-grayish-900')}>
+            <FormLabel className={cn('ms-4 text-sm text-grayish-900', lableClassName)}>
               {label}
               {required && <span className='ms-1'>&#42;</span>}
             </FormLabel>

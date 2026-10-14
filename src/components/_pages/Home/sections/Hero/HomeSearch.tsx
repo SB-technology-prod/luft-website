@@ -1,19 +1,35 @@
 'use client';
-
-import { useState } from 'react';
-
+import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
-
 import { Search } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/i18n/routing';
+import CustomSelect from '@/components/shared/form/CustomSelect';
+import { Form } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import CustomCalenderInput from '@/components/shared/form/CustonCalenderInput';
+
+type SearchFormValues = {
+  city: string;
+  date: Date | string;
+  guestCount: string;
+};
 
 export function HomeSearch() {
   const t = useTranslations('sections.homeSearch');
-  const [city, setCity] = useState('');
-  const [date, setDate] = useState('');
-  const [guestCount, setGuestCount] = useState('');
-
+  const router = useRouter();
+  const handleSearch = (values: SearchFormValues) => {
+    const params = new URLSearchParams();
+    if (values.city) params.set('city', values.city);
+    if (values.date) {
+      params.set(
+        'date',
+        values.date instanceof Date ? format(values.date, 'yyyy-MM-dd') : values.date,
+      );
+    }
+    if (values.guestCount) params.set('guestCount', values.guestCount);
+    router.push(`/search?${params.toString()}`);
+  };
   const cities = [
     { value: '', label: t('cities.placeholder') },
     { value: 'new-york', label: t('cities.newYork') },
@@ -40,6 +56,13 @@ export function HomeSearch() {
     { value: '4', label: t('guestCounts.four') },
     { value: '5+', label: t('guestCounts.fivePlus') },
   ];
+  const form = useForm<SearchFormValues>({
+    defaultValues: {
+      city: '',
+      date: '',
+      guestCount: '',
+    },
+  });
 
   return (
     <div className='mx-auto w-full space-y-6'>
@@ -82,170 +105,128 @@ export function HomeSearch() {
       </div>
 
       {/* Desktop Search Bar */}
-      <div className='hidden items-center rounded-full bg-white p-2 ps-6 shadow-[0_2px_16px_rgba(0,0,0,0.08)] md:flex'>
-        <div className='flex flex-1 items-center'>
-          {/* City */}
-          <div className='relative flex-1 pe-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.city.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {cities.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+      <Form {...form}>
+        <form
+          noValidate
+          onSubmit={form.handleSubmit(handleSearch)}
+        >
+          <div className='hidden items-center rounded-full bg-white p-2 ps-6 shadow-[0_2px_16px_rgba(0,0,0,0.08)] md:flex '>
+            <div className='flex flex-1 items-center'>
+              {/* City */}
+              <div className='relative flex-1 pe-4'>
+                  <CustomSelect
+                    fieldName='city'
+                    options={cities.map((option) => ({
+                      label: option.label,
+                      value: option.value,
+                    }))}
+                    label={t('fields.city.label')}
+                    placeholder={t('fields.city.placeholder')}
+                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                    lableClassName='text-sm font-semibold text-grayish-900'
+                  />
+              </div>
+
+              {/* Divider */}
+              <div className='h-10 w-px bg-grayish-50' />
+
+              {/* Date */}
+              <div className='relative flex-1 px-4'>
+                  <CustomCalenderInput
+                    fieldName='date'
+                    label={t('fields.date.label')}
+                    placeholder={t('fields.date.placeholder')}
+                    iconShow={false}
+                    className="!border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                  />
+              </div>
+
+              {/* Divider */}
+              <div className='h-10 w-px bg-grayish-50' />
+
+              {/* Guests */}
+              <div className='relative flex-1 px-4'>
+                  <CustomSelect
+                    fieldName='guestCount'
+                    options={guests.map((option) => ({
+                      label: option.label,
+                      value: option.value,
+                    }))}
+                    label={t('fields.guests.label')}
+                    placeholder={t('fields.guests.placeholder')}
+                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                    lableClassName='text-sm font-semibold text-grayish-900'
+                  />
+              </div>
             </div>
+
+            {/* Search Button */}
+            <button className='flex h-12 w-12 items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800' type='submit'>
+              <Search className='h-5 w-5 text-white' />
+            </button>
           </div>
-
-          {/* Divider */}
-          <div className='h-10 w-px bg-grayish-50' />
-
-          {/* Date */}
-          <div className='relative flex-1 px-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.date.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {dates.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className='h-10 w-px bg-grayish-50' />
-
-          {/* Guests */}
-          <div className='relative flex-1 px-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.guests.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={guestCount}
-                onChange={(e) => setGuestCount(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {guests.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Search Button */}
-        <button className='flex h-12 w-12 items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800'>
-          <Search className='h-5 w-5 text-white' />
-        </button>
-      </div>
+        </form>
+      </Form>
 
       {/* Mobile Search Cards */}
-      <div className='flex flex-col gap-4 md:hidden'>
-        {/* City Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.city.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {cities.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+      <Form {...form}>
+        <form
+          noValidate
+          onSubmit={form.handleSubmit(handleSearch)}
+        >
+          <div className='flex flex-col gap-4 md:hidden'>
+            {/* City Card */}
+            <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'> 
+                <CustomSelect
+                  fieldName='city'
+                  options={cities.map((option) => ({
+                    label: option.label,
+                    value: option.value,
+                  }))}
+                  label={t('fields.city.label')}
+                  placeholder={t('fields.city.placeholder')}
+                  className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                  lableClassName='text-sm font-semibold text-grayish-900'
+                />
+            </div>
 
-        {/* Date Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.date.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {dates.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+            {/* Date Card */}
+            <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+                <CustomCalenderInput
+                  fieldName='date'
+                  label={t('fields.date.label')}
+                  placeholder={t('fields.date.placeholder')}
+                  iconShow={false}
+                  className="!border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                />
+            </div>
 
-        {/* Guests Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.guests.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={guestCount}
-              onChange={(e) => setGuestCount(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {guests.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+            {/* Guests Card */}
+            <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+                <CustomSelect
+                  fieldName='guestCount'
+                  options={guests.map((option) => ({
+                    label: option.label,
+                    value: option.value,
+                  }))}
+                  label={t('fields.guests.label')}
+                  placeholder={t('fields.guests.placeholder')}
+                  className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none"
+                  lableClassName='text-sm font-semibold text-grayish-900'
+                />
+            </div>
 
-        {/* Mobile Search Button */}
-        <Button className='mt-2 h-10'>{t('buttons.search')}</Button>
-      </div>
+            {/* Mobile Search Button */}
+            <Button
+              className='mt-2 h-10'
+              type='submit'
+            >
+              {t('buttons.search')}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
+
   );
 }
