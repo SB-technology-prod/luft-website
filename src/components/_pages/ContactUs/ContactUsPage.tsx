@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import BannerSection from '@/components/sections/BannerSection';
 
 import ContactInfoSection from './sections/ContactInfoSection';
@@ -14,7 +16,9 @@ export default function ContactUsPage({
       <BannerSection {...banner} />
       <div className='container mb-[4.25rem] mt-5 flex justify-between gap-6 max-md:flex-col md:mb-40 md:mt-10 md:gap-12 lg:mb-[7.25rem] lg:mt-20 lg:gap-[8.5rem]'>
         <div className='w-full flex-1'>
-          <SendMessageSection />
+          <Suspense>
+            <SendMessageSection />
+          </Suspense>
         </div>
         <div className='h-fit w-full md:w-[23.75rem] lg:w-[26rem]'>
           <ContactInfoSection {...contactInformationSection} />
