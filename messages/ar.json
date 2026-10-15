@@ -246,6 +246,7 @@
         "retry": "إعادة المحاولة",
         "success": "تم إرسال حجزك بنجاح",
         "errors": {
+          "reservationFailed": "تعذر إنشاء الحجز. يرجى المحاولة مرة أخرى.",
           "selectDatesAndGuests": "يرجى اختيار التواريخ وعدد الضيوف",
           "datesUnavailable": "التواريخ المختارة لم تعد متاحة",
           "availabilityCheckFailed": "تعذر التأكد من التوفر. يرجى المحاولة مرة أخرى.",
@@ -430,5 +431,34 @@
       "completed": "مكتمل",
       "canceled": "ملغى"
     }
+  },
+  "reservationSummary": {
+    "title": "ملخص الحجز",
+    "details": "التفاصيل",
+    "edit": "تعديل",
+    "back": "العودة إلى الحجز",
+    "guestDetails": "بيانات الضيف",
+    "checkInOut": "تسجيل الوصول - تسجيل المغادرة",
+    "dateRange": "من {checkIn} إلى {checkOut}",
+    "totalGuests": "إجمالي الضيوف",
+    "summary": "ملخص السعر",
+    "taxes": "الضرائب",
+    "finalPrice": "السعر النهائي",
+    "confirm": "تأكيد الحجز",
+    "reviews": "{rating} ({count})",
+    "nightlyPrice": "{price} × {count, plural, zero {# ليلة} one {ليلة واحدة} two {ليلتين} few {# ليالٍ} many {# ليلة} other {# ليلة}}",
+    "stayTotal": "إجمالي الإقامة · {count, plural, zero {# ليلة} one {ليلة واحدة} two {ليلتان} few {# ليالٍ} many {# ليلة} other {# ليلة}}",
+    "feeWithQuantity": "{description} × {quantity}",
+    "notProvided": "غير متوفر",
+    "loading": "جارٍ تحميل ملخص الحجز...",
+    "loadError": "تعذر تحميل ملخص الحجز. يرجى المحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "invalidSelection": "يرجى اختيار تواريخ صالحة وعدد ضيوف ضمن سعة مكان الإقامة.",
+    "loginRequired": "يرجى تسجيل الدخول لمراجعة حجزك.",
+    "login": "تسجيل الدخول",
+    "paymentUnavailable": "الدفع غير متاح حاليًا. يرجى المحاولة لاحقًا.",
+    "datesUnavailable": "هذه التواريخ لم تعد متاحة. يرجى تعديل الحجز لاختيار تواريخ جديدة.",
+    "priceChanged": "تغير سعر الحجز. يرجى مراجعة الملخص المحدث والتأكيد مرة أخرى.",
+    "confirmError": "تعذر الانتقال إلى الدفع. يرجى المحاولة مرة أخرى أو التواصل معنا للمساعدة."
   }
 }

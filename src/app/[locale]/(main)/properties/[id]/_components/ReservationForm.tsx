@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -17,7 +17,6 @@ import {
 import { ar, enUS } from 'date-fns/locale';
 import { Minus, Plus } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-import { toast } from 'sonner';
 
 import { Modal } from '@/components/shared/Modal';
 import Spinner from '@/components/shared/Spinner';
@@ -113,9 +112,10 @@ function ReservationForm({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const session = useSession();
+  const reservation = useReserve();
   const isLoggedIn = !!session;
 
-  // Restore the selection carried through the login redirect
+  // Restore the selection carried through login or the summary's Edit link.
   const [range, setRange] = useState<DateRange>(() => {
     const from = parseDateParam(searchParams.get('checkIn'));
     const to = parseDateParam(searchParams.get('checkOut'));
@@ -138,6 +138,16 @@ function ReservationForm({
   const [openPicker, setOpenPicker] = useState<DatePickerType | null>(null);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isMobileDialogOpen, setIsMobileDialogOpen] = useState(false);
+  useEffect(() => {
+    if (
+      variant === 'mobile' &&
+      searchParams.get('checkIn') &&
+      searchParams.get('checkOut') &&
+      window.matchMedia('(max-width: 767px)').matches
+    ) {
+      setIsMobileDialogOpen(true);
+    }
+  }, [searchParams, variant]);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [submitError, setSubmitError] = useState<string>();
 
@@ -153,8 +163,6 @@ function ReservationForm({
     to && toApiDate(to),
     isLoggedIn,
   );
-
-  const reserveMutation = useReserve();
 
   // The stay can run up to (and check out on) the first booked night after check-in
   const checkOutLimit = useMemo(() => {
@@ -215,10 +223,7 @@ function ReservationForm({
       quoteQuery.isError ||
       quoteQuery.isPlaceholderData ||
       quoteQuery.data === undefined);
-  const isReserving =
-    isCheckingAvailability ||
-    reserveMutation.isPending ||
-    reserveMutation.isSuccess;
+  const isReserving = isCheckingAvailability || reservation.isPending;
 
   const error =
     submitError ??
@@ -236,6 +241,7 @@ function ReservationForm({
   }, [searchParams, pathname, from, to, guests]);
 
   const handleReserve = async () => {
+    if (isReserving) return;
     setSubmitError(undefined);
 
     if (!from || !to || guests < 1) {
@@ -269,24 +275,25 @@ function ReservationForm({
       return;
     }
 
-    reserveMutation.mutate(
-      {
+    try {
+      const response = await reservation.mutateAsync({
         propertyId,
         checkInDate: toApiDate(from),
         checkOutDate: toApiDate(to),
         numberOfGuests: guests,
         expectedTotalAmount,
-      },
-      {
-        onSuccess: (res) => {
-          toast.success(res?.message || t('success'));
-          router.push('/reservation-confirmed');
-        },
-        onError: (err) => {
-          setSubmitError(err.message);
-        },
-      },
-    );
+      });
+      const reservationId = response.result?.id;
+      if (!reservationId) throw new Error(t('errors.reservationFailed'));
+      router.push({
+        pathname: '/reservation-summary',
+        query: { reservationId },
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : t('errors.reservationFailed'),
+      );
+    }
   };
 
   const dateLocale = locale === 'ar' ? ar : enUS;
