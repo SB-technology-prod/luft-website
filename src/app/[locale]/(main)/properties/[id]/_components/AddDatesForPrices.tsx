@@ -16,6 +16,7 @@ export default async function AddDatesForPrices({
 
   return (
     <div
+      id='reservation'
       style={{ boxShadow: '0px 4px 20px 0px #1B1B1B12' }}
       className='flex h-fit w-[15.7rem] flex-col gap-4 rounded-2xl bg-white p-4 max-md:hidden lg:w-[26rem]'
     >
