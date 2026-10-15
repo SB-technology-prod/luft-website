@@ -208,6 +208,13 @@ function ReservationForm({
       ? quoteQuery.data
       : baseTotal;
   const isQuoteLoading = nights > 0 && quoteQuery.isFetching;
+  const isQuoteUnavailable =
+    isLoggedIn &&
+    nights > 0 &&
+    (quoteQuery.isFetching ||
+      quoteQuery.isError ||
+      quoteQuery.isPlaceholderData ||
+      quoteQuery.data === undefined);
   const isReserving =
     isCheckingAvailability ||
     reserveMutation.isPending ||
@@ -242,6 +249,9 @@ function ReservationForm({
       return;
     }
 
+    const expectedTotalAmount = quoteQuery.data;
+    if (isQuoteUnavailable || expectedTotalAmount === undefined) return;
+
     // Re-check availability right before reserving
     setIsCheckingAvailability(true);
     const { data: latestBookedDates, isError } =
@@ -265,6 +275,7 @@ function ReservationForm({
         checkInDate: toApiDate(from),
         checkOutDate: toApiDate(to),
         numberOfGuests: guests,
+        expectedTotalAmount,
       },
       {
         onSuccess: (res) => {
@@ -434,7 +445,7 @@ function ReservationForm({
         type='button'
         className='h-14 text-base text-grayish-50'
         onClick={handleReserve}
-        disabled={isReserving}
+        disabled={isReserving || isQuoteUnavailable}
         isSubmitting={isReserving}
       >
         {t('reserve')}

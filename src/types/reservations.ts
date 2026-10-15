@@ -124,6 +124,7 @@ export type GetQuoteTotalApiResponse = ApiResponse<ReservationQuote>;
 export type ReserveRequest = ReservationQuoteRequest & {
   propertyId: string;
   numberOfGuests: number;
+  expectedTotalAmount: number;
 };
 
 export type ReserveApiResponse = ApiResponse<{ reservationId?: string } | null>;
