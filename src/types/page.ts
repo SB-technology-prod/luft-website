@@ -131,7 +131,10 @@ export type SendMessageFormData = {
   emailAddress: string;
   phoneNumber: string;
   message: string;
-};
+} & (
+  | { messageType: 1; reservationId?: never; propertyName?: never }
+  | { messageType: 2; reservationId: string; propertyName: string }
+);
 
 export type ContactUsData = {
   id: string;

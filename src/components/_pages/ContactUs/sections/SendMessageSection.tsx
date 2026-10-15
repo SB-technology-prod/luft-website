@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { useForm } from 'react-hook-form';
@@ -13,6 +14,7 @@ import CustomTextarea from '@/components/shared/form/CustomTextarea';
 import SubmitButton from '@/components/shared/SubmitButton';
 import { Form } from '@/components/ui/form';
 
+import { type SendMessageFormData } from '@/types/page';
 import { nameSchema } from '@/types/sharedSchemas';
 
 import { EGYPTIAN_PHONE, NOT_SPACES_ONLY } from '@/constants/regex';
@@ -24,6 +26,13 @@ export default function SendMessageSection() {
   const tCommon = useTranslations('common');
   const tRoot = useTranslations();
   const tSendMessage = useTranslations('sections.sendMessage');
+  const searchParams = useSearchParams();
+  const reservationId = searchParams.get('reservationId');
+  const propertyName = searchParams.get('propertyName');
+  const isCancellationRequest =
+    searchParams.get('messageType') === '2' &&
+    z.string().uuid().safeParse(reservationId).success &&
+    !!propertyName?.trim();
 
   const formSchema = z.object({
     firstName: nameSchema(tRoot)
@@ -82,7 +91,12 @@ export default function SendMessageSection() {
         <form
           noValidate
           onSubmit={form.handleSubmit(async (values) => {
-            await mutateAsync(values);
+            const payload: SendMessageFormData =
+              isCancellationRequest && reservationId && propertyName
+                ? { ...values, messageType: 2, reservationId, propertyName }
+                : { ...values, messageType: 1 };
+
+            await mutateAsync(payload);
           })}
         >
           <div className='flex flex-col gap-8 max-sm:gap-6'>
