@@ -15,7 +15,7 @@ import {
 import { getPageSections } from '@/api/page';
 import { Locale } from '@/i18n/i18n.config';
 
-export default async function Page({
+ export default async function Page({
   params,
 }: {
   params: Promise<{ id: string; locale: string }>;

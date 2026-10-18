@@ -23,7 +23,7 @@ import {
 import { SelectOption } from '@/types/components';
 
 import { cn } from '@/lib/utils';
-
+import { useDirection } from '@/hooks/useDirection';
 type CustomInputProps = {
   fieldName: string;
   label: string;
@@ -54,7 +54,7 @@ function CustomSelect({
   const { formState, control } = useFormContext();
   const { isSubmitting, errors } = formState;
   const hasError = errors[fieldName];
-
+  const direction  = useDirection();
   return (
     <FormField
       control={control}
@@ -73,6 +73,7 @@ function CustomSelect({
                 value={field.value}
                 onValueChange={field.onChange}
                 disabled={disabled || isSubmitting}
+                dir={direction}
               >
                 <SelectTrigger
                   className={cn(
@@ -91,7 +92,7 @@ function CustomSelect({
                   <SelectGroup>
                     {options.map(({ label, value }) => (
                       <SelectItem
-                        key={`Select-${label}`}
+                        key={`${fieldName}-${value}`}
                         value={value}
                       >
                         {label}
