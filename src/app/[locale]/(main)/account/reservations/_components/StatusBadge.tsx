@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
+import { type ReservationStatusId } from '@/types/reservations';
+
 import { cn } from '@/lib/utils';
 
 const statusBadgeVariants = cva(
@@ -34,21 +36,30 @@ const statusLabels: Record<StatusBadgeVariant, string> = {
   canceled: 'canceled',
 };
 
+const statusIdBadgeVariants: Record<ReservationStatusId, StatusBadgeVariant> = {
+  1: 'upcoming',
+  2: 'upcoming',
+  3: 'ongoing',
+  4: 'completed',
+  5: 'canceled',
+  6: 'upcoming',
+};
+
 interface StatusBadgeProps {
-  status: string;
+  statusId?: ReservationStatusId | number | null;
   className?: string;
 }
 
-export default function StatusBadge({ status, className }: StatusBadgeProps) {
+export default function StatusBadge({ statusId, className }: StatusBadgeProps) {
   const t = useTranslations('reservations.status');
-  const variant = status.toLowerCase() as StatusBadgeVariant;
-  const safeVariant = statusLabels[variant] ? variant : 'upcoming';
+  const variant =
+    statusIdBadgeVariants[statusId as ReservationStatusId] ?? 'upcoming';
 
   return (
     <span
-      className={cn(statusBadgeVariants({ variant: safeVariant }), className)}
+      className={cn(statusBadgeVariants({ variant }), className)}
     >
-      {t(statusLabels[safeVariant])}
+      {t(statusLabels[variant])}
     </span>
   );
 }

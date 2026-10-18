@@ -51,9 +51,7 @@ function formatStayDateRange(
   }
 
   const formatEnglishDate = (date: Date) => {
-    const month = new Intl.DateTimeFormat('en', { month: 'long' }).format(
-      date,
-    );
+    const month = new Intl.DateTimeFormat('en', { month: 'long' }).format(date);
 
     return `${date.getDate()}${getOrdinalSuffix(date.getDate())} ${month}`;
   };
@@ -90,7 +88,7 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
     checkInDate,
     checkOutDate,
     submittedAt,
-    status,
+    statusId,
   } = reservation;
 
   const formattedStayDates = formatStayDateRange(
@@ -106,7 +104,7 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
       trigger={
         <button
           type='button'
-          className='flex flex-col md:flex-row w-full cursor-pointer items-start gap-3 py-4 text-start transition-colors hover:bg-grayish-50 p-2 rounded active:bg-grayish-100 sm:gap-4'
+          className='flex w-full cursor-pointer flex-col items-start gap-3 rounded p-2 py-4 text-start transition-colors hover:bg-grayish-50 active:bg-grayish-100 sm:gap-4 md:flex-row'
         >
           <div className='relative h-44 w-full shrink-0 overflow-hidden rounded-xl sm:h-56 md:h-28 md:w-36'>
             <Image
@@ -125,14 +123,16 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
               </h3>
               <div className='flex items-center gap-1 text-grayish-500'>
                 <CalenderDateRangeIcon className='size-3.5 shrink-0' />
-                <span className='line-clamp-1 text-sm'>{formattedStayDates}</span>
+                <span className='line-clamp-1 text-sm'>
+                  {formattedStayDates}
+                </span>
               </div>
               <p className='text-sm text-grayish-500'>
                 {t('submittedOn', { date: formattedSubmitted })}
               </p>
             </div>
             <div className='mt-1 shrink-0'>
-              <StatusBadge status={status} />
+              <StatusBadge statusId={statusId} />
             </div>
           </div>
         </button>

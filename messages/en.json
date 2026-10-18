@@ -168,6 +168,18 @@
     "lost": "No internet connection",
     "restored": "Connection restored"
   },
+  "reservationConfirmed": {
+    "title": "Reservation Confirmed",
+    "description": "Your reservation is confirmed. At Luft, we'll take care of everything--just relax and enjoy.",
+    "backToHome": "Back to home",
+    "imageAlt": "Reservation confirmed illustration"
+  },
+  "reservationFailed": {
+    "title": "Reservation Failed",
+    "description": "We couldn't complete your reservation. Please try again or contact us for assistance.",
+    "backToHome": "Back to home",
+    "imageAlt": "Reservation failed illustration"
+  },
   "settings": {
     "title": "Account Settings",
     "description": "Setup and edit your account profile",
@@ -232,6 +244,7 @@
         "retry": "Retry",
         "success": "Your reservation has been submitted successfully",
         "errors": {
+          "reservationFailed": "Couldn’t create your reservation. Please try again.",
           "selectDatesAndGuests": "Please select dates and number of guests",
           "datesUnavailable": "Selected dates are no longer available",
           "availabilityCheckFailed": "We couldn’t confirm availability. Please try again.",
@@ -427,5 +440,34 @@
       "completed": "Completed",
       "canceled": "Canceled"
     }
+  },
+  "reservationSummary": {
+    "title": "Reservation Summary",
+    "details": "Details",
+    "edit": "Edit",
+    "back": "Back to reservation",
+    "guestDetails": "Guest details",
+    "checkInOut": "Check-in - Check-out",
+    "dateRange": "{checkIn} to {checkOut}",
+    "totalGuests": "Total Guests",
+    "summary": "Summary",
+    "taxes": "Taxes",
+    "finalPrice": "Final Price",
+    "confirm": "Confirm Reservation",
+    "reviews": "{rating} ({count})",
+    "nightlyPrice": "{price} × {count, plural, one {# night} other {# nights}}",
+    "stayTotal": "Stay total · {count, plural, one {# night} other {# nights}}",
+    "feeWithQuantity": "{description} × {quantity}",
+    "notProvided": "Not provided",
+    "loading": "Loading reservation summary...",
+    "loadError": "We couldn’t load your reservation summary. Please try again.",
+    "retry": "Retry",
+    "invalidSelection": "Please choose valid dates and a guest count within the property’s capacity.",
+    "loginRequired": "Please sign in to review your reservation.",
+    "login": "Log in",
+    "paymentUnavailable": "Payment is currently unavailable. Please try again later.",
+    "datesUnavailable": "These dates are no longer available. Please edit your reservation to choose new dates.",
+    "priceChanged": "Your price has changed. Please review the updated summary and confirm again.",
+    "confirmError": "We couldn’t open payment. Please try again or contact us for assistance."
   }
 }

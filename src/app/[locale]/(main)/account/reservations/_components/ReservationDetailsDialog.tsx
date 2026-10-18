@@ -10,7 +10,6 @@ import CardIcon from '@/components/icons/CardIcon';
 import Spinner from '@/components/icons/Spinner';
 import StarIcon from '@/components/icons/StarIcon';
 import UsersIcon from '@/components/icons/UsersIcon';
-// import ConfirmModal from '@/components/shared/ConfirmModal';
 import {
   Dialog,
   DialogContent,
@@ -26,8 +25,14 @@ import { useReservationDetails } from '@/hooks/useReservationDetails';
 import {
   type ReservationDetails,
   type ReservationListItem,
-  type ReservationStatus,
 } from '@/types/reservations';
+
+import {
+  getCancellationContactHref,
+  isUpcomingReservation,
+} from '@/utils/reservations';
+
+import { Link } from '@/i18n/routing';
 
 // ─── Date formatting ───────────────────────────────────────────────────────────
 
@@ -79,10 +84,6 @@ export default function ReservationDetailsDialog({
   trigger,
 }: ReservationDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
-  const [localStatus, setLocalStatus] = useState<ReservationStatus | null>(
-    null,
-  );
   const locale = useLocale();
   const t = useTranslations('reservations.details');
 
@@ -100,11 +101,10 @@ export default function ReservationDetailsDialog({
   const description = details?.property?.description ?? '';
   const rating = details?.property?.rating ?? 0;
   const reviewsCount = details?.property?.reviewsCount ?? 0;
-  const status = localStatus ?? details?.status ?? reservation.status;
+  const statusId = details?.statusId ?? reservation.statusId;
 
   const checkInDate = details?.stay?.checkInDate ?? reservation.checkInDate;
   const checkOutDate = details?.stay?.checkOutDate ?? reservation.checkOutDate;
-  const numberOfNights = details?.stay?.numberOfNights ?? 0;
 
   const totalGuests = details?.guests?.total ?? 0;
 
@@ -137,14 +137,7 @@ export default function ReservationDetailsDialog({
     return `${formatNumber(count)} ${count === 1 ? 'night' : 'nights'}`;
   }
 
-  const canCancel =
-    status.toLowerCase() !== 'canceled' &&
-    (details?.cancellation?.canCancel ?? false);
-
-  // function handleCancelReservation() {
-  //   setLocalStatus('Canceled');
-  //   setIsCancelConfirmOpen(false);
-  // }
+  const canCancel = isUpcomingReservation(statusId);
 
   function getPriceSummaryItemTotal(
     item: (typeof priceSummaryItems)[0],
@@ -189,7 +182,7 @@ export default function ReservationDetailsDialog({
       >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-        <DialogContent className='max-h-[calc(100dvh-4.5rem)] w-[calc(100%-2.5rem)] max-w-[42.5rem] overflow-y-auto rounded-[1.75rem] bg-white p-5 pt-6 sm:p-6 md:max-h-[90vh] md:w-full md:rounded-2xl [&>button>svg]:!size-6 [&>button>svg]:!text-neutral-900 [&>button]:top-8 [&>button]:ltr:left-auto [&>button]:ltr:right-8 [&>button]:rtl:left-8 [&>button]:rtl:right-auto md:[&>button>svg]:!size-4 md:[&>button]:top-4 md:[&>button]:ltr:right-4 md:[&>button]:rtl:left-4'>
+        <DialogContent className='max-h-[calc(100dvh-4.5rem)] w-[calc(100%-2.5rem)] max-w-[42.5rem] overflow-y-auto rounded-[1.75rem] bg-white p-5 pt-6 sm:p-6 md:max-h-[90vh] md:w-full md:rounded-2xl [&>button>svg]:!size-6 [&>button>svg]:!text-neutral-900 md:[&>button>svg]:!size-4 [&>button]:top-8 md:[&>button]:top-4 [&>button]:ltr:left-auto [&>button]:ltr:right-8 md:[&>button]:ltr:right-4 [&>button]:rtl:left-8 [&>button]:rtl:right-auto md:[&>button]:rtl:left-4'>
           <DialogHeader className='mb-7 pe-10 md:mb-4'>
             <DialogTitle className='text-start text-2xl font-semibold leading-8 text-grayish-900 md:text-xl md:leading-none'>
               {t('title')}
@@ -238,7 +231,7 @@ export default function ReservationDetailsDialog({
                   )}
                   <div className='mt-1'>
                     <StatusBadge
-                      status={status}
+                      statusId={statusId}
                       className='px-3 py-1 text-base leading-6 md:px-2 md:py-0.5 md:text-xs md:leading-5'
                     />
                   </div>
@@ -365,13 +358,15 @@ export default function ReservationDetailsDialog({
                 <>
                   <Divider />
                   <div>
-                    <button
-                      type='button'
+                    <Link
+                      href={getCancellationContactHref(
+                        reservation.reservationId,
+                        propertyName,
+                      )}
                       className='text-sm font-medium text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'
-                      onClick={() => setIsCancelConfirmOpen(true)}
                     >
                       {t('cancelReservation')}
-                    </button>
+                    </Link>
                   </div>
                 </>
               )}
@@ -379,24 +374,6 @@ export default function ReservationDetailsDialog({
           )}
         </DialogContent>
       </Dialog>
-
-      {/* <ConfirmModal
-        isOpen={isCancelConfirmOpen}
-        onCancel={() => setIsCancelConfirmOpen(false)}
-        onConfirm={handleCancelReservation}
-        variant='destructive'
-      >
-        <div className='flex flex-col items-center gap-2 text-center'>
-          <h6 className='text-xl font-medium'>
-            {t('cancelReservationConfirm.title')}
-          </h6>
-        </div>
-      </ConfirmModal> */}
-      <div className='flex flex-col items-center gap-2 text-center'>
-        <h6 className='text-xl font-medium'>
-          {t('cancelReservationConfirm.title')}
-        </h6>
-      </div>
     </>
   );
 }

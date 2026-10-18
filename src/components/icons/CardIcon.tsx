@@ -1,4 +1,4 @@
-import MastercardIcon from './MastercardIcon';
+import MasterCardIcon from './MasterCardIcon';
 import VisaIcon from './VisaIcon';
 
 type CardIconProps = {
@@ -13,5 +13,5 @@ export default function CardIcon({ type, className }: CardIconProps) {
     return <VisaIcon className={className} />;
   }
 
-  return <MastercardIcon className={className} />;
+  return <MasterCardIcon className={className} />;
 }
