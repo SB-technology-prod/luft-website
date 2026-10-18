@@ -312,6 +312,8 @@
       }
     },
     "homeSearch": {
+      "overStay":"Over 100 stay",
+      "guest":"Guest",
       "tabs": {
         "stays": "Stays",
         "services": "Services"
@@ -329,6 +331,15 @@
           "label": "Guests",
           "placeholder": "Select guests number"
         }
+      },
+      "emptySates":{
+        "emptyTitle": "Your Results are empty",
+        "emptyDescription": "Browse our homes and search again for later.",
+        "discoverHomes": "Discover Homes"
+      },
+      "errors":{
+        "couldNotLoadMoreStays":"Could not load more stays.",
+        "retry":"Retry"
       },
       "buttons": {
         "search": "Search"
