@@ -314,6 +314,8 @@
       }
     },
     "homeSearch": {
+      "overStay": "أكثر من 100 إقامة",
+      "guest": "ضبف",
       "tabs": {
         "stays": "إقامات",
         "services": "خدمات"
@@ -331,6 +333,15 @@
           "label": "الضيوف",
           "placeholder": "اختر عدد الضيوف"
         }
+      },
+      "emptySates": {
+        "emptyTitle": "نتائجك فارغة",
+        "emptyDescription": "تصفح منازلنا وابحث مرة أخرى لاحقًا.",
+        "discoverHomes": "اكتشف المنازل"
+      },
+      "errors": {
+        "couldNotLoadMoreStays": "تعذّر تحميل المزيد من الإقامات",
+        "retry": "إعادة المحاولة"
       },
       "buttons": {
         "search": "بحث"

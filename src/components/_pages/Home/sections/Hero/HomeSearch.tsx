@@ -1,45 +1,86 @@
 'use client';
-
-import { useState } from 'react';
-
+import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
-
 import { Search } from 'lucide-react';
-
+import type { DateRange } from 'react-day-picker';
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/i18n/routing';
+import CustomSelect from '@/components/shared/form/CustomSelect';
+import { Form } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import CustomRangeCalenderInput from '@/components/shared/form/CustonRangeCalenderInput';
+import { useQuery } from '@tanstack/react-query';
+import { getCitiesOfSearch } from '@/api/search';
+import { useDirection } from '@/hooks/useDirection';
+import HeroSearchSkelton from './HeroSearchSkelton';
+
+type SearchFormValues = {
+  city: string;
+  date: DateRange;
+  guestCount: string;
+};
+
+interface SearchOption {
+  label: string;
+  value: string;
+}
 
 export function HomeSearch() {
   const t = useTranslations('sections.homeSearch');
-  const [city, setCity] = useState('');
-  const [date, setDate] = useState('');
-  const [guestCount, setGuestCount] = useState('');
+  const router = useRouter();
+  const direction = useDirection();
+  const { data, isFetching, isError, isLoading } = useQuery({
+    queryKey: ['city'],
+    queryFn: getCitiesOfSearch,
+  });
+  const handleSearch = (values: SearchFormValues) => {
+    const params = new URLSearchParams();
+    if (values.city) params.set('city', values.city);
+    if (values.date.from && values.date.to) {
+      params.set(
+        'checkInDate',
+        format(values.date.from, 'yyyy-MM-dd'),
+      );
+      params.set(
+        'checkOutDate',
+        format(values.date.to, 'yyyy-MM-dd'),
+      );
+    }
+    if (values.guestCount) params.set('guestCount', values.guestCount);
+    router.push(`/search?${params.toString()}`);
+  };
 
-  const cities = [
-    { value: '', label: t('cities.placeholder') },
-    { value: 'new-york', label: t('cities.newYork') },
-    { value: 'los-angeles', label: t('cities.losAngeles') },
-    { value: 'chicago', label: t('cities.chicago') },
-    { value: 'miami', label: t('cities.miami') },
-    { value: 'san-francisco', label: t('cities.sanFrancisco') },
-  ];
-
-  const dates = [
-    { value: '', label: t('dates.placeholder') },
-    { value: 'today', label: t('dates.today') },
-    { value: 'tomorrow', label: t('dates.tomorrow') },
-    { value: 'this-week', label: t('dates.thisWeek') },
-    { value: 'next-week', label: t('dates.nextWeek') },
-    { value: 'this-month', label: t('dates.thisMonth') },
-  ];
+  const cities = data?.result?.map((city: any) => ({
+    value: city.id,
+    label: direction === 'rtl' ? city.nameAr : city.nameEn,
+  })) || [];
 
   const guests = [
     { value: '', label: t('guestCounts.placeholder') },
-    { value: '1', label: t('guestCounts.one') },
-    { value: '2', label: t('guestCounts.two') },
-    { value: '3', label: t('guestCounts.three') },
-    { value: '4', label: t('guestCounts.four') },
-    { value: '5+', label: t('guestCounts.fivePlus') },
+    ...Array.from({ length: 99 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1) + ' ' + t('fields.guests.label'),
+    })),
   ];
+
+  const form = useForm<SearchFormValues>({
+    defaultValues: {
+      city: '',
+      date: { from: undefined, to: undefined },
+      guestCount: '',
+    },
+  });
+  const selectedDate = form.watch('date');
+
+  const isDateRangeSelected = Boolean(
+    selectedDate?.from && selectedDate?.to,
+  );
+
+  if(isLoading || isFetching) {
+    return (
+      <HeroSearchSkelton />
+    )
+  }
 
   return (
     <div className='mx-auto w-full space-y-6'>
@@ -82,170 +123,132 @@ export function HomeSearch() {
       </div>
 
       {/* Desktop Search Bar */}
-      <div className='hidden items-center rounded-full bg-white p-2 ps-6 shadow-[0_2px_16px_rgba(0,0,0,0.08)] md:flex'>
-        <div className='flex flex-1 items-center'>
-          {/* City */}
-          <div className='relative flex-1 pe-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.city.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {cities.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+      <Form {...form}>
+        <form
+          noValidate
+          onSubmit={form.handleSubmit(handleSearch)}
+        >
+          <div className="hidden h-16 items-center rounded-full bg-white p-2 ps-6 shadow-[0_2px_16px_rgba(0,0,0,0.08)] md:flex">
+            {/* Inputs */}
+            <div className="flex min-w-0 flex-1 items-center">
+              {/* City */}
+              <div className="relative min-w-0 flex-1 pe-4">
+                <CustomSelect
+                  fieldName="city"
+                  options={cities.map((option: SearchOption) => ({
+                    label: String(option.label),
+                    value: String(option.value),
+                  }))}
+                  label={t('fields.city.label')}
+                  placeholder={t('fields.city.placeholder')}
+                  className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                  lableClassName="text-sm font-semibold text-grayish-900"
+                  disabled={!isDateRangeSelected}
+                />
+              </div>
+
+              <div className="h-10 w-px shrink-0 bg-grayish-50" />
+
+              {/* Date */}
+              <div className="relative min-w-0 flex-1 px-4">
+                <CustomRangeCalenderInput
+                  fieldName="date"
+                  label={t('fields.date.label')}
+                  placeholder={t('fields.date.placeholder')}
+                  iconShow={false}
+                  className="!mt-0 h-12 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none space-y-1"
+                />
+              </div>
+
+              <div className="h-10 w-px shrink-0 bg-grayish-50" />
+
+              {/* Guests */}
+              <div className="relative min-w-0 flex-1 px-4">
+                <CustomSelect
+                  fieldName="guestCount"
+                  options={guests}
+                  label={t('fields.guests.label')}
+                  placeholder={t('fields.guests.placeholder')}
+                  className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                  lableClassName="text-sm font-semibold text-grayish-900"
+                  disabled={!isDateRangeSelected}
+                />
+              </div>
             </div>
+
+            {/* Search Button */}
+            <button
+              className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800 disabled:cursor-not-allowed disabled:bg-grayish-300"
+              type="submit"
+              disabled={!isDateRangeSelected}
+            >
+              <Search className="h-5 w-5 text-white" />
+            </button>
           </div>
-
-          {/* Divider */}
-          <div className='h-10 w-px bg-grayish-50' />
-
-          {/* Date */}
-          <div className='relative flex-1 px-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.date.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {dates.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className='h-10 w-px bg-grayish-50' />
-
-          {/* Guests */}
-          <div className='relative flex-1 px-4'>
-            <p className='text-sm font-semibold text-grayish-900'>
-              {t('fields.guests.label')}
-            </p>
-            <div className='relative'>
-              <select
-                disabled
-                value={guestCount}
-                onChange={(e) => setGuestCount(e.target.value)}
-                className='w-full cursor-pointer appearance-none bg-transparent text-sm text-grayish-400 focus:outline-none'
-              >
-                {guests.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Search Button */}
-        <button className='flex h-12 w-12 items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800'>
-          <Search className='h-5 w-5 text-white' />
-        </button>
-      </div>
+        </form>
+      </Form>
 
       {/* Mobile Search Cards */}
-      <div className='flex flex-col gap-4 md:hidden'>
-        {/* City Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.city.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {cities.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+      <Form {...form}>
+        <form
+          noValidate
+          onSubmit={form.handleSubmit(handleSearch)}
+        >
+          <div className='flex flex-col gap-4 md:hidden'>
+            {/* City Card */}
+            <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+              <CustomSelect
+                fieldName='city'
+                key={cities.map((option: SearchOption) => option.value).join(',')}
+                options={cities.map((option: SearchOption) => ({
+                  label: String(option.label),
+                  value: String(option.value),
+                }))}
+                label={t('fields.city.label')}
+                placeholder={t('fields.city.placeholder')}
+                className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
+                lableClassName='text-sm font-semibold text-grayish-900'
+                disabled={!isDateRangeSelected}
+              />
+            </div>
 
-        {/* Date Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.date.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {dates.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+            {/* Date Card */}
+            <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+              <CustomRangeCalenderInput
+                fieldName='date'
+                label={t('fields.date.label')}
+                placeholder={t('fields.date.placeholder')}
+                iconShow={false}
+                className="!border-none !bg-white !mt-0 px-4 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-10"
+              />
+            </div>
 
-        {/* Guests Card */}
-        <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-          <p className='text-sm font-semibold text-grayish-900'>
-            {t('fields.guests.label')}
-          </p>
-          <div className='relative'>
-            <select
-              disabled
-              value={guestCount}
-              onChange={(e) => setGuestCount(e.target.value)}
-              className='w-full cursor-pointer appearance-none bg-transparent pe-4 text-sm text-grayish-400 focus:outline-none'
-            >
-              {guests.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+            {/* Guests Card */}
+            <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+              <CustomSelect
+                fieldName='guestCount'
+                key={guests.map((option) => option.value).join(',')}
+                options={guests}
+                label={t('fields.guests.label')}
+                placeholder={t('fields.guests.placeholder')}
+                className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
+                lableClassName='text-sm font-semibold text-grayish-900'
+                disabled={!isDateRangeSelected}
+              />
+            </div>
 
-        {/* Mobile Search Button */}
-        <Button className='mt-2 h-10'>{t('buttons.search')}</Button>
-      </div>
+            {/* Mobile Search Button */}
+            <Button
+              className='mt-2 h-10 disabled:cursor-not-allowed disabled:bg-grayish-300 disabled:text-grayish-400'
+              type='submit'
+              disabled={!isDateRangeSelected}
+            >
+              {t('buttons.search')}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
+
   );
 }
