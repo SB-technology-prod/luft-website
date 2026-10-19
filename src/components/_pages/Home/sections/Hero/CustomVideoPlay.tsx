@@ -21,19 +21,19 @@ const MediaHero = ({ src, className = '', extension }: MediaHeroProps) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [, setVideoLoaded] = useState(false);
 
   // Detect if the src is a video
   const isVideo = useMemo(() => {
     if (!src) return false;
     return ALLOWED_VIDS_TYPES.some((ext) => extension.endsWith(ext));
-  }, [src]);
+  }, [src, extension]);
 
   // Detect if the src is an image
   const isImage = useMemo(() => {
     if (!src) return false;
     return ALLOWED_IMGS_TYPES.some((ext) => extension.endsWith(ext));
-  }, [src]);
+  }, [src, extension]);
 
   useEffect(() => {
     if (videoRef.current && isVideo) {

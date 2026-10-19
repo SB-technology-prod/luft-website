@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -78,10 +79,12 @@ export default function PropertyImages({
             onClick={() => openGalleryWithImage(0)}
             type='button'
           >
-            <img
+            <Image
               src={coverImage}
               alt=''
               className='h-full rounded-2xl object-cover md:w-[24.5rem] xl:w-[39.75rem]'
+              width={500}
+              height={500}
             />
           </button>
 

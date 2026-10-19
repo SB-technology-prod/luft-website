@@ -1,18 +1,26 @@
 'use client';
-import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
+
+import { format } from 'date-fns';
 import { Search } from 'lucide-react';
-import type { DateRange } from 'react-day-picker';
-import { Button } from '@/components/ui/button';
-import { useRouter } from '@/i18n/routing';
-import CustomSelect from '@/components/shared/form/CustomSelect';
-import { Form } from '@/components/ui/form';
+import { type DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
-import CustomRangeCalenderInput from '@/components/shared/form/CustonRangeCalenderInput';
+
 import { useQuery } from '@tanstack/react-query';
-import { getCitiesOfSearch } from '@/api/search';
-import { useDirection } from '@/hooks/useDirection';
+
+import CustomSelect from '@/components/shared/form/CustomSelect';
+import CustomRangeCalenderInput from '@/components/shared/form/CustonRangeCalenderInput';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
+
 import HeroSearchSkelton from './HeroSearchSkelton';
+
+import { useDirection } from '@/hooks/useDirection';
+
+import { type City } from '@/types/cities';
+
+import { getCitiesOfSearch } from '@/api/search';
+import { useRouter } from '@/i18n/routing';
 
 type SearchFormValues = {
   city: string;
@@ -29,7 +37,7 @@ export function HomeSearch() {
   const t = useTranslations('sections.homeSearch');
   const router = useRouter();
   const direction = useDirection();
-  const { data, isFetching, isError, isLoading } = useQuery({
+  const { data, isFetching, isLoading } = useQuery({
     queryKey: ['city'],
     queryFn: getCitiesOfSearch,
   });
@@ -50,7 +58,7 @@ export function HomeSearch() {
     router.push(`/search?${params.toString()}`);
   };
 
-  const cities = data?.result?.map((city: any) => ({
+  const cities = data?.result?.map((city: City) => ({
     value: city.id,
     label: direction === 'rtl' ? city.nameAr : city.nameEn,
   })) || [];
@@ -76,7 +84,7 @@ export function HomeSearch() {
     selectedDate?.from && selectedDate?.to,
   );
 
-  if(isLoading || isFetching) {
+  if (isLoading || isFetching) {
     return (
       <HeroSearchSkelton />
     )

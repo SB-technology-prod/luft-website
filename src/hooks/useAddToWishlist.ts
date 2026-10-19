@@ -12,10 +12,12 @@ export function useAddToWishlist() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (propertyId: string) => addToWishlist(propertyId),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: (res: any) => {
       queryClient.invalidateQueries({ queryKey: [wishlistQueryKey] });
       toast.success(res?.message);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err: any) => {
       // Network failures surface as a raw "Failed to fetch" TypeError
       toast.error(

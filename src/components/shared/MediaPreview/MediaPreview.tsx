@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 
+import Image from 'next/image';
+
 import ImagePlaceholder from '@/components/shared/MediaPreview/ImagePlaceholder';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -61,10 +63,11 @@ export default function MediaPreview({
             {isLoading && (
               <Skeleton className='absolute inset-0 z-10 size-full rounded-none' />
             )}
-            <img
+            <Image
               key={url}
               src={url}
               alt={'Media'}
+              fill
               decoding='async'
               className={cn('size-full object-cover', {
                 'opacity-0': isLoading,

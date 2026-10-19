@@ -1,8 +1,9 @@
 
 import { format } from 'date-fns';
+import { ar, enUS } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
 import type { DateRange } from 'react-day-picker';
+import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -19,9 +20,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { cn } from '@/lib/utils';
 import { useDirection } from '@/hooks/useDirection';
-import { ar, enUS } from 'date-fns/locale';
+
+import { cn } from '@/lib/utils';
 
 type CustomCalenderProps = {
   fieldName: string;
