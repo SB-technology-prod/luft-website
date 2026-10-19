@@ -132,7 +132,7 @@ export const login = async (credentials: LoginFormData) =>
     false,
   );
 
-export const logout = async (token: string) =>
+export const logout = async () =>
   apiFetch(
     'api/auth/logout',
     {

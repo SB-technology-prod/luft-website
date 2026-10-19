@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl';
 
 import HandBellIcon from '@/components/icons/HandBellIcon';
 import HomeIcon from '@/components/icons/HomeIcon';
-import StatusLayout from '@/components/shared/StatusLayout';
 import Spinner from '@/components/shared/Spinner';
+import StatusLayout from '@/components/shared/StatusLayout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 

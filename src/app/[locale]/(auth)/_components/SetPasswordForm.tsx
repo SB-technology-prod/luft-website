@@ -103,9 +103,17 @@ export default function SetPasswordForm({
     onMutate: () => {
       setServerError(undefined);
     },
+     
 
-    onSuccess: (result: any) => {
-      if (result?.success === false) {
+    onSuccess: (result: unknown) => {
+      if (
+        result &&
+        typeof result === 'object' &&
+        'success' in result &&
+        result.success === false &&
+        'error' in result &&
+        typeof result.error === 'string'
+      ) {
         setServerError(result.error);
       } else if (onSubmissionSuccess) {
         onSubmissionSuccess(result);

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import useSession from '@/hooks/useSession';
 
 import { getTextLocale } from '@/utils/language';
@@ -34,10 +36,12 @@ export default function UserImg({ className }: UserImgProps) {
       )}
     >
       {profilePicture ? (
-        <img
+        <Image
           src={profilePicture}
           alt='Profile'
           className='size-full object-cover'
+          width={40}
+          height={40}
         />
       ) : (
         <>

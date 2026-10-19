@@ -1,15 +1,21 @@
 'use client'
-import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
-import PropertySearchMap from "./_components/PropertySearchMap";
+
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import StatusLayout from "@/components/shared/StatusLayout";
-import { searchProperties, searchQueryKey } from "@/api/search";
+
 import { useInfiniteQuery } from "@tanstack/react-query";
+
+import StatusLayout from "@/components/shared/StatusLayout";
+import { Button } from "@/components/ui/button";
+
+import PropertySearchMap from "./_components/PropertySearchMap";
 import PropertySearchResultsCard from "./_components/PropertySearchResultsCard";
 import { PropertySearchResultsCardSkeleton } from "./_components/PropertySearchResultsCardSkeleton";
+
+import { searchProperties, searchQueryKey } from "@/api/search";
 
 export default function SearchResult() {
   const t = useTranslations();

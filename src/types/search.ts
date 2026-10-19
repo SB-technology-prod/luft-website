@@ -29,12 +29,18 @@ export interface SearchItem {
   images: Image[];
   collectionIds: string[];
   amenityIds: string[];
-  nearbyPlaces: any[];
+  nearbyPlaces: nearbyPlace[];
   isWishlisted: boolean;
   reviewsCount: number;
   rating: number;
 }
-
+export interface nearbyPlace {
+  categoryId: string
+  placeNameEn: string
+  placeNameAr: string
+  timeEn: string
+  timeAr: string
+}
 export interface Image {
   id: string;
   url: string;

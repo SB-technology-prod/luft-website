@@ -14,7 +14,7 @@ import { getUserWishlist, wishlistQueryKey } from '@/api/wishlist';
 export default function WishlistPage() {
   const t = useTranslations('pages.wishlist');
 
-  const { data, isFetching, isError, isLoading } = useQuery({
+  const { data, isFetching, isError } = useQuery({
     queryKey: [wishlistQueryKey],
     queryFn: getUserWishlist,
   });
