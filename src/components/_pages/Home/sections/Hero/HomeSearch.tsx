@@ -158,7 +158,7 @@ export function HomeSearch() {
               <div className="h-10 w-px shrink-0 bg-grayish-50" />
 
               {/* Date */}
-              <div className="relative min-w-0 flex-1 px-4">
+              <div className="relative min-w-0 flex-1 px-4 h-[58px]">
                 <CustomRangeCalenderInput
                   fieldName="date"
                   label={t('fields.date.label')}
@@ -171,7 +171,7 @@ export function HomeSearch() {
               <div className="h-10 w-px shrink-0 bg-grayish-50" />
 
               {/* Guests */}
-              <div className="relative min-w-0 flex-1 px-4">
+              <div className="relative min-w-0 flex-1 pe-4">
                 <CustomSelect
                   fieldName="guestCount"
                   options={guests}

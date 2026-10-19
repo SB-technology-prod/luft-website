@@ -41,7 +41,7 @@ const CustomRangeCalenderInput = ({
 }: CustomCalenderProps) => {
   const form = useFormContext();
   const { isSubmitting } = form.formState;
-  const direction  = useDirection();
+  const direction = useDirection();
   const locale = direction === 'rtl' ? ar : enUS;
   return (
     <FormField
@@ -52,9 +52,9 @@ const CustomRangeCalenderInput = ({
 
         const displayValue =
           range?.from && range?.to
-            ? `${format(range.from, 'd MMM yyyy',{ locale })} - ${format(range.to, 'd MMM yyyy',{ locale })}`
+            ? `${format(range.from, 'd MMM yyyy', { locale })} - ${format(range.to, 'd MMM yyyy', { locale })}`
             : range?.from
-              ? `${format(range.from, 'd MMM yyyy',{ locale })} - Select end date`
+              ? `${format(range.from, 'd MMM yyyy', { locale })} - Select end date`
               : '';
 
         return (
@@ -93,11 +93,11 @@ const CustomRangeCalenderInput = ({
                   selected={range}
                   onSelect={field.onChange}
                   formatters={{
-                    formatCaption: (month) => format(month, 'MMM yyyy',{ locale }),
+                    formatCaption: (month) => format(month, 'MMM yyyy', { locale }),
                   }}
                   initialFocus
                   disabled={{ before: new Date() }}
-                  
+
                 />
               </PopoverContent>
             </Popover>
