@@ -394,6 +394,7 @@
     }
   },
   "reservations": {
+    "retry": "إعادة المحاولة",
     "title": "حجوزاتي",
     "tabs": {
       "stays": "الإقامات",
@@ -444,6 +445,11 @@
     }
   },
   "reservationSummary": {
+    "propertyDetails": "تفاصيل مكان الإقامة",
+    "phoneNumber": "رقم الهاتف",
+    "phonePlaceholder": "أدخل رقم الهاتف المحمول",
+    "phoneRequired": "يرجى إدخال رقم الهاتف.",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
     "title": "ملخص الحجز",
     "details": "التفاصيل",
     "edit": "تعديل",
@@ -451,6 +457,10 @@
     "guestDetails": "بيانات الضيف",
     "checkInOut": "تسجيل الوصول - تسجيل المغادرة",
     "dateRange": "من {checkIn} إلى {checkOut}",
+    "propertyGuests": "{count, plural, zero {# ضيف} one {ضيف واحد} two {ضيفان} few {# ضيوف} many {# ضيفًا} other {# ضيف}}",
+    "bedrooms": "{count, plural, zero {# غرفة نوم} one {غرفة نوم واحدة} two {غرفتا نوم} few {# غرف نوم} many {# غرفة نوم} other {# غرفة نوم}}",
+    "bathrooms": "{count, plural, zero {# حمام} one {حمام واحد} two {حمامان} few {# حمامات} many {# حمامًا} other {# حمام}}",
+    "feePrice": "{price} × {quantity} {description}",
     "totalGuests": "إجمالي الضيوف",
     "summary": "ملخص السعر",
     "taxes": "الضرائب",

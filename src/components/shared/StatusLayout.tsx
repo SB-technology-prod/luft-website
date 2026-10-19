@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -32,20 +33,26 @@ const StatusLayout = ({
       )}
     >
       <div className='flex flex-col items-center justify-center'>
-        <img
-          src={mainImageSrc}
-          alt={title}
-          className='mx-auto h-auto w-auto'
-        />
+        {mainImageSrc && (
+          <Image
+            src={mainImageSrc}
+            alt={title}
+            className='mx-auto h-auto w-auto'
+            width={300}
+            height={300}
+          />
+        )}
 
         <div
           className='mt-12 flex w-full items-center justify-between'
           dir='ltr'
         >
-          <img
+          <Image
             src='/svg/leftArrow.svg'
             alt='left arrow'
             className='h-auto w-auto max-sm:hidden'
+            width={24}
+            height={24}
           />
 
           <div className='flex flex-1 flex-col items-center gap-2 text-center text-neutral-50'>
@@ -55,7 +62,7 @@ const StatusLayout = ({
             <span className='text-grayish-400 md:text-lg'>{paragraph}</span>
           </div>
 
-          <img
+          <Image
             src='/svg/rightArrow.svg'
             alt='right arrow'
             className='h-auto w-auto max-sm:hidden'

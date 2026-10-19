@@ -10,7 +10,7 @@ export default function CircleChevronRightIcon({ className }: IconProps) {
       viewBox='0 0 24 24'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
-      className='text-grayish-900'
+      className={className ?? 'text-grayish-900'}
       stroke='currentColor'
       strokeWidth='1'
       strokeLinecap='round'

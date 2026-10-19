@@ -11,8 +11,10 @@ export async function generateMetadata() {
 
 export default function Page() {
   return (
-    <Suspense>
-      <ReservationSummaryPage />
-    </Suspense>
+    <main>
+      <Suspense>
+        <ReservationSummaryPage />
+      </Suspense>
+    </main>
   );
 }

@@ -4,22 +4,21 @@ import { toast } from 'sonner';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { removeFromWishlist } from '@/api/wishlist';
-import { wishlistQueryKey } from '@/api/wishlist';
+import { removeFromWishlist, wishlistQueryKey } from '@/api/wishlist';
 
 export function useRemoveFromWishlist() {
   const t = useTranslations('pages.wishlist');
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (propertyId: string) => removeFromWishlist(propertyId),
-    onSuccess: (res: any) => {
+    onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: [wishlistQueryKey] });
       toast.success(res?.message);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       // Network failures surface as a raw "Failed to fetch" TypeError
       toast.error(
-        err instanceof TypeError || !err?.message
+        err instanceof TypeError || !err.message
           ? t('updateFailed')
           : err.message,
       );

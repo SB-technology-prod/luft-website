@@ -1,16 +1,15 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { useTranslations } from 'next-intl';
 
 import HandBellIcon from '@/components/icons/HandBellIcon';
 import HomeIcon from '@/components/icons/HomeIcon';
+import Spinner from '@/components/shared/Spinner';
 import StatusLayout from '@/components/shared/StatusLayout';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import ReservationCard from './ReservationCard';
 
@@ -52,7 +51,10 @@ export function ReservationsTabsProvider({
   children: React.ReactNode;
 }) {
   return (
-    <Tabs defaultValue='stays' className='w-full'>
+    <Tabs
+      defaultValue='stays'
+      className='w-full'
+    >
       {children}
     </Tabs>
   );
@@ -67,7 +69,7 @@ export function ReservationsTabsList() {
     <TabsList className='flex h-auto w-full items-start justify-between gap-0 rounded-full bg-transparent p-1 md:flex-col'>
       <TabsTrigger
         value='stays'
-        className='flex-1 flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
+        className='flex flex-1 items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
       >
         <HomeIcon className='size-4' />
         <span>{t('stays')}</span>
@@ -75,7 +77,7 @@ export function ReservationsTabsList() {
 
       <TabsTrigger
         value='services'
-        className='flex-1 flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
+        className='flex flex-1 items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
       >
         <HandBellIcon className='size-4' />
         <span>{t('services')}</span>
@@ -88,16 +90,41 @@ export function ReservationsTabsList() {
 
 export function ReservationsTabsContent() {
   const t = useTranslations('reservations');
-  const { data, isFetching, isError } = useMyReservations();
+  const {
+    data,
+    isPending,
+    isFetching,
+    isError,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useMyReservations();
+  const [loadMoreElement, setLoadMoreElement] = useState<HTMLDivElement | null>(
+    null,
+  );
 
-  const reservations = data?.result?.items || [];
-  console.log("🚀 ~ ReservationsTabsContent ~ reservations:", reservations)
+  const reservations = data?.pages.flatMap((page) => page.result.items) ?? [];
+
+  useEffect(() => {
+    if (!loadMoreElement || !hasNextPage || isFetching || isError) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) void fetchNextPage({ cancelRefetch: false });
+    });
+    observer.observe(loadMoreElement);
+    return () => observer.disconnect();
+  }, [loadMoreElement, hasNextPage, isFetching, isError, fetchNextPage]);
 
   return (
     <>
-      <TabsContent value='stays' className='w-full'>
+      <TabsContent
+        value='stays'
+        className='w-full'
+      >
         <div className='flex flex-col divide-y divide-grayish-50'>
-          {isFetching && (
+          {isPending && (
             <>
               <ReservationCardSkeleton />
               <ReservationCardSkeleton />
@@ -105,19 +132,54 @@ export function ReservationsTabsContent() {
             </>
           )}
 
-          {!isFetching && (isError || reservations.length === 0) && (
+          {!isPending && !isError && reservations.length === 0 && (
             <EmptyReservationsState />
           )}
 
-          {!isFetching &&
-            !isError &&
-            reservations.map((reservation) => (
-              <ReservationCard
-                key={reservation.reservationId}
-                reservation={reservation}
-              />
-            ))}
+          {reservations.map((reservation) => (
+            <ReservationCard
+              key={reservation.reservationId}
+              reservation={reservation}
+            />
+          ))}
         </div>
+        {isError && (
+          <div className='flex flex-col items-center gap-3 py-6'>
+            <p
+              role='alert'
+              className='text-sm text-error-500'
+            >
+              {t('error')}
+            </p>
+            <Button
+              type='button'
+              disabled={isFetching}
+              onClick={() => {
+                if (isFetchNextPageError)
+                  void fetchNextPage({ cancelRefetch: false });
+                else void refetch();
+              }}
+            >
+              {t('retry')}
+            </Button>
+          </div>
+        )}
+        {hasNextPage && (
+          <div
+            ref={setLoadMoreElement}
+            className='h-1'
+            aria-hidden
+          />
+        )}
+        {isFetchingNextPage && (
+          <div
+            role='status'
+            className='flex items-center justify-center gap-3 py-6 text-sm text-grayish-400'
+          >
+            <Spinner />
+            <span>{t('loading')}</span>
+          </div>
+        )}
       </TabsContent>
 
       <TabsContent value='services'>

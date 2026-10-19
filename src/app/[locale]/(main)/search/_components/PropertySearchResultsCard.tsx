@@ -18,10 +18,11 @@ import {
 
 import { PropertySearchResultsCardSkeleton } from './PropertySearchResultsCardSkeleton';
 
+import { useDirection } from '@/hooks/useDirection';
+
 import { SearchItem } from '@/types/search';
 
 import { Link } from '@/i18n/routing';
-import { useDirection } from '@/hooks/useDirection';
 
 interface PropertySearchResultsCardProps {
     item: SearchItem;

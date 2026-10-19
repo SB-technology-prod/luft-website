@@ -111,7 +111,7 @@ export async function apiFetch(
     try {
       const parsedBody = JSON.parse(options.body);
       options.body = JSON.stringify(trimStringValues(parsedBody));
-    } catch (e) {
+    } catch {
       // Ignore if it's not a valid JSON string
     }
   }

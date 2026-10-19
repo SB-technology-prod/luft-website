@@ -20,10 +20,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { useDirection } from '@/hooks/useDirection';
+
 import { SelectOption } from '@/types/components';
 
 import { cn } from '@/lib/utils';
-import { useDirection } from '@/hooks/useDirection';
 type CustomInputProps = {
   fieldName: string;
   label: string;

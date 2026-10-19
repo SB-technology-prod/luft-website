@@ -29,7 +29,9 @@ Payment status and expiry fields are represented in the response type; the page 
 
 ## Checkout endpoint
 
-Confirm refreshes the summary and asks the user to review again if the total or currency changed. It then sends an authenticated POST to `api/payments/reservations/{reservationId}/checkout` with the reservation ID in the path and no request body. The path is relative to `NEXT_PUBLIC_API_URL`; no separate checkout environment variable is required. Duplicate clicks are blocked while the operation is pending, and failed checkout requests are not automatically retried.
+Confirm requires a phone number for the payment OTP. Empty numbers and invalid formats are rejected before refreshing the summary or requesting checkout. The input accepts an optional leading `+`, spaces, parentheses, dots, and hyphens with 7–15 digits; formatting separators are removed before sending. The backend must also validate the number before starting payment.
+
+Confirm refreshes the summary and asks the user to review again if the total or currency changed. It then sends an authenticated POST to `api/payments/reservations/{reservationId}/checkout` with the reservation ID in the path and a JSON body such as `{ "phoneNumber": "+201012345678" }`. The path is relative to `NEXT_PUBLIC_API_URL`; no separate checkout environment variable is required. Duplicate clicks are blocked while the operation is pending, and failed checkout requests are not automatically retried.
 
 The response uses the standard API envelope with `result.checkoutUrl`. The frontend redirects the current browser tab to that URL, preserving its checkout parameters. The response also contains `reservationId`, `paymentId`, `clientSecret`, `publicKey`, `amount`, `currency`, `expiresAt`, and `remainingSeconds`, represented in `ReservationCheckoutApiResponse`. The backend must revalidate the existing reservation, handle duplicate checkout requests, and configure payment success/failure callbacks to the localized `/reservation-confirmed` and `/reservation-failed` routes. Availability validation must account for the existing reservation's own booked dates.
 
