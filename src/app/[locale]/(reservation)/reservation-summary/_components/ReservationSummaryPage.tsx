@@ -47,10 +47,14 @@ export default function ReservationSummaryPage() {
       }
     : null;
   const checkout = useMutation({
-    mutationFn: (id: string) => createReservationCheckout(id),
+    mutationFn: ({ id, phoneNumber }: { id: string; phoneNumber: string }) =>
+      createReservationCheckout(id, phoneNumber),
     retry: false,
   });
   const [error, setError] = useState<string>();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneError, setPhoneError] = useState<string>();
+  const phoneInput = useRef<HTMLInputElement>(null);
   const [isConfirming, setIsConfirming] = useState(false);
   const confirming = useRef(false);
   const editHref = selection ? getReservationEditHref(selection) : '/';
@@ -99,6 +103,18 @@ export default function ReservationSummaryPage() {
       !summary.data
     )
       return;
+    const trimmedPhone = phoneNumber.trim();
+    const digits = trimmedPhone.replace(/\D/g, '');
+    if (
+      !/^\+?[\d\s().-]+$/.test(trimmedPhone) ||
+      digits.length < 7 ||
+      digits.length > 15
+    ) {
+      setPhoneError(t(trimmedPhone ? 'phoneInvalid' : 'phoneRequired'));
+      phoneInput.current?.focus();
+      return;
+    }
+    setPhoneError(undefined);
     setError(undefined);
     confirming.current = true;
     setIsConfirming(true);
@@ -118,7 +134,10 @@ export default function ReservationSummaryPage() {
         setError(t('priceChanged'));
         return;
       }
-      const response = await checkout.mutateAsync(reservationId);
+      const response = await checkout.mutateAsync({
+        id: reservationId,
+        phoneNumber: trimmedPhone.replace(/[\s().-]/g, ''),
+      });
       if (
         typeof response.result?.checkoutUrl !== 'string' ||
         !response.result.checkoutUrl.trim()
@@ -210,24 +229,90 @@ export default function ReservationSummaryPage() {
               <span>{t('loading')}</span>
             </div>
           ) : (
-            <>
-              <div className='mb-7 flex items-center justify-between gap-4'>
+            <form
+              noValidate
+              onSubmit={(event) => {
+                event.preventDefault();
+                void confirmReservation();
+              }}
+            >
+              <div className='border-b border-grayish-50 pb-6'>
                 <h2 className='text-[26px] font-medium leading-[34px]'>
                   {t('details')}
                 </h2>
-                <Link
-                  href={editHref}
-                  aria-disabled={isConfirming || checkout.isSuccess}
-                  onClick={(event) => {
-                    if (isConfirming || checkout.isSuccess)
-                      event.preventDefault();
-                  }}
-                  className='me-4 flex items-center gap-1 text-sm underline underline-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50'
-                >
-                  <EditIcon className='size-4 shrink-0' />
-                  {t('edit')}
-                </Link>
               </div>
+              <div className='space-y-2 border-b border-grayish-50 py-4'>
+                <h3 className='text-lg font-medium leading-6'>
+                  {t('guestDetails')}
+                </h3>
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <ReservationSummaryIcon name='guest' />
+                  <bdi>{data.guest.name || t('notProvided')}</bdi>
+                </p>
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <GmailIcon className='size-[22px] shrink-0' />
+                  <bdi
+                    className='break-all'
+                    dir='ltr'
+                  >
+                    {data.guest.email || t('notProvided')}
+                  </bdi>
+                </p>
+                <div className='w-full pt-3 sm:max-w-[442px]'>
+                  <label
+                    htmlFor='checkout-phone'
+                    className='mb-2 block px-3.5 text-sm'
+                  >
+                    {t('phoneNumber')}{' '}
+                    <span
+                      aria-hidden='true'
+                      className='text-error-500'
+                    >
+                      *
+                    </span>
+                  </label>
+                  <div className='relative'>
+                    <span
+                      className='pointer-events-none absolute inset-y-0 start-3.5 flex items-center'
+                      aria-hidden
+                    >
+                      <PhoneIcon className='size-5 shrink-0' />
+                    </span>
+                    <input
+                      ref={phoneInput}
+                      id='checkout-phone'
+                      name='phoneNumber'
+                      type='tel'
+                      autoComplete='tel'
+                      required
+                      value={phoneNumber}
+                      onChange={(event) => {
+                        setPhoneNumber(event.target.value);
+                        setPhoneError(undefined);
+                      }}
+                      disabled={isConfirming || checkout.isSuccess}
+                      aria-invalid={Boolean(phoneError)}
+                      aria-describedby={
+                        phoneError ? 'checkout-phone-error' : undefined
+                      }
+                      placeholder={t('phonePlaceholder')}
+                      className='h-11 w-full rounded-2xl border border-grayish-100 bg-white pe-3.5 ps-10 text-sm outline-none placeholder:text-grayish-400 focus:border-grayish-900 focus:ring-1 focus:ring-grayish-900 disabled:opacity-50 aria-[invalid=true]:border-error-500'
+                    />
+                  </div>
+                  {phoneError && (
+                    <p
+                      id='checkout-phone-error'
+                      role='alert'
+                      className='mt-2.5 px-3.5 text-sm text-error-500'
+                    >
+                      {phoneError}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <h3 className='pt-4 text-lg font-medium leading-6'>
+                {t('propertyDetails')}
+              </h3>
               <div className='flex items-center gap-4 pb-4'>
                 {data.property.imageUrl && (
                   <div className='relative h-[120px] w-[146px] shrink-0 overflow-hidden rounded-2xl max-sm:h-24 max-sm:w-24'>
@@ -272,32 +357,24 @@ export default function ReservationSummaryPage() {
                   </p>
                 </div>
               </div>
-              <div className='space-y-2 border-t border-grayish-50 py-4'>
-                <h3 className='text-lg font-medium leading-6'>
-                  {t('guestDetails')}
-                </h3>
-                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
-                  <ReservationSummaryIcon name='guest' />
-                  <bdi>{data.guest.name || t('notProvided')}</bdi>
-                </p>
-                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
-                  <PhoneIcon className='size-[22px] shrink-0' />
-                  <bdi dir='ltr'>{data.guest.phone || t('notProvided')}</bdi>
-                </p>
-                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
-                  <GmailIcon className='size-[22px] shrink-0' />
-                  <bdi
-                    className='break-all'
-                    dir='ltr'
-                  >
-                    {data.guest.email || t('notProvided')}
-                  </bdi>
-                </p>
-              </div>
               <div className='space-y-2 border-t border-grayish-50 pb-4 pt-4'>
-                <h3 className='text-lg font-medium leading-6'>
-                  {t('checkInOut')}
-                </h3>
+                <div className='flex items-center justify-between gap-4'>
+                  <h3 className='text-lg font-medium leading-6'>
+                    {t('checkInOut')}
+                  </h3>
+                  <Link
+                    href={editHref}
+                    aria-disabled={isConfirming || checkout.isSuccess}
+                    onClick={(event) => {
+                      if (isConfirming || checkout.isSuccess)
+                        event.preventDefault();
+                    }}
+                    className='me-4 flex items-center gap-1 text-sm underline underline-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50'
+                  >
+                    <EditIcon className='size-4 shrink-0' />
+                    {t('edit')}
+                  </Link>
+                </div>
                 <p className='flex items-center gap-1 text-sm leading-6 text-grayish-400'>
                   <ReservationSummaryCalenderIcon className='size-[22px] shrink-0' />
                   {t('dateRange', {
@@ -360,8 +437,7 @@ export default function ReservationSummaryPage() {
               )}
               <div className='mt-6 flex justify-end'>
                 <SubmitButton
-                  type='button'
-                  onClick={confirmReservation}
+                  type='submit'
                   isSubmitting={isConfirming}
                   disabled={
                     isConfirming || checkout.isSuccess || summary.isFetching
@@ -371,7 +447,7 @@ export default function ReservationSummaryPage() {
                   {t('confirm')}
                 </SubmitButton>
               </div>
-            </>
+            </form>
           )}
         </section>
       </div>
