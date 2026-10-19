@@ -7,10 +7,14 @@ import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { format, parseISO } from 'date-fns';
-import { CalendarDays, SquarePen, Star } from 'lucide-react';
+import { ChevronLeft, Star } from 'lucide-react';
 
 import { useMutation } from '@tanstack/react-query';
 
+import EditIcon from '@/components/icons/EditIcon';
+import GmailIcon from '@/components/icons/GmailIcon';
+import PhoneIcon from '@/components/icons/PhoneIcon';
+import ReservationSummaryCalenderIcon from '@/components/icons/ReservationSummaryCalenderIcon';
 import Spinner from '@/components/shared/Spinner';
 import SubmitButton from '@/components/shared/SubmitButton';
 import { Button } from '@/components/ui/button';
@@ -50,6 +54,9 @@ export default function ReservationSummaryPage() {
   const [isConfirming, setIsConfirming] = useState(false);
   const confirming = useRef(false);
   const editHref = selection ? getReservationEditHref(selection) : '/';
+  const backHref = data
+    ? `/properties/${encodeURIComponent(data.property.id)}`
+    : '/';
 
   const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const money = (amount: number) =>
@@ -143,11 +150,27 @@ export default function ReservationSummaryPage() {
 
   return (
     <div
-      className='min-h-[70vh] w-full bg-grayish-30 p-3 text-grayish-900'
+      className='min-h-screen w-full bg-grayish-30 px-4 pb-20 pt-7 text-grayish-900 sm:px-[42px]'
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
-      <div className='mx-auto w-full max-w-[708px]'>
-        <h1 className='sr-only'>{t('title')}</h1>
+      <header className='flex flex-col items-start gap-4'>
+        <Link
+          href={backHref}
+          aria-label={t('back')}
+          aria-disabled={isConfirming || checkout.isSuccess}
+          onClick={(event) => {
+            if (isConfirming || checkout.isSuccess) event.preventDefault();
+          }}
+          className='flex size-[38px] items-center justify-center rounded-full border border-grayish-900 transition-colors hover:bg-grayish-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 aria-disabled:pointer-events-none aria-disabled:opacity-50'
+        >
+          <ChevronLeft
+            className='size-4 rtl:rotate-180'
+            aria-hidden
+          />
+        </Link>
+        <h1 className='text-[28px] font-medium leading-9'>{t('title')}</h1>
+      </header>
+      <div className='mx-auto mt-11 w-full max-w-[708px]'>
         <section
           aria-label={t('details')}
           className='w-full rounded-3xl bg-white px-4 pb-[22px] pt-7 sm:px-[22px]'
@@ -201,7 +224,7 @@ export default function ReservationSummaryPage() {
                   }}
                   className='me-4 flex items-center gap-1 text-sm underline underline-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50'
                 >
-                  <SquarePen className='size-4' />
+                  <EditIcon className='size-4 shrink-0' />
                   {t('edit')}
                 </Link>
               </div>
@@ -258,11 +281,11 @@ export default function ReservationSummaryPage() {
                   <bdi>{data.guest.name || t('notProvided')}</bdi>
                 </p>
                 <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
-                  <ReservationSummaryIcon name='phone' />
+                  <PhoneIcon className='size-[22px] shrink-0' />
                   <bdi dir='ltr'>{data.guest.phone || t('notProvided')}</bdi>
                 </p>
                 <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
-                  <ReservationSummaryIcon name='email' />
+                  <GmailIcon className='size-[22px] shrink-0' />
                   <bdi
                     className='break-all'
                     dir='ltr'
@@ -276,10 +299,7 @@ export default function ReservationSummaryPage() {
                   {t('checkInOut')}
                 </h3>
                 <p className='flex items-center gap-1 text-sm leading-6 text-grayish-400'>
-                  <CalendarDays
-                    className='size-[22px] shrink-0'
-                    aria-hidden
-                  />
+                  <ReservationSummaryCalenderIcon className='size-[22px] shrink-0' />
                   {t('dateRange', {
                     checkIn: date(data.stay.checkInDate),
                     checkOut: date(data.stay.checkOutDate),
