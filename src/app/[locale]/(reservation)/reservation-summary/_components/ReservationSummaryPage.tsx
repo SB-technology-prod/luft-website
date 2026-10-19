@@ -6,23 +6,20 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { parseISO } from 'date-fns';
-import {
-  ArrowLeft,
-  CalendarDays,
-  Mail,
-  Pencil,
-  Phone,
-  Star,
-  UserRound,
-  UsersRound,
-} from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { ChevronLeft, Star } from 'lucide-react';
 
 import { useMutation } from '@tanstack/react-query';
 
+import EditIcon from '@/components/icons/EditIcon';
+import GmailIcon from '@/components/icons/GmailIcon';
+import PhoneIcon from '@/components/icons/PhoneIcon';
+import ReservationSummaryCalenderIcon from '@/components/icons/ReservationSummaryCalenderIcon';
 import Spinner from '@/components/shared/Spinner';
 import SubmitButton from '@/components/shared/SubmitButton';
 import { Button } from '@/components/ui/button';
+
+import ReservationSummaryIcon from './ReservationSummaryIcon';
 
 import { useReservationSummary } from '@/hooks/useReservationSummary';
 import useSession from '@/hooks/useSession';
@@ -35,7 +32,6 @@ import { Link, usePathname } from '@/i18n/routing';
 export default function ReservationSummaryPage() {
   const locale = useLocale();
   const t = useTranslations('reservationSummary');
-  const propertyT = useTranslations('pages.propertyDetails.propertyInfo');
   const params = useSearchParams();
   const pathname = usePathname();
   const session = useSession();
@@ -58,20 +54,41 @@ export default function ReservationSummaryPage() {
   const [isConfirming, setIsConfirming] = useState(false);
   const confirming = useRef(false);
   const editHref = selection ? getReservationEditHref(selection) : '/';
+  const backHref = data
+    ? `/properties/${encodeURIComponent(data.property.id)}`
+    : '/';
 
   const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const money = (amount: number) =>
     new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: summary.data!.price.currency,
+      currencyDisplay: 'symbol',
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
-    }).format(amount);
-  const date = (value: string) =>
-    new Intl.DateTimeFormat(locale, {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }).format(parseISO(value.slice(0, 10)));
+    })
+      .formatToParts(amount)
+      .map((part, index, parts) => {
+        if (part.type !== 'currency') return part.value;
+        if (parts[index + 1]?.type === 'integer') return `${part.value} `;
+        if (['integer', 'fraction'].includes(parts[index - 1]?.type))
+          return ` ${part.value}`;
+        return part.value;
+      })
+      .join('');
+  const date = (value: string) => {
+    const parsed = parseISO(value.slice(0, 10));
+    const showYear =
+      data?.stay.checkInDate.slice(0, 4) !==
+      data?.stay.checkOutDate.slice(0, 4);
+    return locale === 'en'
+      ? format(parsed, showYear ? 'do MMMM yyyy' : 'do MMMM')
+      : new Intl.DateTimeFormat(locale, {
+          day: 'numeric',
+          month: 'long',
+          ...(showYear ? { year: 'numeric' } : {}),
+        }).format(parsed);
+  };
 
   async function confirmReservation() {
     if (
@@ -133,21 +150,30 @@ export default function ReservationSummaryPage() {
 
   return (
     <div
-      className='min-h-[70vh] w-full bg-grayish-30 py-6 text-grayish-900 md:py-8'
+      className='min-h-screen w-full bg-grayish-30 px-4 pb-20 pt-7 text-grayish-900 sm:px-[42px]'
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
-      <div className='container'>
+      <header className='flex flex-col items-start gap-4'>
         <Link
-          href={editHref}
+          href={backHref}
           aria-label={t('back')}
-          className='mb-4 flex size-9 items-center justify-center rounded-full border border-grayish-900'
+          aria-disabled={isConfirming || checkout.isSuccess}
+          onClick={(event) => {
+            if (isConfirming || checkout.isSuccess) event.preventDefault();
+          }}
+          className='flex size-[38px] items-center justify-center rounded-full border border-grayish-900 transition-colors hover:bg-grayish-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 aria-disabled:pointer-events-none aria-disabled:opacity-50'
         >
-          <ArrowLeft className='size-4 rtl:rotate-180' />
+          <ChevronLeft
+            className='size-4 rtl:rotate-180'
+            aria-hidden
+          />
         </Link>
-        <h1 className='text-2xl font-medium'>{t('title')}</h1>
+        <h1 className='text-[28px] font-medium leading-9'>{t('title')}</h1>
+      </header>
+      <div className='mx-auto mt-11 w-full max-w-[708px]'>
         <section
           aria-label={t('details')}
-          className='mx-auto mt-8 w-full max-w-[34rem] rounded-3xl bg-white p-5 md:mt-10 md:p-6'
+          className='w-full rounded-3xl bg-white px-4 pb-[22px] pt-7 sm:px-[22px]'
         >
           {invalid ? (
             <div className='flex flex-col items-start gap-4'>
@@ -185,8 +211,10 @@ export default function ReservationSummaryPage() {
             </div>
           ) : (
             <>
-              <div className='mb-6 flex items-center justify-between gap-4'>
-                <h2 className='text-xl font-medium'>{t('details')}</h2>
+              <div className='mb-7 flex items-center justify-between gap-4'>
+                <h2 className='text-[26px] font-medium leading-[34px]'>
+                  {t('details')}
+                </h2>
                 <Link
                   href={editHref}
                   aria-disabled={isConfirming || checkout.isSuccess}
@@ -194,20 +222,20 @@ export default function ReservationSummaryPage() {
                     if (isConfirming || checkout.isSuccess)
                       event.preventDefault();
                   }}
-                  className='flex items-center gap-1 text-sm underline underline-offset-2'
+                  className='me-4 flex items-center gap-1 text-sm underline underline-offset-2 aria-disabled:pointer-events-none aria-disabled:opacity-50'
                 >
-                  <Pencil className='size-4' />
+                  <EditIcon className='size-4 shrink-0' />
                   {t('edit')}
                 </Link>
               </div>
               <div className='flex items-center gap-4 pb-4'>
                 {data.property.imageUrl && (
-                  <div className='relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl max-sm:h-24 max-sm:w-24'>
+                  <div className='relative h-[120px] w-[146px] shrink-0 overflow-hidden rounded-2xl max-sm:h-24 max-sm:w-24'>
                     <Image
                       src={data.property.imageUrl}
                       alt={data.property.name}
                       fill
-                      sizes='112px'
+                      sizes='(max-width: 599px) 96px, 146px'
                       className='object-cover'
                     />
                   </div>
@@ -220,43 +248,44 @@ export default function ReservationSummaryPage() {
                       count: number(data.property.reviewsCount),
                     })}
                   </p>
-                  <h3 className='text-lg font-medium'>{data.property.name}</h3>
-                  <p className='text-sm text-grayish-400'>
-                    {data.property.location}
-                  </p>
-                  <p className='mt-1 flex flex-wrap gap-x-1 text-sm'>
+                  <h3 className='text-lg font-medium leading-7 sm:text-[22px]'>
+                    {data.property.name}
+                  </h3>
+                  <p className='mt-2 flex flex-wrap gap-x-1 text-sm leading-5'>
                     <span>
-                      {propertyT('guests', {
-                        count: number(data.property.maximumGuests),
+                      {t('propertyGuests', {
+                        count: data.property.maximumGuests,
                       })}
                     </span>
                     <span aria-hidden>·</span>
                     <span>
-                      {propertyT('bedrooms', {
-                        count: number(data.property.bedrooms),
+                      {t('bedrooms', {
+                        count: data.property.bedrooms,
                       })}
                     </span>
                     <span aria-hidden>·</span>
                     <span>
-                      {propertyT('bathrooms', {
-                        count: number(data.property.bathrooms),
+                      {t('bathrooms', {
+                        count: data.property.bathrooms,
                       })}
                     </span>
                   </p>
                 </div>
               </div>
               <div className='space-y-2 border-t border-grayish-50 py-4'>
-                <h3 className='font-medium'>{t('guestDetails')}</h3>
-                <p className='flex items-center gap-2 text-grayish-400'>
-                  <UserRound className='size-4 shrink-0' />
+                <h3 className='text-lg font-medium leading-6'>
+                  {t('guestDetails')}
+                </h3>
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <ReservationSummaryIcon name='guest' />
                   <bdi>{data.guest.name || t('notProvided')}</bdi>
                 </p>
-                <p className='flex items-center gap-2 text-grayish-400'>
-                  <Phone className='size-4 shrink-0' />
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <PhoneIcon className='size-[22px] shrink-0' />
                   <bdi dir='ltr'>{data.guest.phone || t('notProvided')}</bdi>
                 </p>
-                <p className='flex items-center gap-2 text-grayish-400'>
-                  <Mail className='size-4 shrink-0' />
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <GmailIcon className='size-[22px] shrink-0' />
                   <bdi
                     className='break-all'
                     dir='ltr'
@@ -265,24 +294,30 @@ export default function ReservationSummaryPage() {
                   </bdi>
                 </p>
               </div>
-              <div className='space-y-2 border-t border-grayish-50 py-4'>
-                <h3 className='font-medium'>{t('checkInOut')}</h3>
-                <p className='flex items-center gap-2 text-sm text-grayish-400'>
-                  <CalendarDays className='size-4 shrink-0' />
+              <div className='space-y-2 border-t border-grayish-50 pb-4 pt-4'>
+                <h3 className='text-lg font-medium leading-6'>
+                  {t('checkInOut')}
+                </h3>
+                <p className='flex items-center gap-1 text-sm leading-6 text-grayish-400'>
+                  <ReservationSummaryCalenderIcon className='size-[22px] shrink-0' />
                   {t('dateRange', {
                     checkIn: date(data.stay.checkInDate),
                     checkOut: date(data.stay.checkOutDate),
                   })}
                 </p>
-                <h3 className='pt-2 font-medium'>{t('totalGuests')}</h3>
-                <p className='flex items-center gap-2 text-grayish-400'>
-                  <UsersRound className='size-4 shrink-0' />
+                <h3 className='pt-2 text-lg font-medium leading-6'>
+                  {t('totalGuests')}
+                </h3>
+                <p className='flex items-center gap-1 text-base leading-6 text-grayish-400'>
+                  <ReservationSummaryIcon name='guests' />
                   {number(data.guests.total)}
                 </p>
               </div>
               <div className='border-t border-grayish-50 pt-4'>
-                <h3 className='mb-2 font-medium'>{t('summary')}</h3>
-                <dl className='space-y-1 text-sm'>
+                <h3 className='mb-2 text-lg font-medium leading-6'>
+                  {t('summary')}
+                </h3>
+                <dl className='space-y-1 text-sm leading-[19px]'>
                   {data.price.items.map((item, index) => (
                     <div
                       key={`${item.type}-${index}`}
@@ -294,19 +329,20 @@ export default function ReservationSummaryPage() {
                               price: money(item.unitPrice),
                               count: item.quantity,
                             })
-                          : item.quantity > 1
-                            ? t('feeWithQuantity', {
-                                description: item.description,
+                          : item.type === 'Tax'
+                            ? item.description || t('taxes')
+                            : t('feePrice', {
+                                price: money(item.unitPrice),
                                 quantity: number(item.quantity),
-                              })
-                            : item.description}
+                                description: item.description,
+                              })}
                       </dt>
                       <dd className='shrink-0'>
                         <bdi>{money(item.total)}</bdi>
                       </dd>
                     </div>
                   ))}
-                  <div className='!mt-3 flex justify-between gap-4 border-t border-grayish-50 pt-3 text-base'>
+                  <div className='!mt-2 flex justify-between gap-4 border-t border-grayish-50 pt-2 text-base leading-6'>
                     <dt>{t('finalPrice')}</dt>
                     <dd>
                       <bdi>{money(data.price.totalAmount)}</bdi>
@@ -330,7 +366,7 @@ export default function ReservationSummaryPage() {
                   disabled={
                     isConfirming || checkout.isSuccess || summary.isFetching
                   }
-                  className='h-12 w-full text-sm sm:w-1/2'
+                  className='h-[52px] w-full text-sm shadow-none sm:w-[49%]'
                 >
                   {t('confirm')}
                 </SubmitButton>

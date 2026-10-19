@@ -12,7 +12,11 @@ export default function LanguageSwitcher() {
   const nextLocale = locale === 'en' ? 'ar' : 'en';
 
   const switchLanguage = () => {
-    router.replace(pathname, { locale: nextLocale });
+    const { search, hash } = window.location;
+    router.replace(`${pathname}${search}${hash}`, {
+      locale: nextLocale,
+      scroll: false,
+    });
   };
 
   return (
