@@ -14,7 +14,7 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
-type ActionResult<T = any> =
+type ActionResult<T = unknown> =
   { success: true; data: T } | { success: false; error: string };
 
 export async function loginAction(
