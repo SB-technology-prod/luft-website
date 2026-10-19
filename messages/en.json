@@ -168,6 +168,18 @@
     "lost": "No internet connection",
     "restored": "Connection restored"
   },
+  "reservationConfirmed": {
+    "title": "Reservation Confirmed",
+    "description": "Your reservation is confirmed. At Luft, we'll take care of everything--just relax and enjoy.",
+    "backToHome": "Back to home",
+    "imageAlt": "Reservation confirmed illustration"
+  },
+  "reservationFailed": {
+    "title": "Reservation Failed",
+    "description": "We couldn't complete your reservation. Please try again or contact us for assistance.",
+    "backToHome": "Back to home",
+    "imageAlt": "Reservation failed illustration"
+  },
   "settings": {
     "title": "Account Settings",
     "description": "Setup and edit your account profile",
@@ -221,13 +233,29 @@
       "reservation": {
         "addDatesTitle": "Add dates for prices",
         "addDatesSubtitle": "Choose your dates and guests to secure this stay.",
-        "forNights": "for {count} nights",
+        "forNights": "for {count, plural, one {# night} other {# nights}}",
         "checkIn": "Check-in",
         "checkOut": "Check-out",
         "addDate": "Add Date",
         "guests": "Guests",
-        "guestsCount": "{count} Guests",
-        "reserve": "Reserve"
+        "guestsCount": "{count, plural, one {# Guest} other {# Guests}}",
+        "reserve": "Reserve",
+        "perNight": "per night",
+        "retry": "Retry",
+        "success": "Your reservation has been submitted successfully",
+        "errors": {
+          "reservationFailed": "Couldn’t create your reservation. Please try again.",
+          "selectDatesAndGuests": "Please select dates and number of guests",
+          "datesUnavailable": "Selected dates are no longer available",
+          "availabilityCheckFailed": "We couldn’t confirm availability. Please try again.",
+          "availabilityLoadFailed": "Couldn’t load availability"
+        },
+        "loginRequired": {
+          "title": "Sign in to reserve",
+          "description": "You need to sign in to complete your reservation. We’ll bring you right back here with your dates saved.",
+          "login": "Log in",
+          "cancel": "Cancel"
+        }
       },
       "reviews": {
         "showAll": "Show all reviews",
@@ -247,7 +275,9 @@
     "wishlist": {
       "title": "Your Wishlist",
       "emptyTitle": "Your wishlist is empty",
-      "emptyDescription": "Browse our homes and save your favorites for later."
+      "emptyDescription": "Browse our homes and save your favorites for later.",
+      "discoverHomes": "Discover Homes",
+      "updateFailed": "We couldn’t update your wishlist. Please try again."
     }
   },
   "sections": {
@@ -282,6 +312,8 @@
       }
     },
     "homeSearch": {
+      "overStay":"Over 100 stay",
+      "guest":"Guest",
       "tabs": {
         "stays": "Stays",
         "services": "Services"
@@ -299,6 +331,15 @@
           "label": "Guests",
           "placeholder": "Select guests number"
         }
+      },
+      "emptySates":{
+        "emptyTitle": "Your Results are empty",
+        "emptyDescription": "Browse our homes and search again for later.",
+        "discoverHomes": "Discover Homes"
+      },
+      "errors":{
+        "couldNotLoadMoreStays":"Could not load more stays.",
+        "retry":"Retry"
       },
       "buttons": {
         "search": "Search"
@@ -399,5 +440,34 @@
       "completed": "Completed",
       "canceled": "Canceled"
     }
+  },
+  "reservationSummary": {
+    "title": "Reservation Summary",
+    "details": "Details",
+    "edit": "Edit",
+    "back": "Back to reservation",
+    "guestDetails": "Guest details",
+    "checkInOut": "Check-in - Check-out",
+    "dateRange": "{checkIn} to {checkOut}",
+    "totalGuests": "Total Guests",
+    "summary": "Summary",
+    "taxes": "Taxes",
+    "finalPrice": "Final Price",
+    "confirm": "Confirm Reservation",
+    "reviews": "{rating} ({count})",
+    "nightlyPrice": "{price} × {count, plural, one {# night} other {# nights}}",
+    "stayTotal": "Stay total · {count, plural, one {# night} other {# nights}}",
+    "feeWithQuantity": "{description} × {quantity}",
+    "notProvided": "Not provided",
+    "loading": "Loading reservation summary...",
+    "loadError": "We couldn’t load your reservation summary. Please try again.",
+    "retry": "Retry",
+    "invalidSelection": "Please choose valid dates and a guest count within the property’s capacity.",
+    "loginRequired": "Please sign in to review your reservation.",
+    "login": "Log in",
+    "paymentUnavailable": "Payment is currently unavailable. Please try again later.",
+    "datesUnavailable": "These dates are no longer available. Please edit your reservation to choose new dates.",
+    "priceChanged": "Your price has changed. Please review the updated summary and confirm again.",
+    "confirmError": "We couldn’t open payment. Please try again or contact us for assistance."
   }
 }

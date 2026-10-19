@@ -85,6 +85,8 @@ export async function apiFetch(
   endpoint: string,
   options: RequestInit = {},
   isAuth: boolean = true,
+  // Pass false for client mutations so a 404 surfaces as an error instead of rendering the not-found page
+  redirectOnNotFound: boolean = true,
 ) {
   const language = await getLanguage();
 
@@ -124,7 +126,7 @@ export async function apiFetch(
   });
 
   if (!res.ok) {
-    if (res.status === 404) {
+    if (res.status === 404 && redirectOnNotFound) {
       notFound();
     }
 
@@ -152,7 +154,7 @@ export async function apiFetch(
       await signOut();
     }
 
-    if (data.statusCode === 404) {
+    if (data.statusCode === 404 && redirectOnNotFound) {
       notFound();
     }
     throw new Error(data?.message, {

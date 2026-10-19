@@ -133,7 +133,7 @@ export default function ProfileForm() {
               image={userData?.profilePicture}
               className='w-fit max-sm:mx-auto'
             />
-            <DeleteAccountBtn />
+            <DeleteAccountBtn className='max-sm:hidden' />
           </div>
 
           <div className='flex w-full flex-wrap gap-6'>

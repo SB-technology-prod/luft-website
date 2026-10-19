@@ -3,12 +3,13 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import CalenderDateRangeIcon from '@/components/icons/CalenderDateRangeIcon';
+import CardIcon from '@/components/icons/CardIcon';
+import Spinner from '@/components/icons/Spinner';
 import StarIcon from '@/components/icons/StarIcon';
 import UsersIcon from '@/components/icons/UsersIcon';
-import ConfirmModal from '@/components/shared/ConfirmModal';
 import {
   Dialog,
   DialogContent,
@@ -17,157 +18,34 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+import StatusBadge from './StatusBadge';
+
 import { useReservationDetails } from '@/hooks/useReservationDetails';
 
 import {
   type ReservationDetails,
   type ReservationListItem,
-  type ReservationStatus,
 } from '@/types/reservations';
 
-import { cn } from '@/lib/utils';
+import {
+  getCancellationContactHref,
+  isUpcomingReservation,
+} from '@/utils/reservations';
 
-// ─── Mastercard Icon ───────────────────────────────────────────────────────────
-
-function MastercardIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox='0 0 38 24'
-      xmlns='http://www.w3.org/2000/svg'
-      role='img'
-      aria-label='Mastercard'
-    >
-      <rect
-        width='38'
-        height='24'
-        rx='4'
-        fill='#252525'
-      />
-      <circle
-        cx='15'
-        cy='12'
-        r='7'
-        fill='#EB001B'
-      />
-      <circle
-        cx='23'
-        cy='12'
-        r='7'
-        fill='#F79E1B'
-      />
-      <path
-        d='M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z'
-        fill='#FF5F00'
-      />
-    </svg>
-  );
-}
-
-// ─── Visa Icon ─────────────────────────────────────────────────────────────────
-
-function VisaIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox='0 0 38 24'
-      xmlns='http://www.w3.org/2000/svg'
-      role='img'
-      aria-label='Visa'
-    >
-      <rect
-        width='38'
-        height='24'
-        rx='4'
-        fill='#1A1F71'
-      />
-      <text
-        x='19'
-        y='17'
-        textAnchor='middle'
-        fill='white'
-        fontSize='12'
-        fontWeight='bold'
-        fontFamily='Arial, sans-serif'
-        letterSpacing='1'
-      >
-        VISA
-      </text>
-    </svg>
-  );
-}
-
-function CardIcon({ type, className }: { type: string; className?: string }) {
-  const lower = type.toLowerCase();
-  if (lower.includes('visa')) return <VisaIcon className={className} />;
-  return <MastercardIcon className={className} />;
-}
-
-// ─── Spinner ───────────────────────────────────────────────────────────────────
-
-function Spinner() {
-  return (
-    <svg
-      className='size-8 animate-spin text-grayish-400'
-      xmlns='http://www.w3.org/2000/svg'
-      fill='none'
-      viewBox='0 0 24 24'
-    >
-      <circle
-        className='opacity-25'
-        cx='12'
-        cy='12'
-        r='10'
-        stroke='currentColor'
-        strokeWidth='4'
-      />
-      <path
-        className='opacity-75'
-        fill='currentColor'
-        d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'
-      />
-    </svg>
-  );
-}
-
-// ─── Status badge ──────────────────────────────────────────────────────────────
-
-const statusStyles: Record<string, string> = {
-  upcoming: 'border border-neutral-900 text-neutral-900 bg-neutral-50',
-  ongoing: 'border border-warning-500 text-warning-600 bg-warning-50',
-  completed: 'border border-success-500 text-success-600 bg-success-50',
-  canceled: 'border border-error-500 text-error-500 bg-error-50',
-};
-
-function StatusBadge({ status }: { status: string }) {
-  const t = useTranslations('reservations.status');
-  const key = status.toLowerCase() as keyof typeof statusStyles;
-  const style = statusStyles[key] ?? statusStyles['upcoming'];
-  const label =
-    key === 'upcoming'
-      ? t('upcoming')
-      : key === 'ongoing'
-        ? t('ongoing')
-        : key === 'completed'
-          ? t('completed')
-          : t('canceled');
-
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full px-3 py-1 text-sm font-medium',
-        style,
-      )}
-    >
-      {label}
-    </span>
-  );
-}
+import { Link } from '@/i18n/routing';
 
 // ─── Date formatting ───────────────────────────────────────────────────────────
 
-function formatDateDisplay(dateStr: string): string {
+function formatDateDisplay(dateStr: string, locale: string): string {
   const date = new Date(dateStr + 'T00:00:00');
+
+  if (locale !== 'en') {
+    return new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'long',
+    }).format(date);
+  }
+
   const day = date.getDate();
   const month = date.toLocaleString('en-US', { month: 'long' });
   const suffix = getDaySuffix(day);
@@ -206,10 +84,7 @@ export default function ReservationDetailsDialog({
   trigger,
 }: ReservationDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
-  const [localStatus, setLocalStatus] = useState<ReservationStatus | null>(
-    null,
-  );
+  const locale = useLocale();
   const t = useTranslations('reservations.details');
 
   const { data, isLoading, isError } = useReservationDetails(
@@ -226,11 +101,10 @@ export default function ReservationDetailsDialog({
   const description = details?.property?.description ?? '';
   const rating = details?.property?.rating ?? 0;
   const reviewsCount = details?.property?.reviewsCount ?? 0;
-  const status = localStatus ?? details?.status ?? reservation.status;
+  const statusId = details?.statusId ?? reservation.statusId;
 
   const checkInDate = details?.stay?.checkInDate ?? reservation.checkInDate;
   const checkOutDate = details?.stay?.checkOutDate ?? reservation.checkOutDate;
-  const numberOfNights = details?.stay?.numberOfNights ?? 0;
 
   const totalGuests = details?.guests?.total ?? 0;
 
@@ -243,20 +117,27 @@ export default function ReservationDetailsDialog({
   const paidAmount = details?.payment?.paidAmount ?? 0;
   const paymentCard = details?.payment?.card;
 
-  // Localize currency symbol: EGP → ج.م
+  const isRtl = locale === 'ar';
+
+  function formatNumber(value: number): string {
+    return new Intl.NumberFormat(locale).format(value);
+  }
+
+  // Localize currency symbol: EGP -> ج.م
   function formatCurrency(amount: number, cur: string): string {
-    const symbol = cur === 'EGP' ? 'ج.م' : cur;
-    return `${amount} ${symbol}`;
+    const symbol = cur === 'EGP' && isRtl ? 'ج.م' : cur;
+    return `${formatNumber(amount)} ${symbol}`;
   }
 
-  const canCancel =
-    status.toLowerCase() !== 'canceled' &&
-    (details?.cancellation?.canCancel ?? false);
+  function formatNightCount(count: number): string {
+    if (isRtl) {
+      return `${formatNumber(count)} ${count === 1 ? 'ليلة' : 'ليالٍ'}`;
+    }
 
-  function handleCancelReservation() {
-    setLocalStatus('Canceled');
-    setIsCancelConfirmOpen(false);
+    return `${formatNumber(count)} ${count === 1 ? 'night' : 'nights'}`;
   }
+
+  const canCancel = isUpcomingReservation(statusId);
 
   function getPriceSummaryItemTotal(
     item: (typeof priceSummaryItems)[0],
@@ -267,19 +148,27 @@ export default function ReservationDetailsDialog({
     return item.total;
   }
 
-  function formatPriceItemLabel(item: (typeof priceSummaryItems)[0]): string {
+  function formatPriceItemLabel(item: (typeof priceSummaryItems)[0]) {
     if (item.type === 'ReservePrice' && item.pricePerNight != null) {
-      const key = item.quantity === 1 ? 'reservePrice' : 'reservePricePlural';
-      return t(key, {
-        price: item.pricePerNight,
-        currency,
-        nights: item.quantity,
-      });
+      return (
+        <span
+          className='inline-flex flex-wrap items-center gap-1'
+          dir='ltr'
+        >
+          <span dir={isRtl ? 'rtl' : 'ltr'}>
+            {formatCurrency(item.pricePerNight, currency)}
+          </span>
+          <span>×</span>
+          <span dir={isRtl ? 'rtl' : 'ltr'}>
+            {formatNightCount(item.quantity)}
+          </span>
+        </span>
+      );
     }
     if (item.quantity > 1) {
       return t('feeWithQuantity', {
         description: item.description,
-        quantity: item.quantity,
+        quantity: formatNumber(item.quantity),
       });
     }
     return item.description;
@@ -293,9 +182,9 @@ export default function ReservationDetailsDialog({
       >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-        <DialogContent className='max-h-[90vh] w-full max-w-[42.5rem] overflow-y-auto rounded-2xl bg-white p-6 sm:rounded-2xl [&>button>svg]:!text-neutral-900'>
-          <DialogHeader className='mb-4'>
-            <DialogTitle className='text-xl font-semibold text-grayish-900'>
+        <DialogContent className='max-h-[calc(100dvh-4.5rem)] w-[calc(100%-2.5rem)] max-w-[42.5rem] overflow-y-auto rounded-[1.75rem] bg-white p-5 pt-6 sm:p-6 md:max-h-[90vh] md:w-full md:rounded-2xl [&>button>svg]:!size-6 [&>button>svg]:!text-neutral-900 md:[&>button>svg]:!size-4 [&>button]:top-8 md:[&>button]:top-4 [&>button]:ltr:left-auto [&>button]:ltr:right-8 md:[&>button]:ltr:right-4 [&>button]:rtl:left-8 [&>button]:rtl:right-auto md:[&>button]:rtl:left-4'>
+          <DialogHeader className='mb-7 pe-10 md:mb-4'>
+            <DialogTitle className='text-start text-2xl font-semibold leading-8 text-grayish-900 md:text-xl md:leading-none'>
               {t('title')}
             </DialogTitle>
           </DialogHeader>
@@ -311,37 +200,40 @@ export default function ReservationDetailsDialog({
           ) : (
             <div className='flex flex-col gap-4'>
               {/* ── Property Info ─────────────────────────────── */}
-              <div className='flex gap-4'>
-                <div className='relative h-28 w-36 shrink-0 overflow-hidden rounded-xl'>
+              <div className='flex flex-col gap-4 md:flex-row'>
+                <div className='relative h-48 w-full shrink-0 overflow-hidden rounded-2xl md:h-28 md:w-36 md:rounded-xl'>
                   <Image
                     src={propertyImage}
                     alt={propertyName}
                     fill
                     className='object-cover'
-                    sizes='144px'
+                    sizes='(max-width: 767px) calc(100vw - 5rem), 144px'
                   />
                 </div>
 
-                <div className='flex flex-col gap-1.5'>
+                <div className='flex flex-col gap-2 md:gap-1.5'>
                   <div className='flex items-center gap-1'>
                     <StarIcon
-                      className='size-4 fill-neutral-400'
+                      className='size-5 fill-neutral-500 md:size-4 md:fill-neutral-400'
                       fill='currentColor'
                     />
-                    <span className='text-sm font-medium text-grayish-900'>
+                    <span className='text-base font-medium text-grayish-500 md:text-sm md:text-grayish-900'>
                       {t('reviews', { rating, count: reviewsCount })}
                     </span>
                   </div>
-                  <h3 className='text-lg font-semibold text-grayish-900'>
+                  <h3 className='text-xl font-semibold leading-7 text-grayish-900 md:text-lg md:leading-normal'>
                     {propertyName}
                   </h3>
                   {description && (
-                    <p className='text-sm leading-relaxed text-grayish-500'>
+                    <p className='text-lg leading-6 text-grayish-500 md:text-sm md:leading-relaxed'>
                       {description}
                     </p>
                   )}
                   <div className='mt-1'>
-                    <StatusBadge status={status} />
+                    <StatusBadge
+                      statusId={statusId}
+                      className='px-3 py-1 text-base leading-6 md:px-2 md:py-0.5 md:text-xs md:leading-5'
+                    />
                   </div>
                 </div>
               </div>
@@ -350,15 +242,15 @@ export default function ReservationDetailsDialog({
 
               {/* ── Check-in / Check-out ──────────────────────── */}
               <div className='flex flex-col gap-2'>
-                <p className='font-medium text-grayish-900'>
+                <p className='text-lg font-medium text-grayish-900 md:text-base'>
                   {t('checkInOut')}
                 </p>
                 <div className='flex items-center gap-2 text-grayish-600'>
-                  <CalenderDateRangeIcon className='size-5 shrink-0' />
-                  <span className='text-sm'>
+                  <CalenderDateRangeIcon className='size-6 shrink-0 md:size-5' />
+                  <span className='text-base md:text-sm'>
                     {t('checkInOutValue', {
-                      checkIn: formatDateDisplay(checkInDate),
-                      checkOut: formatDateDisplay(checkOutDate),
+                      checkIn: formatDateDisplay(checkInDate, locale),
+                      checkOut: formatDateDisplay(checkOutDate, locale),
                     })}
                   </span>
                 </div>
@@ -368,10 +260,12 @@ export default function ReservationDetailsDialog({
 
               {/* ── Guests ────────────────────────────────────── */}
               <div className='flex flex-col gap-2'>
-                <p className='font-medium text-grayish-900'>{t('guests')}</p>
+                <p className='text-lg font-medium text-grayish-900 md:text-base'>
+                  {t('guests')}
+                </p>
                 <div className='flex items-center gap-2 text-grayish-600'>
-                  <UsersIcon className='size-5 shrink-0' />
-                  <span className='text-sm'>
+                  <UsersIcon className='size-6 shrink-0 md:size-5' />
+                  <span className='text-base md:text-sm'>
                     {totalGuests === 1
                       ? t('guestsCount', { count: totalGuests })
                       : t('guestsCountPlural', { count: totalGuests })}
@@ -383,12 +277,14 @@ export default function ReservationDetailsDialog({
 
               {/* ── Price Summary ─────────────────────────────── */}
               <div className='flex flex-col gap-3'>
-                <p className='font-medium text-grayish-900'>{t('summary')}</p>
+                <p className='text-lg font-medium text-grayish-900 md:text-base'>
+                  {t('summary')}
+                </p>
                 <div className='flex flex-col gap-2'>
                   {priceSummaryItems.map((item, index) => (
                     <div
                       key={index}
-                      className='flex items-center justify-between text-sm text-grayish-700'
+                      className='flex items-center justify-between gap-4 text-base text-grayish-700 md:text-sm'
                     >
                       <span>{formatPriceItemLabel(item)}</span>
                       <span>
@@ -399,7 +295,7 @@ export default function ReservationDetailsDialog({
                       </span>
                     </div>
                   ))}
-                  <div className='flex items-center justify-between text-sm text-grayish-700'>
+                  <div className='flex items-center justify-between gap-4 text-base text-grayish-700 md:text-sm'>
                     <span>{t('taxes')}</span>
                     <span>{formatCurrency(taxes, currency)}</span>
                   </div>
@@ -409,7 +305,7 @@ export default function ReservationDetailsDialog({
               <Divider />
 
               {/* ── Final Price ───────────────────────────────── */}
-              <div className='flex items-center justify-between'>
+              <div className='flex items-center justify-between gap-4'>
                 <span className='text-grayish-900'>{t('finalPrice')}</span>
                 <span className='text-grayish-900'>
                   {formatCurrency(finalPrice, currency)}
@@ -420,7 +316,9 @@ export default function ReservationDetailsDialog({
 
               {/* ── Payment ──────────────────────────────────── */}
               <div className='flex flex-col gap-3'>
-                <p className='font-medium text-grayish-900'>{t('payment')}</p>
+                <p className='text-lg font-medium text-grayish-900 md:text-base'>
+                  {t('payment')}
+                </p>
                 <div className='flex flex-col gap-2'>
                   {paymentCard ? (
                     <>
@@ -429,24 +327,24 @@ export default function ReservationDetailsDialog({
                           type={paymentCard.type}
                           className='h-6 w-9 shrink-0 rounded'
                         />
-                        <span className='text-sm font-medium text-grayish-900'>
+                        <span className='text-base font-medium text-grayish-900 md:text-sm'>
                           {t('paymentMethod', {
                             cardType: paymentCard.type,
                             lastFour: paymentCard.lastFourDigits,
                           })}
                         </span>
                       </div>
-                      <p className='text-sm text-grayish-500'>
+                      <p className='text-base text-grayish-500 md:text-sm'>
                         {t('paymentExpiry', { expiry: paymentCard.expiryDate })}
                       </p>
                     </>
                   ) : (
                     <>
-                      <div className='flex items-center justify-between text-sm text-grayish-700'>
+                      <div className='flex items-center justify-between gap-4 text-base text-grayish-700 md:text-sm'>
                         <span>{t('paymentStatus')}</span>
                         <span className='font-medium'>{paymentStatus}</span>
                       </div>
-                      <div className='flex items-center justify-between text-sm text-grayish-700'>
+                      <div className='flex items-center justify-between gap-4 text-base text-grayish-700 md:text-sm'>
                         <span>{t('paidAmount')}</span>
                         <span>{formatCurrency(paidAmount, currency)}</span>
                       </div>
@@ -460,13 +358,15 @@ export default function ReservationDetailsDialog({
                 <>
                   <Divider />
                   <div>
-                    <button
-                      type='button'
+                    <Link
+                      href={getCancellationContactHref(
+                        reservation.reservationId,
+                        propertyName,
+                      )}
                       className='text-sm font-medium text-grayish-900 underline underline-offset-2 transition-colors hover:text-error-500'
-                      onClick={() => setIsCancelConfirmOpen(true)}
                     >
                       {t('cancelReservation')}
-                    </button>
+                    </Link>
                   </div>
                 </>
               )}
@@ -474,19 +374,6 @@ export default function ReservationDetailsDialog({
           )}
         </DialogContent>
       </Dialog>
-
-      <ConfirmModal
-        isOpen={isCancelConfirmOpen}
-        onCancel={() => setIsCancelConfirmOpen(false)}
-        onConfirm={handleCancelReservation}
-        variant='destructive'
-      >
-        <div className='flex flex-col items-center gap-2 text-center'>
-          <h6 className='text-xl font-medium'>
-            {t('cancelReservationConfirm.title')}
-          </h6>
-        </div>
-      </ConfirmModal>
     </>
   );
 }

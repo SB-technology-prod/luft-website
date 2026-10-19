@@ -11,6 +11,8 @@ type StatusLayoutProps = {
   paragraph: string;
   mainImageSrc?: string;
   className?: string;
+  /** Overrides the default "Back To Home" button label */
+  buttonLabel?: string;
 };
 
 const StatusLayout = ({
@@ -18,6 +20,7 @@ const StatusLayout = ({
   paragraph,
   mainImageSrc,
   className,
+  buttonLabel,
 }: StatusLayoutProps) => {
   const params = useParams();
   const isEnglish = params.locale === 'en';
@@ -64,7 +67,7 @@ const StatusLayout = ({
             href={`/`}
             className='w-full'
           >
-            {isEnglish ? 'Back To Home' : 'الرجوع للرئيسية'}
+            {buttonLabel ?? (isEnglish ? 'Back To Home' : 'الرجوع للرئيسية')}
           </Link>
         </Button>
       </div>

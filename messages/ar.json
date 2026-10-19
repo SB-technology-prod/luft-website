@@ -62,7 +62,6 @@
       "phone": {
         "invalid": "رقم هاتف غير صحيح"
       },
-
       "required": "الحقل مطلوب",
       "lettersOnly": "يجب أن يحتوي الاسم على أحرف فقط",
       "invalidInput": "القيمة المدخلة غير صحيحة",
@@ -171,6 +170,18 @@
     "lost": "لا يوجد اتصال بالإنترنت",
     "restored": "تم استعادة الاتصال بالإنترنت"
   },
+  "reservationConfirmed": {
+    "title": "تم تأكيد الحجز",
+    "description": "تم تأكيد حجزك. في Luft، سنتولى الاهتمام بكل شيء--فقط استرخ واستمتع.",
+    "backToHome": "العودة إلى الرئيسية",
+    "imageAlt": "رسم توضيحي لتأكيد الحجز"
+  },
+  "reservationFailed": {
+    "title": "تعذّر إتمام الحجز",
+    "description": "لم نتمكن من إتمام حجزك. يرجى المحاولة مرة أخرى أو التواصل معنا للحصول على المساعدة.",
+    "backToHome": "العودة إلى الرئيسية",
+    "imageAlt": "رسم توضيحي لتعذّر إتمام الحجز"
+  },
   "settings": {
     "title": "إعدادات الحساب",
     "description": "قم بإعداد وتعديل ملفك الشخصي",
@@ -224,13 +235,29 @@
       "reservation": {
         "addDatesTitle": "أضف التواريخ للأسعار",
         "addDatesSubtitle": "اختر تواريخك وعدد ضيوفك لتأمين هذه الإقامة.",
-        "forNights": "لمدة {count} ليالٍ",
+        "forNights": "لمدة {count, plural, one {ليلة واحدة} two {ليلتين} few {# ليالٍ} other {# ليلة}}",
         "checkIn": "الوصول",
         "checkOut": "المغادرة",
         "addDate": "أضف تاريخاً",
         "guests": "الضيوف",
-        "guestsCount": "{count} ضيوف",
-        "reserve": "احجز الآن"
+        "guestsCount": "{count, plural, one {ضيف واحد} two {ضيفان} few {# ضيوف} other {# ضيف}}",
+        "reserve": "احجز الآن",
+        "perNight": "لليلة",
+        "retry": "إعادة المحاولة",
+        "success": "تم إرسال حجزك بنجاح",
+        "errors": {
+          "reservationFailed": "تعذر إنشاء الحجز. يرجى المحاولة مرة أخرى.",
+          "selectDatesAndGuests": "يرجى اختيار التواريخ وعدد الضيوف",
+          "datesUnavailable": "التواريخ المختارة لم تعد متاحة",
+          "availabilityCheckFailed": "تعذر التأكد من التوفر. يرجى المحاولة مرة أخرى.",
+          "availabilityLoadFailed": "تعذر تحميل التوفر"
+        },
+        "loginRequired": {
+          "title": "سجّل الدخول للحجز",
+          "description": "يجب تسجيل الدخول لإتمام حجزك. سنعيدك إلى هذه الصفحة مع حفظ تواريخك.",
+          "login": "تسجيل الدخول",
+          "cancel": "إلغاء"
+        }
       },
       "reviews": {
         "showAll": "عرض جميع التقييمات",
@@ -250,7 +277,9 @@
     "wishlist": {
       "title": "قائمة المفضلة",
       "emptyTitle": "قائمة المفضلة فارغة",
-      "emptyDescription": "استكشف منازلنا واحفظ مفضلاتك لوقت لاحق."
+      "emptyDescription": "استكشف منازلنا واحفظ مفضلاتك لوقت لاحق.",
+      "discoverHomes": "اكتشف المنازل",
+      "updateFailed": "تعذّر تحديث قائمة المفضلة. يرجى المحاولة مرة أخرى."
     }
   },
   "sections": {
@@ -285,6 +314,8 @@
       }
     },
     "homeSearch": {
+      "overStay": "أكثر من 100 إقامة",
+      "guest": "ضبف",
       "tabs": {
         "stays": "إقامات",
         "services": "خدمات"
@@ -302,6 +333,15 @@
           "label": "الضيوف",
           "placeholder": "اختر عدد الضيوف"
         }
+      },
+      "emptySates": {
+        "emptyTitle": "نتائجك فارغة",
+        "emptyDescription": "تصفح منازلنا وابحث مرة أخرى لاحقًا.",
+        "discoverHomes": "اكتشف المنازل"
+      },
+      "errors": {
+        "couldNotLoadMoreStays": "تعذّر تحميل المزيد من الإقامات",
+        "retry": "إعادة المحاولة"
       },
       "buttons": {
         "search": "بحث"
@@ -402,5 +442,34 @@
       "completed": "مكتمل",
       "canceled": "ملغى"
     }
+  },
+  "reservationSummary": {
+    "title": "ملخص الحجز",
+    "details": "التفاصيل",
+    "edit": "تعديل",
+    "back": "العودة إلى الحجز",
+    "guestDetails": "بيانات الضيف",
+    "checkInOut": "تسجيل الوصول - تسجيل المغادرة",
+    "dateRange": "من {checkIn} إلى {checkOut}",
+    "totalGuests": "إجمالي الضيوف",
+    "summary": "ملخص السعر",
+    "taxes": "الضرائب",
+    "finalPrice": "السعر النهائي",
+    "confirm": "تأكيد الحجز",
+    "reviews": "{rating} ({count})",
+    "nightlyPrice": "{price} × {count, plural, zero {# ليلة} one {ليلة واحدة} two {ليلتين} few {# ليالٍ} many {# ليلة} other {# ليلة}}",
+    "stayTotal": "إجمالي الإقامة · {count, plural, zero {# ليلة} one {ليلة واحدة} two {ليلتان} few {# ليالٍ} many {# ليلة} other {# ليلة}}",
+    "feeWithQuantity": "{description} × {quantity}",
+    "notProvided": "غير متوفر",
+    "loading": "جارٍ تحميل ملخص الحجز...",
+    "loadError": "تعذر تحميل ملخص الحجز. يرجى المحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "invalidSelection": "يرجى اختيار تواريخ صالحة وعدد ضيوف ضمن سعة مكان الإقامة.",
+    "loginRequired": "يرجى تسجيل الدخول لمراجعة حجزك.",
+    "login": "تسجيل الدخول",
+    "paymentUnavailable": "الدفع غير متاح حاليًا. يرجى المحاولة لاحقًا.",
+    "datesUnavailable": "هذه التواريخ لم تعد متاحة. يرجى تعديل الحجز لاختيار تواريخ جديدة.",
+    "priceChanged": "تغير سعر الحجز. يرجى مراجعة الملخص المحدث والتأكيد مرة أخرى.",
+    "confirmError": "تعذر الانتقال إلى الدفع. يرجى المحاولة مرة أخرى أو التواصل معنا للمساعدة."
   }
 }
