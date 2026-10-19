@@ -48,9 +48,11 @@ export const trimStringValues = <T>(obj: T): T => {
     if (Array.isArray(obj)) {
       return obj.map(trimStringValues) as unknown as T;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = {};
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         result[key] = trimStringValues((obj as any)[key]);
       }
     }

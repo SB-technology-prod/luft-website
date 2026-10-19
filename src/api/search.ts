@@ -1,6 +1,8 @@
-import { apiFetch } from '@/utils/api';
 import type { ApiResponse } from '@/types';
+import { CitiesApiResponse } from '@/types/cities';
 import type { SearchItem } from '@/types/search';
+
+import { apiFetch } from '@/utils/api';
 
 export const searchQueryKey = 'search';
 
@@ -33,5 +35,5 @@ export const searchProperties = (
   return apiFetch(`api/Property/search-properties?${params.toString()}`);
 };
 
-export const getCitiesOfSearch = (): Promise<any> =>
+export const getCitiesOfSearch = (): Promise<CitiesApiResponse> =>
   apiFetch(`api/Cities/get-all`);

@@ -4,4 +4,6 @@ export type City = {
   nameAr: string;
 };
 
-export type CitiesApiResponse = City[];
+export type CitiesApiResponse = {
+  result: City[];
+};

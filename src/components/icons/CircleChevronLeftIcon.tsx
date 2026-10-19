@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { IconProps } from '@/types';
-
-export default function CircleChevronLeftIcon({ className }: IconProps) {
+export default function CircleChevronLeftIcon() {
   return (
     <svg
       width='40'

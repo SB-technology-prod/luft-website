@@ -23,7 +23,7 @@ export default async function RecommendedProperties() {
         <PropertiesCarousel properties={properties} />
       </div>
     );
-  } catch (error) {
+  } catch {
     return <RecommendedPropertiesError />;
   }
 }

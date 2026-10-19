@@ -5,7 +5,6 @@ import { CardItem } from '@/types/page';
 export default function CardItemPreview({
   title,
   iconUrl,
-  mediaExtension,
 }: CardItem) {
   return (
     <button

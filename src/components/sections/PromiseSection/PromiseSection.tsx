@@ -11,7 +11,6 @@ export default function PromiseSectionPreview({
   description,
   items,
   mediaUrl,
-  mediaExtension,
   mediaPosition,
 }: PromiseSectionRes) {
   return (
