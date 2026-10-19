@@ -20,11 +20,14 @@ export function getReservationSummary(
 
 export function createReservationCheckout(
   reservationId: string,
+  phoneNumber: string,
 ): Promise<ReservationCheckoutApiResponse> {
   return apiFetch(
     `api/payments/reservations/${encodeURIComponent(reservationId)}/checkout`,
     {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber }),
     },
     true,
     false,

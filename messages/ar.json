@@ -394,6 +394,7 @@
     }
   },
   "reservations": {
+    "retry": "إعادة المحاولة",
     "title": "حجوزاتي",
     "tabs": {
       "stays": "الإقامات",
@@ -444,6 +445,11 @@
     }
   },
   "reservationSummary": {
+    "propertyDetails": "تفاصيل مكان الإقامة",
+    "phoneNumber": "رقم الهاتف",
+    "phonePlaceholder": "أدخل رقم الهاتف المحمول",
+    "phoneRequired": "يرجى إدخال رقم الهاتف.",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
     "title": "ملخص الحجز",
     "details": "التفاصيل",
     "edit": "تعديل",
