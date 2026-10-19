@@ -1,11 +1,11 @@
 import { apiFetch } from '@/utils/api';
 import type { ApiResponse } from '@/types';
-import type { wishlistItemApi } from '@/types/wishlist';
+import type { SearchItem } from '@/types/search';
 
 export const searchQueryKey = 'search';
 
 export type SearchPropertiesResult = {
-  items: wishlistItemApi[];
+  items: SearchItem[];
   totalCount: number;
   pageSize: number;
   pageNumber: number;

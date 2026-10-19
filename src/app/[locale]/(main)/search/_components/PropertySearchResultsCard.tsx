@@ -18,12 +18,13 @@ import {
 
 import { PropertySearchResultsCardSkeleton } from './PropertySearchResultsCardSkeleton';
 
-import { wishlistItemApi } from '@/types/wishlist';
+import { SearchItem } from '@/types/search';
 
 import { Link } from '@/i18n/routing';
+import { useDirection } from '@/hooks/useDirection';
 
 interface PropertySearchResultsCardProps {
-    item: wishlistItemApi;
+    item: SearchItem;
 }
 
 export default function PropertySearchResultsCard({
@@ -34,14 +35,16 @@ export default function PropertySearchResultsCard({
     const [activeIndex, setActiveIndex] = useState(0);
 
     const {
-        propertyId,
-        name,
-        description,
+        id,
+        titleEn,
+        titleAr,
+        descriptionEn,
+        descriptionAr,
         pricePerNight,
-        rating,
-        reviewsCount,
         images,
         isWishlisted,
+        reviewsCount,
+        rating,
     } = item;
 
     const onSelect = useCallback((api: CarouselApi) => {
@@ -60,17 +63,18 @@ export default function PropertySearchResultsCard({
 
     // Carousel controls live inside the card link — keep them from navigating
     const preventNavigation = (e: React.MouseEvent) => e.preventDefault();
-
+    const direction = useDirection();
+    const locale = direction === 'rtl' ? 'ar' : 'en';
     return (
         <Link
-            href={`/properties/${propertyId}`}
+            href={`/properties/${id}`}
             className='relative flex w-full min-w-0 flex-col gap-4'
         >
             <AddToWishlistBtn
                 variant='icon'
                 className='absolute end-3 top-3 z-20 md:end-6 md:top-6'
                 isWishlisted={isWishlisted}
-                propertyId={propertyId}
+                propertyId={id}
             />
             {/* Carousel */}
             <Carousel
@@ -131,16 +135,16 @@ export default function PropertySearchResultsCard({
             {/* Info */}
             <div className='flex w-full flex-col gap-2'>
                 <h5
-                    title={name}
+                    title={locale === 'en' ? titleEn : titleAr}
                     className='line-clamp-2 text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'
                 >
-                    {name}
+                    {locale === 'en' ? titleEn : titleAr}
                 </h5>
                 <p
-                    title={description}
+                    title={locale === 'en' ? descriptionEn : descriptionAr}
                     className='truncate leading-[1.3125rem] text-grayish-400'
                 >
-                    {description}
+                    {locale === 'en' ? descriptionEn : descriptionAr}
                 </p>
                 {/* price and rating */}
                 <div className='flex flex-wrap items-center gap-x-1 whitespace-nowrap text-grayish-400'>
