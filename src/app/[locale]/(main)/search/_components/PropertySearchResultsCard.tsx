@@ -44,7 +44,7 @@ export default function PropertySearchResultsCard({
         pricePerNight,
         images,
         isWishlisted,
-        reviewsCount,
+        reviewCount,
         rating,
     } = item;
 
@@ -158,7 +158,7 @@ export default function PropertySearchResultsCard({
                     <div className='flex items-center gap-1 text-lg leading-[1.6875rem]'>
                         <Star className='size-5 shrink-0 fill-grayish-400' />
                         <span>
-                            {rating} ({reviewsCount})
+                            {rating} ({reviewCount})
                         </span>
                     </div>
                 </div>
