@@ -27,8 +27,16 @@ export const reservationsQueryKeys = {
     ] as const,
 };
 
-export const getMyReservations = (): Promise<GetMyReservationsApiResponse> =>
-  apiFetch(`api/reservations/my-reservation`);
+export const getMyReservations = (
+  pageNumber = 1,
+  pageSize = 10,
+): Promise<GetMyReservationsApiResponse> =>
+  apiFetch(
+    `api/reservations/my-reservation?${new URLSearchParams({
+      pageNumber: String(pageNumber),
+      pageSize: String(pageSize),
+    })}`,
+  );
 
 export const getReservationDetails = (
   reservationId: string,

@@ -392,6 +392,7 @@
     }
   },
   "reservations": {
+    "retry": "Retry",
     "title": "My Reservations",
     "tabs": {
       "stays": "Stays",
@@ -442,6 +443,11 @@
     }
   },
   "reservationSummary": {
+    "propertyDetails": "Property details",
+    "phoneNumber": "Phone number",
+    "phonePlaceholder": "Enter mobile number",
+    "phoneRequired": "Please enter your phone number.",
+    "phoneInvalid": "Please enter a valid phone number.",
     "title": "Reservation Summary",
     "details": "Details",
     "edit": "Edit",
