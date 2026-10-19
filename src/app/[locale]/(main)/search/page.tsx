@@ -10,17 +10,7 @@ import { searchProperties, searchQueryKey } from "@/api/search";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import PropertySearchResultsCard from "./_components/PropertySearchResultsCard";
 import { PropertySearchResultsCardSkeleton } from "./_components/PropertySearchResultsCardSkeleton";
-const mapPrices = [
-  { id: 1, lat: 30.0625, lng: 31.2197, price: 300 },
-  { id: 2, lat: 30.052, lng: 31.232, price: 200 },
-  { id: 3, lat: 30.045, lng: 31.205, price: 250 },
-  { id: 4, lat: 30.035, lng: 31.226, price: 120 },
-  { id: 5, lat: 30.021, lng: 31.247, price: 200 },
-  { id: 6, lat: 30.015, lng: 31.216, price: 350 },
-  { id: 7, lat: 30.005, lng: 31.2, price: 350 },
-  { id: 8, lat: 29.978, lng: 31.23, price: 150 },
-  { id: 9, lat: 29.975, lng: 31.267, price: 150 },
-];
+
 export default function SearchResult() {
   const t = useTranslations();
   const searchParams = useSearchParams();
@@ -63,6 +53,19 @@ export default function SearchResult() {
     },
   });
   const items = data?.pages.flatMap((page) => page.result.items) ?? [];
+  const mapPrices = items
+    .filter(
+      (item) =>
+        item.latitude != null &&
+        item.longitude != null &&
+        item.pricePerNight != null,
+    )
+    .map((item, index) => ({
+      id: index + 1,
+      lat: item.latitude,
+      lng: item.longitude,
+      price: item.pricePerNight,
+    }));
 
   useEffect(() => {
     const loadMoreElement = loadMoreRef.current;
@@ -87,7 +90,7 @@ export default function SearchResult() {
     );
   return (
     <main className="min-h-screen w-full bg-[#f7f7f7] px-4 py-6 md:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(380px,1fr)]">
+      <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(380px,1.5fr)]">
         {/* Properties */}
         <section className="min-w-0">
           <div className="mb-5 flex items-center justify-between gap-3">
@@ -122,7 +125,7 @@ export default function SearchResult() {
                 ))
                 : items.map((item) => (
                   <PropertySearchResultsCard
-                    key={item.propertyId}
+                    key={item.id}
                     item={item}
                   />
                 ))}
@@ -155,7 +158,7 @@ export default function SearchResult() {
         <aside className="min-w-0 lg:sticky lg:top-6">
           <PropertySearchMap
             prices={mapPrices}
-            className="h-[420px] sm:h-[520px] lg:h-[calc(100dvh-96px)] lg:min-h-[500px]"
+            className="h-[400px] sm:h-[500px] lg:min-h-[600px]"
           />
         </aside>
       </div>
