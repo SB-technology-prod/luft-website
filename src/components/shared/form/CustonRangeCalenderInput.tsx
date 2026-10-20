@@ -1,5 +1,4 @@
-
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { ar, enUS } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
@@ -23,6 +22,7 @@ import {
 import { useDirection } from '@/hooks/useDirection';
 
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 type CustomCalenderProps = {
   fieldName: string;
@@ -43,6 +43,7 @@ const CustomRangeCalenderInput = ({
   const { isSubmitting } = form.formState;
   const direction = useDirection();
   const locale = direction === 'rtl' ? ar : enUS;
+  const [selectingEnd, setSelectingEnd] = useState(false);
   return (
     <FormField
       control={form.control}
@@ -91,7 +92,30 @@ const CustomRangeCalenderInput = ({
                   dir={direction}
                   mode="range"
                   selected={range}
-                  onSelect={field.onChange}
+                  onSelect={(newRange, selectedDay) => {
+                    if (!selectingEnd || !range?.from) {
+                      field.onChange({
+                        from: selectedDay,
+                        to: addDays(selectedDay, 1),
+                      });
+                      setSelectingEnd(true);
+                      return;
+                    }
+
+                    if (selectedDay > range.from) {
+                      field.onChange({
+                        from: range.from,
+                        to: selectedDay,
+                      });
+                      setSelectingEnd(false);
+                    } else {
+                      field.onChange({
+                        from: selectedDay,
+                        to: addDays(selectedDay, 1),
+                      });
+                      setSelectingEnd(true);
+                    }
+                  }}
                   formatters={{
                     formatCaption: (month) => format(month, 'MMM yyyy', { locale }),
                   }}
