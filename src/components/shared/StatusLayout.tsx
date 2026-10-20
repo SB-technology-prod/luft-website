@@ -66,6 +66,8 @@ const StatusLayout = ({
             src='/svg/rightArrow.svg'
             alt='right arrow'
             className='h-auto w-auto max-sm:hidden'
+            width={24}
+            height={24}
           />
         </div>
 
