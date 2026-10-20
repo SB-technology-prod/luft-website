@@ -74,7 +74,7 @@ const CustomRangeCalenderInput = ({
                     )}
                     disabled={isSubmitting}
                   >
-                    <span className="w-full text-start font-semibold text-grayish-400">
+                    <span className="w-full text-start font-semibold text-grayish-400 pt-1.5">
                       {displayValue || placeholder}
                     </span>
 

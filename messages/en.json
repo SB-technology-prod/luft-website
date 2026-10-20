@@ -342,7 +342,8 @@
         "retry":"Retry"
       },
       "buttons": {
-        "search": "Search"
+        "search": "Search",
+        "dateRequired": "Please select dates first."
       },
       "cities": {
         "placeholder": "Select destination",

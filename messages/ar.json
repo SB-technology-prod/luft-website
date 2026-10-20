@@ -344,7 +344,8 @@
         "retry": "إعادة المحاولة"
       },
       "buttons": {
-        "search": "بحث"
+        "search": "بحث",
+        "dateRequired": "يرجى اختيار التواريخ أولاً."
       },
       "cities": {
         "placeholder": "اختر الوجهة",
