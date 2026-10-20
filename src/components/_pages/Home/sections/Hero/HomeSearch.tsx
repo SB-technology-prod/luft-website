@@ -23,7 +23,7 @@ import { type City } from '@/types/cities';
 import { getCitiesOfSearch } from '@/api/search';
 import { useRouter } from '@/i18n/routing';
 type SearchFormValues = {
-  city: string;
+  cityId: string;
   date: DateRange;
   guestCount: string;
 };
@@ -32,8 +32,6 @@ interface SearchOption {
   label: string;
   value: string;
 }
-
-
 
 export function HomeSearch() {
   const t = useTranslations('sections.homeSearch');
@@ -45,7 +43,7 @@ export function HomeSearch() {
   });
   const handleSearch = (values: SearchFormValues) => {
     const params = new URLSearchParams();
-    if (values.city) params.set('city', values.city);
+    if (values.cityId) params.set('cityId', values.cityId);
     if (values.date.from && values.date.to) {
       params.set(
         'checkInDate',
@@ -67,15 +65,15 @@ export function HomeSearch() {
 
   const guests = [
     { value: '', label: t('guestCounts.placeholder') },
-    ...Array.from({ length: 99 }, (_, i) => ({
+    ...Array.from({ length: 100 }, (_, i) => ({
       value: String(i + 1),
-      label: String(i + 1) + ' ' + t('fields.guests.label'),
+      label: String(i + 1) + ' ' + t('guest'),
     })),
   ];
 
   const form = useForm<SearchFormValues>({
     defaultValues: {
-      city: '',
+      cityId: '',
       date: { from: undefined, to: undefined },
       guestCount: '',
     },
@@ -148,7 +146,7 @@ export function HomeSearch() {
               >
                 <div className="relative min-w-0 flex-1 pe-4">
                   <CustomSelect
-                    fieldName="city"
+                    fieldName="cityId"
                     options={cities.map((option: SearchOption) => ({
                       label: String(option.label),
                       value: String(option.value),
@@ -230,7 +228,7 @@ export function HomeSearch() {
               >
                 <div className="w-full">
                   <CustomSelect
-                    fieldName='city'
+                    fieldName='cityId'
                     key={cities.map((option: SearchOption) => option.value).join(',')}
                     options={cities.map((option: SearchOption) => ({
                       label: String(option.label),

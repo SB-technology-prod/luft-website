@@ -23,7 +23,7 @@ export default function SearchResult() {
   const dateCheckInParam = searchParams.get("checkInDate");
   const dateCheckOutParam = searchParams.get("checkOutDate");
   const guestCountParam = searchParams.get("guestCount");
-  const cityParam = searchParams.get("city");
+  const cityParam = searchParams.get("cityId");
   const [filterOpen, setFilterOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const {
