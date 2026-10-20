@@ -19,7 +19,7 @@ export const searchProperties = (
   guestCount: string,
   checkInDate: string,
   checkOutDate: string,
-  city: string,
+  cityId: string,
   pageNumber = 1,
   pageSize = 10,
 ): Promise<SearchPropertiesResponse> => {
@@ -27,11 +27,14 @@ export const searchProperties = (
     numberOfGuests: guestCount,
     checkInDate,
     checkOutDate,
-    city,
+    cityId,
     pageNumber: String(pageNumber),
     pageSize: String(pageSize),
   });
-
+  if(guestCount) params.set('numberOfGuests', guestCount);
+  if(checkInDate) params.set('checkInDate', checkInDate);
+  if(checkOutDate) params.set('checkOutDate', checkOutDate);
+  if(cityId) params.set('cityId', cityId);
   return apiFetch(`api/Property/search-properties?${params.toString()}`);
 };
 
