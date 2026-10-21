@@ -39,6 +39,7 @@ export type DropdownProps = {
   isOpen?: boolean;
   setIsopen?: SetState<boolean>;
   dir?: Dir;
+  disabled?: boolean;
 };
 
 export type NavLinkProps = {
