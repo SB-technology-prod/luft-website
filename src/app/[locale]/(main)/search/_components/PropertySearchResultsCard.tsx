@@ -151,7 +151,7 @@ export default function PropertySearchResultsCard({
                 <div className='flex flex-wrap items-center gap-x-1 whitespace-nowrap text-grayish-400'>
                     <div className='flex items-center gap-1'>
                         <span className='text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'>
-                            ${pricePerNight}
+                            {t('price', { amount: pricePerNight })}
                         </span>
                         <span className='leading-[1.3125rem]'>{t('night')} ,</span>
                     </div>

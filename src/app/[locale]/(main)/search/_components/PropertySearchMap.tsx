@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { Minus, Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -60,6 +62,7 @@ function ZoomControls() {
 }
 
 function PriceMarkers({ prices }: { prices: PriceMarker[] }) {
+    const t = useTranslations("common");
     const [selectedId, setSelectedId] = useState<number | null>(null);
 
     return (
@@ -79,7 +82,7 @@ function PriceMarkers({ prices }: { prices: PriceMarker[] }) {
                         <div className="relative">
                             <button
                                 type="button"
-                                aria-label={`View stay for $${marker.price} per night`}
+                                aria-label={t("viewStayFor", { amount: marker.price })}
                                 aria-expanded={selected}
                                 className={cn(
                                     "whitespace-nowrap rounded-full border border-neutral-200 px-3 py-1.5 text-xs font-medium shadow-md transition",
@@ -88,13 +91,13 @@ function PriceMarkers({ prices }: { prices: PriceMarker[] }) {
                                         : "bg-white text-neutral-900 hover:scale-105 hover:shadow-lg"
                                 )}
                             >
-                                ${marker.price}
+                                {t("price", { amount: marker.price })}
                             </button>
 
                             {selected && (
                                 <div className="absolute left-1/2 top-full z-20 mt-2 w-36 -translate-x-1/2 rounded-xl bg-white p-3 text-center shadow-xl">
                                     <p className="text-sm font-semibold">
-                                        ${marker.price} / night
+                                        {t("pricePerNight", { amount: marker.price })}
                                     </p>
                                     <p className="mt-1 text-xs text-neutral-500">
                                         Cairo, Egypt
