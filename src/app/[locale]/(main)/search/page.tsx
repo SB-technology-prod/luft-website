@@ -23,7 +23,7 @@ export default function SearchResult() {
   const dateCheckInParam = searchParams.get("checkInDate");
   const dateCheckOutParam = searchParams.get("checkOutDate");
   const guestCountParam = searchParams.get("guestCount");
-  const cityParam = searchParams.get("cityId");
+  const governorateParam = searchParams.get("governorateId");
   const [filterOpen, setFilterOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const {
@@ -40,7 +40,7 @@ export default function SearchResult() {
       guestCountParam,
       dateCheckInParam,
       dateCheckOutParam,
-      cityParam,
+      governorateParam,
     ],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
@@ -48,7 +48,7 @@ export default function SearchResult() {
         guestCountParam ?? "",
         dateCheckInParam ?? "",
         dateCheckOutParam ?? "",
-        cityParam ?? "",
+        governorateParam ?? "",
         pageParam,
       ),
     getNextPageParam: (lastPage) => {
