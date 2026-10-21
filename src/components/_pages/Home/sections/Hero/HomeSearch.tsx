@@ -23,7 +23,7 @@ import { type City } from '@/types/cities';
 import { getCitiesOfSearch } from '@/api/search';
 import { useRouter } from '@/i18n/routing';
 type SearchFormValues = {
-  cityId: string;
+  governorateId: string;
   date: DateRange;
   guestCount: string;
 };
@@ -38,12 +38,12 @@ export function HomeSearch() {
   const router = useRouter();
   const direction = useDirection();
   const { data, isFetching, isLoading } = useQuery({
-    queryKey: ['city'],
+    queryKey: ['governorates'],
     queryFn: getCitiesOfSearch,
   });
   const handleSearch = (values: SearchFormValues) => {
     const params = new URLSearchParams();
-    if (values.cityId) params.set('cityId', values.cityId);
+    if (values.governorateId) params.set('governorateId', values.governorateId);
     if (values.date.from && values.date.to) {
       params.set(
         'checkInDate',
@@ -58,9 +58,9 @@ export function HomeSearch() {
     router.push(`/search?${params.toString()}`);
   };
 
-  const cities = data?.result?.map((city: City) => ({
-    value: city.id,
-    label: direction === 'rtl' ? city.nameAr : city.nameEn,
+  const governorates = data?.result?.map((governorate: City) => ({
+    value: governorate.id,
+    label: direction === 'rtl' ? governorate.nameAr : governorate.nameEn,
   })) || [];
 
   const guests = [
@@ -73,7 +73,7 @@ export function HomeSearch() {
 
   const form = useForm<SearchFormValues>({
     defaultValues: {
-      cityId: '',
+      governorateId: '',
       date: { from: undefined, to: undefined },
       guestCount: '',
     },
@@ -146,8 +146,8 @@ export function HomeSearch() {
               >
                 <div className="relative min-w-0 flex-1 pe-4">
                   <CustomSelect
-                    fieldName="cityId"
-                    options={cities.map((option: SearchOption) => ({
+                    fieldName="governorateId"
+                    options={governorates.map((option: SearchOption) => ({
                       label: String(option.label),
                       value: String(option.value),
                     }))}
@@ -228,9 +228,9 @@ export function HomeSearch() {
               >
                 <div className="w-full">
                   <CustomSelect
-                    fieldName='cityId'
-                    key={cities.map((option: SearchOption) => option.value).join(',')}
-                    options={cities.map((option: SearchOption) => ({
+                    fieldName='governorateId'
+                    key={governorates.map((option: SearchOption) => option.value).join(',')}
+                    options={governorates.map((option: SearchOption) => ({
                       label: String(option.label),
                       value: String(option.value),
                     }))}
