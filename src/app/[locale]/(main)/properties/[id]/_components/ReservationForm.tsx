@@ -55,9 +55,9 @@ const CALENDAR_CLASS_NAMES = {
     'flex h-8 items-center justify-center text-sm font-medium text-grayish-900',
   nav: 'absolute inset-x-4 top-4 z-[1] flex justify-between',
   button_previous:
-    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30 rtl:rotate-180',
+    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30',
   button_next:
-    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30 rtl:rotate-180',
+    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30',
   month_grid: 'w-full border-collapse',
   weekdays: 'flex',
   weekday: 'w-10 text-[0.8rem] font-normal text-grayish-400',
@@ -97,9 +97,6 @@ const hasBookedNight = (from: Date, to: Date, bookedDates: Set<string>) => {
   return false;
 };
 
-const formatPrice = (amount: number) =>
-  `$${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-
 function ReservationForm({
   propertyId,
   maxGuests,
@@ -107,7 +104,13 @@ function ReservationForm({
   variant = 'default',
 }: ReservationFormProps) {
   const t = useTranslations('pages.propertyDetails.reservation');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
+
+  const formatPrice = (amount: number) =>
+    tCommon('price', {
+      amount: amount.toLocaleString(locale, { maximumFractionDigits: 2 }),
+    });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

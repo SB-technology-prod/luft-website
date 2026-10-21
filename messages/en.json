@@ -111,6 +111,9 @@
       "GBP": "GBP"
     },
     "night": "/night",
+    "price": "{amount} EGP",
+    "pricePerNight": "{amount} EGP / night",
+    "viewStayFor": "View stay for {amount} EGP per night",
     "mediaNotSupported": "Media not supported",
     "cantLoadMedia": "Can't load media",
     "noMediaUploaded": "No media uploaded",
