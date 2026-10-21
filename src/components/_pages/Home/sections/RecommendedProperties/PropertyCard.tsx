@@ -65,8 +65,14 @@ export default function PropertyCard({
         {/* price and rating */}
         <div className='flex items-center gap-1 text-grayish-400 max-sm:flex-col max-sm:items-start max-sm:gap-1.5'>
           <div className='flex items-center gap-1 font-medium leading-5 text-grayish-400 md:text-lg lg:text-xl'>
-            {oldPrice && <span className='line-through'>${oldPrice}</span>}
-            <span className='text-grayish-900'>${newPrice}</span>
+            {oldPrice && (
+              <span className='line-through'>
+                {t('price', { amount: oldPrice })}
+              </span>
+            )}
+            <span className='text-grayish-900'>
+              {t('price', { amount: newPrice })}
+            </span>
             <span className='text-base font-normal leading-5'>
               {t('night')}
             </span>

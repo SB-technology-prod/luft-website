@@ -113,6 +113,9 @@
       "GBP": "جنيه إسترليني"
     },
     "night": "/الليلة",
+    "price": "{amount} ج.م",
+    "pricePerNight": "{amount} ج.م / الليلة",
+    "viewStayFor": "عرض الإقامة مقابل {amount} ج.م في الليلة",
     "mediaNotSupported": "الوسائط غير مدعومة",
     "cantLoadMedia": "تعذّر تحميل الوسائط",
     "noMediaUploaded": "لم يتم رفع أي وسائط",
