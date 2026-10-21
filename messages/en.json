@@ -82,7 +82,8 @@
       "exploreMore": "Explore More",
       "next": "Next",
       "edit": "Edit",
-      "add": "Add"
+      "add": "Add",
+      "delete": "Delete"
     },
     "toaster": {
       "emailOtpSent": "OTP is sent to your email",
@@ -103,6 +104,12 @@
     },
     "logout": "Logout",
     "currency": "Currency",
+    "currencies": {
+      "EGP": "EGP",
+      "USD": "USD",
+      "EUR": "EUR",
+      "GBP": "GBP"
+    },
     "night": "/night",
     "mediaNotSupported": "Media not supported",
     "cantLoadMedia": "Can't load media",
