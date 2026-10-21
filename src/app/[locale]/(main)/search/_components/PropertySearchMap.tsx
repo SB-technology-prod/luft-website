@@ -88,7 +88,7 @@ function PriceMarkers({ prices }: { prices: PriceMarker[] }) {
                                         : "bg-white text-neutral-900 hover:scale-105 hover:shadow-lg"
                                 )}
                             >
-                                ${marker.price}
+                                EGP{marker.price}
                             </button>
 
                             {selected && (
