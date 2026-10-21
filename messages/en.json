@@ -103,6 +103,12 @@
     },
     "logout": "Logout",
     "currency": "Currency",
+    "currencies": {
+      "EGP": "EGP",
+      "USD": "USD",
+      "EUR": "EUR",
+      "GBP": "GBP"
+    },
     "night": "/night",
     "mediaNotSupported": "Media not supported",
     "cantLoadMedia": "Can't load media",

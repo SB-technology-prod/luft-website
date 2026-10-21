@@ -21,6 +21,7 @@ export default function Dropdown({
   isOpen,
   setIsopen,
   dir,
+  disabled,
 }: DropdownProps) {
   return (
     <DropdownMenu
@@ -28,7 +29,10 @@ export default function Dropdown({
       onOpenChange={setIsopen}
       dir={dir}
     >
-      <DropdownMenuTrigger className={triggerClassName}>
+      <DropdownMenuTrigger
+        className={triggerClassName}
+        disabled={disabled}
+      >
         {trigger}
       </DropdownMenuTrigger>
       <DropdownMenuContent
