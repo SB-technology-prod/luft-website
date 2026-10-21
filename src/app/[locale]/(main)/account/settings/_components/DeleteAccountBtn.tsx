@@ -21,6 +21,7 @@ export default function DeleteAccountBtn({
   className?: string;
 }) {
   const t = useTranslations('settings');
+  const tButtons = useTranslations('common.buttons');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const { mutate, isPending } = useMutation({
@@ -52,6 +53,7 @@ export default function DeleteAccountBtn({
         onConfirm={() => mutate()}
         isActionsDisabled={isPending}
         variant='destructive'
+        confirmLabel={tButtons('delete')}
       >
         <div className='flex flex-col items-center gap-6 text-center'>
           <svg
@@ -68,10 +70,10 @@ export default function DeleteAccountBtn({
             />
           </svg>
           <div className='flex flex-col items-center gap-2 text-center'>
-            <h6 className='text-xl font-medium'>
+            <h6 className='text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'>
               {t('deleteAccountConfirm.title')}
             </h6>
-            <p className='text-grayish-400'>
+            <p className='leading-[1.3125rem] text-grayish-400'>
               {t('deleteAccountConfirm.description')}
             </p>
           </div>

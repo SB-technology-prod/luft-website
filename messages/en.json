@@ -82,7 +82,8 @@
       "exploreMore": "Explore More",
       "next": "Next",
       "edit": "Edit",
-      "add": "Add"
+      "add": "Add",
+      "delete": "Delete"
     },
     "toaster": {
       "emailOtpSent": "OTP is sent to your email",
