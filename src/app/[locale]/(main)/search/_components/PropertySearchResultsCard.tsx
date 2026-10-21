@@ -28,7 +28,7 @@ interface PropertySearchResultsCardProps {
     item: SearchItem;
 }
 
-export default function PropertySearchResultsCard({
+export default function  PropertySearchResultsCard({
     item,
 }: PropertySearchResultsCardProps) {
     const t = useTranslations('common');
@@ -151,7 +151,7 @@ export default function PropertySearchResultsCard({
                 <div className='flex flex-wrap items-center gap-x-1 whitespace-nowrap text-grayish-400'>
                     <div className='flex items-center gap-1'>
                         <span className='text-xl font-medium leading-[1.625rem] tracking-[-0.3px] text-grayish-900'>
-                            ${pricePerNight}
+                            EGP{pricePerNight}
                         </span>
                         <span className='leading-[1.3125rem]'>{t('night')} ,</span>
                     </div>
