@@ -45,6 +45,7 @@ export default function ReservationSummaryPage() {
   const data = summary.data;
   const selection = data
     ? {
+        reservationId: data.reservationId,
         propertyId: data.property.id,
         checkIn: data.stay.checkInDate.slice(0, 10),
         checkOut: data.stay.checkOutDate.slice(0, 10),

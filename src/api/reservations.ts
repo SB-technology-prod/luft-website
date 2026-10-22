@@ -47,11 +47,16 @@ export const getReservationDetails = (
 
 export const getBookedDates = (
   propertyId: string,
+  reservationId: string | null = null,
 ): Promise<GetBookedDatesApiResponse> =>
   apiFetch(
-    `api/reservations/properties/${propertyId}/booked-dates`,
+    `api/reservations/properties/${propertyId}/booked-dates${
+      reservationId
+        ? `?${new URLSearchParams({ reservationId })}`
+        : ''
+    }`,
     undefined,
-    false,
+    !!reservationId,
     false,
   );
 

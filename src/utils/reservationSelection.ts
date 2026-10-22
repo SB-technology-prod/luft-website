@@ -1,6 +1,7 @@
 import { format, isBefore, isValid, parseISO, startOfDay } from 'date-fns';
 
 export type ReservationSelection = {
+  reservationId?: string;
   propertyId: string;
   checkIn: string;
   checkOut: string;
@@ -37,6 +38,9 @@ export function getReservationEditHref(selection: ReservationSelection) {
   return {
     pathname: `/properties/${encodeURIComponent(selection.propertyId)}`,
     query: {
+      ...(selection.reservationId
+        ? { reservationId: selection.reservationId }
+        : {}),
       checkIn: selection.checkIn,
       checkOut: selection.checkOut,
       guests: String(selection.guests),
