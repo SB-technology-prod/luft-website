@@ -18,6 +18,7 @@ export default function CustomPasswordInput(props: CustomPasswordInputProps) {
   return (
     <CustomInputWithIcon
       {...props}
+      autoComplete={props.autoComplete ?? 'current-password'}
       showAllErrors={true}
       type={showPassword ? 'text' : 'password'}
       icon={

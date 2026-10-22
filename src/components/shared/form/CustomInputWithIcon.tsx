@@ -50,6 +50,7 @@ function CustomInputWithIcon({
   showAllErrors,
   onKeyDown,
   autoFocus,
+  autoComplete,
 }: CustomInputWithIconProps) {
   const { formState, control, watch } = useFormContext();
   const { isSubmitting, errors } = formState;
@@ -123,6 +124,7 @@ function CustomInputWithIcon({
                 }
                 onKeyDown={onKeyDown}
                 autoFocus={autoFocus}
+                autoComplete={autoComplete}
               />
               {icon && (
                 <InputGroupAddon
