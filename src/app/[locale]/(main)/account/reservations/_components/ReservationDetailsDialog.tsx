@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -84,6 +84,8 @@ export default function ReservationDetailsDialog({
   trigger,
 }: ReservationDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const descriptionId = useId();
   const locale = useLocale();
   const t = useTranslations('reservations.details');
 
@@ -116,6 +118,10 @@ export default function ReservationDetailsDialog({
   const paymentStatus = details?.payment?.status ?? '';
   const paidAmount = details?.payment?.paidAmount ?? 0;
   const paymentCard = details?.payment?.card;
+  const cardBrand = paymentCard?.brandCardName?.trim() ?? '';
+  const cardLastFour = paymentCard?.cardNumber?.trim().slice(-4) ?? '';
+  const paymentMethod = cardBrand || details?.payment?.method || '';
+  const hasCardDetails = Boolean(cardBrand || cardLastFour);
 
   const isRtl = locale === 'ar';
 
@@ -178,7 +184,10 @@ export default function ReservationDetailsDialog({
     <>
       <Dialog
         open={isOpen}
-        onOpenChange={setIsOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) setIsDescriptionExpanded(false);
+        }}
       >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
 
@@ -211,7 +220,7 @@ export default function ReservationDetailsDialog({
                   />
                 </div>
 
-                <div className='flex flex-col gap-2 md:gap-1.5'>
+                <div className='flex min-w-0 flex-1 flex-col gap-2 md:gap-1.5'>
                   <div className='flex items-center gap-1'>
                     <StarIcon
                       className='size-5 fill-neutral-500 md:size-4 md:fill-neutral-400'
@@ -225,9 +234,23 @@ export default function ReservationDetailsDialog({
                     {propertyName}
                   </h3>
                   {description && (
-                    <p className='text-lg leading-6 text-grayish-500 md:text-sm md:leading-relaxed'>
-                      {description}
-                    </p>
+                    <div>
+                      <p
+                        id={descriptionId}
+                        className={`break-words text-lg leading-6 text-grayish-500 md:text-sm md:leading-relaxed ${isDescriptionExpanded ? '' : 'line-clamp-2'}`}
+                      >
+                        {description}
+                      </p>
+                      <button
+                        type='button'
+                        aria-expanded={isDescriptionExpanded}
+                        aria-controls={descriptionId}
+                        onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}
+                        className='mt-1 text-sm font-medium text-grayish-900 underline underline-offset-2'
+                      >
+                        {isDescriptionExpanded ? t('seeLess') : t('seeMore')}
+                      </button>
+                    </div>
                   )}
                   <div className='mt-1'>
                     <StatusBadge
@@ -320,23 +343,33 @@ export default function ReservationDetailsDialog({
                   {t('payment')}
                 </p>
                 <div className='flex flex-col gap-2'>
-                  {paymentCard ? (
+                  {hasCardDetails ? (
                     <>
                       <div className='flex items-center gap-2.5'>
-                        <CardIcon
-                          type={paymentCard.type}
-                          className='h-6 w-9 shrink-0 rounded'
-                        />
+                        {paymentCard?.icon ? (
+                          <Image
+                            src={paymentCard.icon}
+                            alt=''
+                            width={36}
+                            height={24}
+                            unoptimized
+                            className='h-6 w-9 shrink-0 rounded object-contain'
+                          />
+                        ) : (
+                          <CardIcon
+                            type={cardBrand}
+                            className='h-6 w-9 shrink-0 rounded'
+                          />
+                        )}
                         <span className='text-base font-medium text-grayish-900 md:text-sm'>
-                          {t('paymentMethod', {
-                            cardType: paymentCard.type,
-                            lastFour: paymentCard.lastFourDigits,
-                          })}
+                          {cardLastFour
+                            ? t('paymentMethod', {
+                                cardType: paymentMethod,
+                                lastFour: cardLastFour,
+                              })
+                            : paymentMethod}
                         </span>
                       </div>
-                      <p className='text-base text-grayish-500 md:text-sm'>
-                        {t('paymentExpiry', { expiry: paymentCard.expiryDate })}
-                      </p>
                     </>
                   ) : (
                     <>

@@ -424,6 +424,8 @@
     "submittedOn": "تاريخ الحجز: {date}",
     "details": {
       "title": "تفاصيل الحجز",
+      "seeMore": "عرض المزيد",
+      "seeLess": "عرض أقل",
       "loadError": "فشل تحميل تفاصيل الحجز.",
       "reviews": "{rating} ({count})",
       "checkInOut": "الوصول - المغادرة",

@@ -63,15 +63,17 @@ export type ReservationPriceSummary = {
 };
 
 export type ReservationPaymentCard = {
-  type: string;
-  lastFourDigits: string;
-  expiryDate: string;
+  brandCardName?: string | null;
+  icon?: string | null;
+  cardNumber?: string | null;
 };
 
 export type ReservationPayment = {
   status: string;
+  statusId: number;
   paidAmount: number;
-  card?: ReservationPaymentCard;
+  method?: string | null;
+  card?: ReservationPaymentCard | null;
 };
 
 export type ReservationCancellation = {
