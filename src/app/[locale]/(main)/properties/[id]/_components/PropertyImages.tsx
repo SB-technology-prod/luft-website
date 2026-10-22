@@ -100,9 +100,11 @@ export default function PropertyImages({
                   key={index}
                   onClick={() => openGalleryWithImage(index)}
                 >
-                  <img
+                  <Image
                     src={imageUrl}
                     alt=''
+                    width={500}
+                    height={500}
                     className='h-full w-full rounded-2xl object-cover'
                   />
                 </button>
@@ -139,10 +141,12 @@ export default function PropertyImages({
                     className='flex max-h-full min-w-full justify-center pl-0'
                     key={id + index}
                   >
-                    <img
+                    <Image
                       src={url}
                       alt=''
-                      className='max-h-full min-h-full'
+                      width={1200}
+                      height={800}
+                      className='max-h-full min-h-full object-contain'
                     />
                   </CarouselItem>
                 );
@@ -184,9 +188,11 @@ export default function PropertyImages({
             className='h-[270px] min-w-full pl-0'
             key={coverImage}
           >
-            <img
+            <Image
               src={coverImage}
               alt=''
+              width={500}
+              height={270}
               className='size-full object-cover'
             />
           </CarouselItem>
@@ -198,9 +204,11 @@ export default function PropertyImages({
                 className='h-[270px] min-w-full pl-0'
                 key={id + index}
               >
-                <img
+                <Image
                   src={url}
                   alt=''
+                  width={500}
+                  height={270}
                   className='size-full object-cover'
                 />
               </CarouselItem>
