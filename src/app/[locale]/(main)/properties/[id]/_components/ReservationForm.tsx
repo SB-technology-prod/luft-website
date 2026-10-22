@@ -167,17 +167,6 @@ function ReservationForm({
     isLoggedIn,
   );
 
-  // The stay can run up to (and check out on) the first booked night after check-in
-  const checkOutLimit = useMemo(() => {
-    if (!from) return undefined;
-    const fromKey = toDateKey(from);
-    let limit: string | undefined;
-    bookedDates.forEach((date) => {
-      if (date >= fromKey && (!limit || date < limit)) limit = date;
-    });
-    return limit;
-  }, [from, bookedDates]);
-
   const today = startOfDay(new Date());
 
   const isCheckInDisabled = (date: Date) => {
@@ -189,9 +178,9 @@ function ReservationForm({
     const day = startOfDay(date);
     // Check-out must be after check-in (or after today when no check-in yet)
     if (!isBefore(from ?? today, day)) return true;
-    if (from) return !!checkOutLimit && toDateKey(day) > checkOutLimit;
-    // Without a check-in, the night before check-out must be free
-    return bookedDates.has(toDateKey(addDays(day, -1)));
+    // Disable only the dates returned by the availability endpoint, without
+    // extending a booked date into a blocked range or shifting it by a day.
+    return bookedDates.has(toDateKey(day));
   };
 
   const handleCheckInSelect = (_: DateRange | undefined, triggerDate: Date) => {
