@@ -65,7 +65,7 @@ function CustomSelect({
 
         return (
           <FormItem className={formItemClassName}>
-            <FormLabel className={cn('ms-4 text-sm text-grayish-900', lableClassName)}>
+            <FormLabel className={cn('text-sm text-grayish-900', lableClassName ? lableClassName : 'ms-4')}>
               {label}
               {required && <span className='ms-1'>&#42;</span>}
             </FormLabel>
