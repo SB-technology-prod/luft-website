@@ -114,6 +114,7 @@ function ReservationForm({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const existingReservationId = searchParams.get('reservationId')?.trim() || null;
   const session = useSession();
   const reservation = useReserve();
   const isLoggedIn = !!session;
@@ -157,7 +158,7 @@ function ReservationForm({
   const { from, to } = range;
   const nights = from && to ? differenceInCalendarDays(to, from) : 0;
 
-  const bookedDatesQuery = useBookedDates(propertyId);
+  const bookedDatesQuery = useBookedDates(propertyId, existingReservationId);
   const bookedDates = bookedDatesQuery.data ?? EMPTY_BOOKED_DATES;
 
   const quoteQuery = useQuoteTotal(
@@ -269,6 +270,9 @@ function ReservationForm({
 
     try {
       const response = await reservation.mutateAsync({
+        ...(existingReservationId
+          ? { reservationId: existingReservationId }
+          : {}),
         propertyId,
         checkInDate: toApiDate(from),
         checkOutDate: toApiDate(to),
