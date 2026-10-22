@@ -460,7 +460,7 @@
     "phoneNumber": "Phone number",
     "phonePlaceholder": "Enter mobile number",
     "phoneRequired": "Please enter your phone number.",
-    "phoneInvalid": "Please enter a valid phone number.",
+    "phoneInvalid": "Enter a valid phone number",
     "title": "Reservation Summary",
     "details": "Details",
     "edit": "Edit",
