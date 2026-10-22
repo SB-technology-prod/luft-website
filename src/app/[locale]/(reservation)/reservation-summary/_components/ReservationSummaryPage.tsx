@@ -26,8 +26,9 @@ import useSession from '@/hooks/useSession';
 
 import { getReservationEditHref } from '@/utils/reservationSelection';
 
-import { createReservationCheckout } from '@/api/reservationSummary';
 import { EGYPTIAN_PHONE } from '@/constants/regex';
+
+import { createReservationCheckout } from '@/api/reservationSummary';
 import { Link, usePathname } from '@/i18n/routing';
 
 const normalizeEgyptianPhone = (value: string) =>

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import { useMutation } from '@tanstack/react-query';
@@ -39,10 +40,10 @@ export default function ConfirmLogoutModal({
       isActionsDisabled={isPending || isSuccess}
     >
       <div className='flex flex-col items-center gap-6'>
-        <img
-          src='images/auth/logoutConfirm.png'
+        <Image
+          src='/images/auth/logoutConfirm.png'
           alt='Logout'
-          width={98.73619842529297}
+          width={99}
           height={185}
         />
         <div className='flex flex-col items-center gap-2 text-center'>

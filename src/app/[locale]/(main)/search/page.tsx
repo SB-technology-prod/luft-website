@@ -1,10 +1,8 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
-
-import { SlidersHorizontal } from "lucide-react";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 
