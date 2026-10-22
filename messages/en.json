@@ -422,6 +422,8 @@
     "submittedOn": "Submitted on: {date}",
     "details": {
       "title": "Reservation Details",
+      "seeMore": "See more",
+      "seeLess": "See less",
       "loadError": "Failed to load reservation details.",
       "reviews": "{rating} ({count})",
       "checkInOut": "Check-in - Check-out",

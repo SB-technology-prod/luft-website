@@ -144,6 +144,7 @@ export default function SetPasswordForm({
           <CustomPasswordInput
             required
             fieldName='password'
+            autoComplete='new-password'
             label={tCommon('labels.newPassword')}
             placeholder={tCommon('placeholders.newPassword')}
             onKeyDown={preventSpaces}
@@ -151,6 +152,7 @@ export default function SetPasswordForm({
           <CustomPasswordInput
             required
             fieldName='confirm_password'
+            autoComplete='new-password'
             label={tCommon('labels.confirmPassword')}
             placeholder={tCommon('placeholders.confirmPassword')}
             onKeyDown={preventSpaces}
