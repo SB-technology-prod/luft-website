@@ -153,8 +153,9 @@ export function HomeSearch() {
                     }))}
                     label={t('fields.city.label')}
                     placeholder={t('fields.city.placeholder')}
-                    className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
-                    lableClassName="text-sm font-semibold text-grayish-900"
+                    formItemClassName="space-y-0.5 min-w-0 w-full"
+                    className="!mt-0 h-6 w-full min-w-0 !border-none !bg-transparent !p-0 text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                    lableClassName="text-xs font-semibold text-grayish-900 ms-0 block"
                     disabled={!isDateRangeSelected}
                   />
                 </div>
@@ -163,13 +164,16 @@ export function HomeSearch() {
               <div className="h-10 w-px shrink-0 bg-grayish-50" />
 
               {/* Date */}
-              <div className="relative min-w-0 flex-1 px-4 h-[58px]">
+              <div className="relative min-w-0 flex-1 px-4">
                 <CustomRangeCalenderInput
                   fieldName="date"
                   label={t('fields.date.label')}
                   placeholder={t('fields.date.placeholder')}
                   iconShow={false}
-                  className="!mt-0 h-12 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none space-y-1"
+                  chevronShow={true}
+                  className="space-y-0.5 min-w-0 w-full"
+                  labelClassName="text-xs font-semibold text-grayish-900 ms-0 block"
+                  buttonClassName="h-6 w-full !bg-transparent !p-0 shadow-none"
                 />
               </div>
 
@@ -186,8 +190,9 @@ export function HomeSearch() {
                     options={guests}
                     label={t('fields.guests.label')}
                     placeholder={t('fields.guests.placeholder')}
-                    className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
-                    lableClassName="text-sm font-semibold text-grayish-900"
+                    formItemClassName="space-y-0.5 min-w-0 w-full"
+                    className="!mt-0 h-6 w-full min-w-0 !border-none !bg-transparent !p-0 text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                    lableClassName="text-xs font-semibold text-grayish-900 ms-0 block"
                     disabled={!isDateRangeSelected}
                   />
                 </div>
@@ -221,12 +226,12 @@ export function HomeSearch() {
         >
           <div className='flex flex-col gap-4 md:hidden'>
             {/* City Card */}
-            <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+            <div className='flex min-h-[68px] flex-col justify-center overflow-hidden rounded-full bg-white px-6 py-2.5 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
               <DateRequiredTooltip
                 enabled={!isDateRangeSelected}
                 message={t('buttons.dateRequired')}
               >
-                <div className="w-full">
+                <div className="w-full min-w-0">
                   <CustomSelect
                     fieldName='governorateId'
                     key={governorates.map((option: SearchOption) => option.value).join(',')}
@@ -236,8 +241,9 @@ export function HomeSearch() {
                     }))}
                     label={t('fields.city.label')}
                     placeholder={t('fields.city.placeholder')}
-                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
-                    lableClassName='text-sm font-semibold text-grayish-900'
+                    formItemClassName="space-y-0.5 w-full min-w-0"
+                    className="border-none !bg-transparent !mt-0 !p-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-6 w-full"
+                    lableClassName='text-sm font-semibold text-grayish-900 ms-0 block'
                     disabled={!isDateRangeSelected}
                   />
                 </div>
@@ -245,31 +251,35 @@ export function HomeSearch() {
             </div>
 
             {/* Date Card */}
-            <div className='rounded-full bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+            <div className='flex min-h-[68px] flex-col justify-center overflow-hidden rounded-full bg-white px-6 py-2.5 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
               <CustomRangeCalenderInput
                 fieldName='date'
                 label={t('fields.date.label')}
                 placeholder={t('fields.date.placeholder')}
                 iconShow={false}
-                className="!border-none !bg-white !mt-0 px-4 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-10"
+                chevronShow={true}
+                className="space-y-0.5 w-full min-w-0"
+                labelClassName="text-sm font-semibold text-grayish-900 ms-0 block"
+                buttonClassName="h-6 w-full !bg-transparent !p-0 shadow-none"
               />
             </div>
 
             {/* Guests Card */}
-            <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
+            <div className='flex min-h-[68px] flex-col justify-center overflow-hidden rounded-full bg-white px-6 py-2.5 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
               <DateRequiredTooltip
                 enabled={!isDateRangeSelected}
                 message={t('buttons.dateRequired')}
               >
-                <div className="w-full">
+                <div className="w-full min-w-0">
                   <CustomSelect
                     fieldName='guestCount'
                     key={guests.map((option) => option.value).join(',')}
                     options={guests}
                     label={t('fields.guests.label')}
                     placeholder={t('fields.guests.placeholder')}
-                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
-                    lableClassName='text-sm font-semibold text-grayish-900'
+                    formItemClassName="space-y-0.5 w-full min-w-0"
+                    className="border-none !bg-transparent !mt-0 !p-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-6 w-full"
+                    lableClassName='text-sm font-semibold text-grayish-900 ms-0 block'
                     disabled={!isDateRangeSelected}
                   />
                 </div>

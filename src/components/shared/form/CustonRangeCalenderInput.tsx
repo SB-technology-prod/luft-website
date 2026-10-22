@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { addDays, format } from 'date-fns';
 import { ar, enUS } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, ChevronDown } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 import { useFormContext } from 'react-hook-form';
 
@@ -30,7 +30,10 @@ type CustomCalenderProps = {
   label: string;
   placeholder: string;
   className?: string;
+  labelClassName?: string;
+  buttonClassName?: string;
   iconShow?: boolean;
+  chevronShow?: boolean;
 };
 
 const CustomRangeCalenderInput = ({
@@ -38,13 +41,19 @@ const CustomRangeCalenderInput = ({
   label,
   placeholder,
   className,
+  labelClassName,
+  buttonClassName,
   iconShow = true,
+  chevronShow = false,
 }: CustomCalenderProps) => {
   const form = useFormContext();
   const { isSubmitting } = form.formState;
   const direction = useDirection();
   const locale = direction === 'rtl' ? ar : enUS;
   const [selectingEnd, setSelectingEnd] = useState(false);
+  const selectEndDateText =
+    direction === 'rtl' ? 'اختر تاريخ المغادرة' : 'Select end date';
+
   return (
     <FormField
       control={form.control}
@@ -56,12 +65,17 @@ const CustomRangeCalenderInput = ({
           range?.from && range?.to
             ? `${format(range.from, 'd MMM yyyy', { locale })} - ${format(range.to, 'd MMM yyyy', { locale })}`
             : range?.from
-              ? `${format(range.from, 'd MMM yyyy', { locale })} - Select end date`
+              ? `${format(range.from, 'd MMM yyyy', { locale })} - ${selectEndDateText}`
               : '';
 
         return (
-          <FormItem className={cn('flex flex-col', className)}>
-            <FormLabel className="text-sm font-semibold text-grayish-900">
+          <FormItem className={cn('flex flex-col min-w-0', className)}>
+            <FormLabel
+              className={cn(
+                'text-sm font-semibold text-grayish-900',
+                labelClassName,
+              )}
+            >
               {label}
             </FormLabel>
 
@@ -70,18 +84,28 @@ const CustomRangeCalenderInput = ({
                 <FormControl>
                   <Button
                     variant="link"
+                    type="button"
                     className={cn(
-                      'm-0 h-[48px] w-full justify-start rounded-2xl p-0 text-start font-normal',
-                      !range?.from && 'text-muted-foreground',
+                      'm-0 flex h-auto w-full min-w-0 items-center justify-between p-0 text-start font-normal hover:no-underline focus-visible:ring-0',
+                      buttonClassName,
                     )}
                     disabled={isSubmitting}
                   >
-                    <span className="w-full text-start font-semibold text-grayish-400 pt-1.5">
+                    <span
+                      className={cn(
+                        'block w-full min-w-0 truncate text-start text-sm font-semibold',
+                        displayValue ? 'text-grayish-900' : 'text-grayish-400',
+                      )}
+                      title={displayValue || placeholder}
+                    >
                       {displayValue || placeholder}
                     </span>
 
                     {iconShow && (
-                      <CalendarIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                      <CalendarIcon className="ms-2 h-4 w-4 shrink-0 text-grayish-500 opacity-50" />
+                    )}
+                    {chevronShow && (
+                      <ChevronDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
                     )}
                   </Button>
                 </FormControl>
