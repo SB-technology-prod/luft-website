@@ -64,14 +64,14 @@ function MobileNavSheet({
             <UserLink
               label={t('common.navLinks.reservations')}
               icon={<KeyIcon className='!size-6 fill-grayish-500' />}
-              href='reservations'
+              href='/account/reservations'
             />
             <UserLink
               label={t('common.navLinks.wishlist')}
               icon={
                 <Heart className='!size-6 fill-grayish-500 stroke-grayish-500' />
               }
-              href='whishlist'
+              href='/account/wishlist'
             />
           </div>
           <hr className='text-grayish-100' />
