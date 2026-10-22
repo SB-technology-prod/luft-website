@@ -55,9 +55,9 @@ const CALENDAR_CLASS_NAMES = {
     'flex h-8 items-center justify-center text-sm font-medium text-grayish-900',
   nav: 'absolute inset-x-4 top-4 z-[1] flex justify-between',
   button_previous:
-    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30 rtl:rotate-180',
+    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30',
   button_next:
-    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30 rtl:rotate-180',
+    'flex size-8 items-center justify-center rounded-full hover:bg-grayish-50 disabled:opacity-30',
   month_grid: 'w-full border-collapse',
   weekdays: 'flex',
   weekday: 'w-10 text-[0.8rem] font-normal text-grayish-400',
@@ -97,9 +97,6 @@ const hasBookedNight = (from: Date, to: Date, bookedDates: Set<string>) => {
   return false;
 };
 
-const formatPrice = (amount: number) =>
-  `$${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-
 function ReservationForm({
   propertyId,
   maxGuests,
@@ -107,10 +104,17 @@ function ReservationForm({
   variant = 'default',
 }: ReservationFormProps) {
   const t = useTranslations('pages.propertyDetails.reservation');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
+
+  const formatPrice = (amount: number) =>
+    tCommon('price', {
+      amount: amount.toLocaleString(locale, { maximumFractionDigits: 2 }),
+    });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const existingReservationId = searchParams.get('reservationId')?.trim() || null;
   const session = useSession();
   const reservation = useReserve();
   const isLoggedIn = !!session;
@@ -154,7 +158,7 @@ function ReservationForm({
   const { from, to } = range;
   const nights = from && to ? differenceInCalendarDays(to, from) : 0;
 
-  const bookedDatesQuery = useBookedDates(propertyId);
+  const bookedDatesQuery = useBookedDates(propertyId, existingReservationId);
   const bookedDates = bookedDatesQuery.data ?? EMPTY_BOOKED_DATES;
 
   const quoteQuery = useQuoteTotal(
@@ -163,17 +167,6 @@ function ReservationForm({
     to && toApiDate(to),
     isLoggedIn,
   );
-
-  // The stay can run up to (and check out on) the first booked night after check-in
-  const checkOutLimit = useMemo(() => {
-    if (!from) return undefined;
-    const fromKey = toDateKey(from);
-    let limit: string | undefined;
-    bookedDates.forEach((date) => {
-      if (date >= fromKey && (!limit || date < limit)) limit = date;
-    });
-    return limit;
-  }, [from, bookedDates]);
 
   const today = startOfDay(new Date());
 
@@ -186,9 +179,9 @@ function ReservationForm({
     const day = startOfDay(date);
     // Check-out must be after check-in (or after today when no check-in yet)
     if (!isBefore(from ?? today, day)) return true;
-    if (from) return !!checkOutLimit && toDateKey(day) > checkOutLimit;
-    // Without a check-in, the night before check-out must be free
-    return bookedDates.has(toDateKey(addDays(day, -1)));
+    // Disable only the dates returned by the availability endpoint, without
+    // extending a booked date into a blocked range or shifting it by a day.
+    return bookedDates.has(toDateKey(day));
   };
 
   const handleCheckInSelect = (_: DateRange | undefined, triggerDate: Date) => {
@@ -277,6 +270,9 @@ function ReservationForm({
 
     try {
       const response = await reservation.mutateAsync({
+        ...(existingReservationId
+          ? { reservationId: existingReservationId }
+          : {}),
         propertyId,
         checkInDate: toApiDate(from),
         checkOutDate: toApiDate(to),

@@ -1,5 +1,6 @@
+import { useState } from 'react';
 
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { ar, enUS } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
@@ -41,8 +42,9 @@ const CustomRangeCalenderInput = ({
 }: CustomCalenderProps) => {
   const form = useFormContext();
   const { isSubmitting } = form.formState;
-  const direction  = useDirection();
+  const direction = useDirection();
   const locale = direction === 'rtl' ? ar : enUS;
+  const [selectingEnd, setSelectingEnd] = useState(false);
   return (
     <FormField
       control={form.control}
@@ -52,9 +54,9 @@ const CustomRangeCalenderInput = ({
 
         const displayValue =
           range?.from && range?.to
-            ? `${format(range.from, 'd MMM yyyy',{ locale })} - ${format(range.to, 'd MMM yyyy',{ locale })}`
+            ? `${format(range.from, 'd MMM yyyy', { locale })} - ${format(range.to, 'd MMM yyyy', { locale })}`
             : range?.from
-              ? `${format(range.from, 'd MMM yyyy',{ locale })} - Select end date`
+              ? `${format(range.from, 'd MMM yyyy', { locale })} - Select end date`
               : '';
 
         return (
@@ -74,7 +76,7 @@ const CustomRangeCalenderInput = ({
                     )}
                     disabled={isSubmitting}
                   >
-                    <span className="w-full text-start font-semibold text-grayish-400">
+                    <span className="w-full text-start font-semibold text-grayish-400 pt-1.5">
                       {displayValue || placeholder}
                     </span>
 
@@ -91,13 +93,36 @@ const CustomRangeCalenderInput = ({
                   dir={direction}
                   mode="range"
                   selected={range}
-                  onSelect={field.onChange}
+                  onSelect={(newRange, selectedDay) => {
+                    if (!selectingEnd || !range?.from) {
+                      field.onChange({
+                        from: selectedDay,
+                        to: addDays(selectedDay, 1),
+                      });
+                      setSelectingEnd(true);
+                      return;
+                    }
+
+                    if (selectedDay > range.from) {
+                      field.onChange({
+                        from: range.from,
+                        to: selectedDay,
+                      });
+                      setSelectingEnd(false);
+                    } else {
+                      field.onChange({
+                        from: selectedDay,
+                        to: addDays(selectedDay, 1),
+                      });
+                      setSelectingEnd(true);
+                    }
+                  }}
                   formatters={{
-                    formatCaption: (month) => format(month, 'MMM yyyy',{ locale }),
+                    formatCaption: (month) => format(month, 'MMM yyyy', { locale }),
                   }}
                   initialFocus
                   disabled={{ before: new Date() }}
-                  
+
                 />
               </PopoverContent>
             </Popover>

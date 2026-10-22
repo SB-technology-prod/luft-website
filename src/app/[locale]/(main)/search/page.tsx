@@ -1,10 +1,8 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
-
-import { SlidersHorizontal } from "lucide-react";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 
@@ -23,8 +21,8 @@ export default function SearchResult() {
   const dateCheckInParam = searchParams.get("checkInDate");
   const dateCheckOutParam = searchParams.get("checkOutDate");
   const guestCountParam = searchParams.get("guestCount");
-  const cityParam = searchParams.get("city");
-  const [filterOpen, setFilterOpen] = useState(false);
+  const governorateParam = searchParams.get("governorateId");
+  // const [filterOpen, setFilterOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const {
     data,
@@ -40,7 +38,7 @@ export default function SearchResult() {
       guestCountParam,
       dateCheckInParam,
       dateCheckOutParam,
-      cityParam,
+      governorateParam,
     ],
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
@@ -48,7 +46,7 @@ export default function SearchResult() {
         guestCountParam ?? "",
         dateCheckInParam ?? "",
         dateCheckOutParam ?? "",
-        cityParam ?? "",
+        governorateParam ?? "",
         pageParam,
       ),
     getNextPageParam: (lastPage) => {
@@ -104,7 +102,7 @@ export default function SearchResult() {
               {t("sections.homeSearch.overStay")}
             </h1>
 
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               onClick={() => setFilterOpen((open) => !open)}
@@ -113,16 +111,16 @@ export default function SearchResult() {
             >
               <SlidersHorizontal className="mr-2 size-4" />
               Filter
-            </Button>
+            </Button> */}
           </div>
 
-          {filterOpen && (
+          {/* {filterOpen && (
             <div className="mb-5 rounded-xl border bg-white p-4">
               <p className="text-sm text-neutral-600">
                 Add your existing property filters here.
               </p>
             </div>
-          )}
+          )} */}
 
           <div className="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2">
             {isLoading

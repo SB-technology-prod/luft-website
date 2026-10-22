@@ -31,7 +31,7 @@ export interface SearchItem {
   amenityIds: string[];
   nearbyPlaces: nearbyPlace[];
   isWishlisted: boolean;
-  reviewsCount: number;
+  reviewCount: number;
   rating: number;
 }
 export interface nearbyPlace {

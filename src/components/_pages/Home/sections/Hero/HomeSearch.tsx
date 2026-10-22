@@ -13,6 +13,7 @@ import CustomRangeCalenderInput from '@/components/shared/form/CustonRangeCalend
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
+import { DateRequiredTooltip } from './DateRequiredTooltip';
 import HeroSearchSkelton from './HeroSearchSkelton';
 
 import { useDirection } from '@/hooks/useDirection';
@@ -21,9 +22,8 @@ import { type City } from '@/types/cities';
 
 import { getCitiesOfSearch } from '@/api/search';
 import { useRouter } from '@/i18n/routing';
-
 type SearchFormValues = {
-  city: string;
+  governorateId: string;
   date: DateRange;
   guestCount: string;
 };
@@ -38,12 +38,12 @@ export function HomeSearch() {
   const router = useRouter();
   const direction = useDirection();
   const { data, isFetching, isLoading } = useQuery({
-    queryKey: ['city'],
+    queryKey: ['governorates'],
     queryFn: getCitiesOfSearch,
   });
   const handleSearch = (values: SearchFormValues) => {
     const params = new URLSearchParams();
-    if (values.city) params.set('city', values.city);
+    if (values.governorateId) params.set('governorateId', values.governorateId);
     if (values.date.from && values.date.to) {
       params.set(
         'checkInDate',
@@ -58,22 +58,22 @@ export function HomeSearch() {
     router.push(`/search?${params.toString()}`);
   };
 
-  const cities = data?.result?.map((city: City) => ({
-    value: city.id,
-    label: direction === 'rtl' ? city.nameAr : city.nameEn,
+  const governorates = data?.result?.map((governorate: City) => ({
+    value: governorate.id,
+    label: direction === 'rtl' ? governorate.nameAr : governorate.nameEn,
   })) || [];
 
   const guests = [
     { value: '', label: t('guestCounts.placeholder') },
-    ...Array.from({ length: 99 }, (_, i) => ({
+    ...Array.from({ length: 100 }, (_, i) => ({
       value: String(i + 1),
-      label: String(i + 1) + ' ' + t('fields.guests.label'),
+      label: String(i + 1) + ' ' + t('guest'),
     })),
   ];
 
   const form = useForm<SearchFormValues>({
     defaultValues: {
-      city: '',
+      governorateId: '',
       date: { from: undefined, to: undefined },
       guestCount: '',
     },
@@ -140,25 +140,30 @@ export function HomeSearch() {
             {/* Inputs */}
             <div className="flex min-w-0 flex-1 items-center">
               {/* City */}
-              <div className="relative min-w-0 flex-1 pe-4">
-                <CustomSelect
-                  fieldName="city"
-                  options={cities.map((option: SearchOption) => ({
-                    label: String(option.label),
-                    value: String(option.value),
-                  }))}
-                  label={t('fields.city.label')}
-                  placeholder={t('fields.city.placeholder')}
-                  className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
-                  lableClassName="text-sm font-semibold text-grayish-900"
-                  disabled={!isDateRangeSelected}
-                />
-              </div>
+              <DateRequiredTooltip
+                enabled={!isDateRangeSelected}
+                message={t('buttons.dateRequired')}
+              >
+                <div className="relative min-w-0 flex-1 pe-4">
+                  <CustomSelect
+                    fieldName="governorateId"
+                    options={governorates.map((option: SearchOption) => ({
+                      label: String(option.label),
+                      value: String(option.value),
+                    }))}
+                    label={t('fields.city.label')}
+                    placeholder={t('fields.city.placeholder')}
+                    className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                    lableClassName="text-sm font-semibold text-grayish-900"
+                    disabled={!isDateRangeSelected}
+                  />
+                </div>
+              </DateRequiredTooltip>
 
               <div className="h-10 w-px shrink-0 bg-grayish-50" />
 
               {/* Date */}
-              <div className="relative min-w-0 flex-1 px-4">
+              <div className="relative min-w-0 flex-1 px-4 h-[58px]">
                 <CustomRangeCalenderInput
                   fieldName="date"
                   label={t('fields.date.label')}
@@ -171,27 +176,39 @@ export function HomeSearch() {
               <div className="h-10 w-px shrink-0 bg-grayish-50" />
 
               {/* Guests */}
-              <div className="relative min-w-0 flex-1 px-4">
-                <CustomSelect
-                  fieldName="guestCount"
-                  options={guests}
-                  label={t('fields.guests.label')}
-                  placeholder={t('fields.guests.placeholder')}
-                  className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
-                  lableClassName="text-sm font-semibold text-grayish-900"
-                  disabled={!isDateRangeSelected}
-                />
-              </div>
+              <DateRequiredTooltip
+                enabled={!isDateRangeSelected}
+                message={t('buttons.dateRequired')}
+              >
+                <div className="relative min-w-0 flex-1 pe-4">
+                  <CustomSelect
+                    fieldName="guestCount"
+                    options={guests}
+                    label={t('fields.guests.label')}
+                    placeholder={t('fields.guests.placeholder')}
+                    className="!mt-0 h-10 w-full min-w-0 !border-none !bg-white text-sm font-semibold text-grayish-400 shadow-none focus:ring-0 focus:outline-none"
+                    lableClassName="text-sm font-semibold text-grayish-900"
+                    disabled={!isDateRangeSelected}
+                  />
+                </div>
+              </DateRequiredTooltip>
             </div>
 
             {/* Search Button */}
-            <button
-              className="ml-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800 disabled:cursor-not-allowed disabled:bg-grayish-300"
-              type="submit"
-              disabled={!isDateRangeSelected}
+            <DateRequiredTooltip
+              enabled={!isDateRangeSelected}
+              message={t('buttons.dateRequired')}
             >
-              <Search className="h-5 w-5 text-white" />
-            </button>
+              <div className="ml-2 flex h-12 w-12 shrink-0">
+                <button
+                  className="flex h-full w-full items-center justify-center rounded-full bg-grayish-900 transition-colors hover:bg-grayish-800 disabled:cursor-not-allowed disabled:bg-grayish-300"
+                  type="submit"
+                  disabled={!isDateRangeSelected}
+                >
+                  <Search className="h-5 w-5 text-white" />
+                </button>
+              </div>
+            </DateRequiredTooltip>
           </div>
         </form>
       </Form>
@@ -205,19 +222,26 @@ export function HomeSearch() {
           <div className='flex flex-col gap-4 md:hidden'>
             {/* City Card */}
             <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-              <CustomSelect
-                fieldName='city'
-                key={cities.map((option: SearchOption) => option.value).join(',')}
-                options={cities.map((option: SearchOption) => ({
-                  label: String(option.label),
-                  value: String(option.value),
-                }))}
-                label={t('fields.city.label')}
-                placeholder={t('fields.city.placeholder')}
-                className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
-                lableClassName='text-sm font-semibold text-grayish-900'
-                disabled={!isDateRangeSelected}
-              />
+              <DateRequiredTooltip
+                enabled={!isDateRangeSelected}
+                message={t('buttons.dateRequired')}
+              >
+                <div className="w-full">
+                  <CustomSelect
+                    fieldName='governorateId'
+                    key={governorates.map((option: SearchOption) => option.value).join(',')}
+                    options={governorates.map((option: SearchOption) => ({
+                      label: String(option.label),
+                      value: String(option.value),
+                    }))}
+                    label={t('fields.city.label')}
+                    placeholder={t('fields.city.placeholder')}
+                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
+                    lableClassName='text-sm font-semibold text-grayish-900'
+                    disabled={!isDateRangeSelected}
+                  />
+                </div>
+              </DateRequiredTooltip>
             </div>
 
             {/* Date Card */}
@@ -233,26 +257,40 @@ export function HomeSearch() {
 
             {/* Guests Card */}
             <div className='rounded-full h-16 bg-white px-6 py-2 shadow-[0_2px_16px_rgba(0,0,0,0.08)]'>
-              <CustomSelect
-                fieldName='guestCount'
-                key={guests.map((option) => option.value).join(',')}
-                options={guests}
-                label={t('fields.guests.label')}
-                placeholder={t('fields.guests.placeholder')}
-                className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
-                lableClassName='text-sm font-semibold text-grayish-900'
-                disabled={!isDateRangeSelected}
-              />
+              <DateRequiredTooltip
+                enabled={!isDateRangeSelected}
+                message={t('buttons.dateRequired')}
+              >
+                <div className="w-full">
+                  <CustomSelect
+                    fieldName='guestCount'
+                    key={guests.map((option) => option.value).join(',')}
+                    options={guests}
+                    label={t('fields.guests.label')}
+                    placeholder={t('fields.guests.placeholder')}
+                    className="border-none !bg-white !mt-0 text-sm font-semibold text-grayish-400 focus:outline-none focus:ring-0 shadow-none h-8"
+                    lableClassName='text-sm font-semibold text-grayish-900'
+                    disabled={!isDateRangeSelected}
+                  />
+                </div>
+              </DateRequiredTooltip>
             </div>
 
             {/* Mobile Search Button */}
-            <Button
-              className='mt-2 h-10 disabled:cursor-not-allowed disabled:bg-grayish-300 disabled:text-grayish-400'
-              type='submit'
-              disabled={!isDateRangeSelected}
+            <DateRequiredTooltip
+              enabled={!isDateRangeSelected}
+              message={t('buttons.dateRequired')}
             >
-              {t('buttons.search')}
-            </Button>
+              <div className="mt-2 flex">
+                <Button
+                  className='h-10 w-full disabled:cursor-not-allowed disabled:bg-grayish-300 disabled:text-grayish-400'
+                  type='submit'
+                  disabled={!isDateRangeSelected}
+                >
+                  {t('buttons.search')}
+                </Button>
+              </div>
+            </DateRequiredTooltip>
           </div>
         </form>
       </Form>

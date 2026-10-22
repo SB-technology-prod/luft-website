@@ -8,6 +8,10 @@ import DollarIcon from '@/components/icons/DollarIcon';
 import Dropdown from '@/components/shared/Dropdown';
 import Select from '@/components/shared/Select';
 
+// Only EGP is supported for now; flip this to re-enable switching currencies
+const IS_CURRENCY_SELECTION_ENABLED = false;
+const DEFAULT_CURRENCY = 'EGP';
+
 type CurrencySelectProps = {
   variant?: 'desktop' | 'mobile';
 };
@@ -16,12 +20,13 @@ export default function CurrencySelect({
   variant = 'desktop',
 }: CurrencySelectProps) {
   const t = useTranslations('common');
-  const [value, setValue] = useState(() => {
+  const [storedValue, setValue] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('currency') || 'EGP';
+      return localStorage.getItem('currency') || DEFAULT_CURRENCY;
     }
-    return 'EGP';
+    return DEFAULT_CURRENCY;
   });
+  const value = IS_CURRENCY_SELECTION_ENABLED ? storedValue : DEFAULT_CURRENCY;
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -45,12 +50,9 @@ export default function CurrencySelect({
   }, []);
 
   // Fetch this from the api
-  const currencyOptions = [
-    { label: 'EGP', value: 'EGP' },
-    { label: 'USD', value: 'USD' },
-    { label: 'EUR', value: 'EUR' },
-    { label: 'GBP', value: 'GBP' },
-  ];
+  const currencyOptions = (['EGP', 'USD', 'EUR', 'GBP'] as const).map(
+    (currency) => ({ label: t(`currencies.${currency}`), value: currency }),
+  );
 
   const onCurrencyChange = (value: string) => {
     setValue(value);
@@ -64,8 +66,9 @@ export default function CurrencySelect({
         label={t('currency')}
         options={currencyOptions}
         onChange={onCurrencyChange}
-        placeholder='EGP'
+        placeholder={t(`currencies.${DEFAULT_CURRENCY}`)}
         value={value}
+        disabled={!IS_CURRENCY_SELECTION_ENABLED}
         labelIcon={<DollarIcon className='size-5' />}
       />
     );
@@ -77,8 +80,15 @@ export default function CurrencySelect({
         ...option,
         onClick: () => onCurrencyChange(option.value),
       }))}
-      trigger={<span className='text-grayish-900 underline'>{value}</span>}
+      trigger={
+        <span className='text-grayish-900'>
+          {currencyOptions.find((option) => option.value === value)?.label ??
+            value}
+        </span>
+      }
       className='border-transparent bg-grayish-30 drop-shadow'
+      triggerClassName='disabled:cursor-default'
+      disabled={!IS_CURRENCY_SELECTION_ENABLED}
     />
   );
 }

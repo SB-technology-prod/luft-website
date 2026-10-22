@@ -26,8 +26,13 @@ import useSession from '@/hooks/useSession';
 
 import { getReservationEditHref } from '@/utils/reservationSelection';
 
+import { EGYPTIAN_PHONE } from '@/constants/regex';
+
 import { createReservationCheckout } from '@/api/reservationSummary';
 import { Link, usePathname } from '@/i18n/routing';
+
+const normalizeEgyptianPhone = (value: string) =>
+  value.trim().replace(/[\s().-]/g, '').replace(/^(?:\+20|0020)/, '0');
 
 export default function ReservationSummaryPage() {
   const locale = useLocale();
@@ -40,6 +45,7 @@ export default function ReservationSummaryPage() {
   const data = summary.data;
   const selection = data
     ? {
+        reservationId: data.reservationId,
         propertyId: data.property.id,
         checkIn: data.stay.checkInDate.slice(0, 10),
         checkOut: data.stay.checkOutDate.slice(0, 10),
@@ -94,6 +100,15 @@ export default function ReservationSummaryPage() {
         }).format(parsed);
   };
 
+  const validatePhoneNumber = (value: string) => {
+    const trimmedPhone = value.trim();
+    if (!trimmedPhone) return t('phoneRequired');
+    if (!EGYPTIAN_PHONE.test(normalizeEgyptianPhone(value))) {
+      return t('phoneInvalid');
+    }
+    return undefined;
+  };
+
   async function confirmReservation() {
     if (
       confirming.current ||
@@ -103,14 +118,9 @@ export default function ReservationSummaryPage() {
       !summary.data
     )
       return;
-    const trimmedPhone = phoneNumber.trim();
-    const digits = trimmedPhone.replace(/\D/g, '');
-    if (
-      !/^\+?[\d\s().-]+$/.test(trimmedPhone) ||
-      digits.length < 7 ||
-      digits.length > 15
-    ) {
-      setPhoneError(t(trimmedPhone ? 'phoneInvalid' : 'phoneRequired'));
+    const validationError = validatePhoneNumber(phoneNumber);
+    if (validationError) {
+      setPhoneError(validationError);
       phoneInput.current?.focus();
       return;
     }
@@ -136,7 +146,7 @@ export default function ReservationSummaryPage() {
       }
       const response = await checkout.mutateAsync({
         id: reservationId,
-        phoneNumber: trimmedPhone.replace(/[\s().-]/g, ''),
+        phoneNumber: normalizeEgyptianPhone(phoneNumber),
       });
       if (
         typeof response.result?.checkoutUrl !== 'string' ||
@@ -283,12 +293,13 @@ export default function ReservationSummaryPage() {
                       id='checkout-phone'
                       name='phoneNumber'
                       type='tel'
+                      dir={phoneNumber ? 'ltr' : locale === 'ar' ? 'rtl' : 'ltr'}
                       autoComplete='tel'
                       required
                       value={phoneNumber}
                       onChange={(event) => {
                         setPhoneNumber(event.target.value);
-                        setPhoneError(undefined);
+                        setPhoneError(validatePhoneNumber(event.target.value));
                       }}
                       disabled={isConfirming || checkout.isSuccess}
                       aria-invalid={Boolean(phoneError)}
@@ -296,7 +307,7 @@ export default function ReservationSummaryPage() {
                         phoneError ? 'checkout-phone-error' : undefined
                       }
                       placeholder={t('phonePlaceholder')}
-                      className='h-11 w-full rounded-2xl border border-grayish-100 bg-white pe-3.5 ps-10 text-sm outline-none placeholder:text-grayish-400 focus:border-grayish-900 focus:ring-1 focus:ring-grayish-900 disabled:opacity-50 aria-[invalid=true]:border-error-500'
+                      className={`h-11 w-full rounded-2xl border border-grayish-100 bg-white text-sm outline-none placeholder:text-grayish-400 focus:border-grayish-900 focus:ring-1 focus:ring-grayish-900 disabled:opacity-50 aria-[invalid=true]:border-error-500 ${locale === 'ar' ? 'pl-3.5 pr-10 text-right' : 'pl-10 pr-3.5 text-left'}`}
                     />
                   </div>
                   {phoneError && (

@@ -84,7 +84,8 @@
       "exploreMore": "استكشف المزيد",
       "next": "التالي",
       "edit": "تعديل",
-      "add": "إضافة"
+      "add": "إضافة",
+      "delete": "حذف"
     },
     "toaster": {
       "emailOtpSent": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
@@ -105,7 +106,16 @@
     },
     "logout": "تسجيل الخروج",
     "currency": "العملة",
+    "currencies": {
+      "EGP": "جنيه مصري",
+      "USD": "دولار أمريكي",
+      "EUR": "يورو",
+      "GBP": "جنيه إسترليني"
+    },
     "night": "/الليلة",
+    "price": "{amount} ج.م",
+    "pricePerNight": "{amount} ج.م / الليلة",
+    "viewStayFor": "عرض الإقامة مقابل {amount} ج.م في الليلة",
     "mediaNotSupported": "الوسائط غير مدعومة",
     "cantLoadMedia": "تعذّر تحميل الوسائط",
     "noMediaUploaded": "لم يتم رفع أي وسائط",
@@ -344,7 +354,8 @@
         "retry": "إعادة المحاولة"
       },
       "buttons": {
-        "search": "بحث"
+        "search": "بحث",
+        "dateRequired": "يرجى اختيار التواريخ أولاً."
       },
       "cities": {
         "placeholder": "اختر الوجهة",
@@ -413,6 +424,8 @@
     "submittedOn": "تاريخ الحجز: {date}",
     "details": {
       "title": "تفاصيل الحجز",
+      "seeMore": "عرض المزيد",
+      "seeLess": "عرض أقل",
       "loadError": "فشل تحميل تفاصيل الحجز.",
       "reviews": "{rating} ({count})",
       "checkInOut": "الوصول - المغادرة",
@@ -449,7 +462,7 @@
     "phoneNumber": "رقم الهاتف",
     "phonePlaceholder": "أدخل رقم الهاتف المحمول",
     "phoneRequired": "يرجى إدخال رقم الهاتف.",
-    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+    "phoneInvalid": "أدخل رقم هاتف صحيح",
     "title": "ملخص الحجز",
     "details": "التفاصيل",
     "edit": "تعديل",

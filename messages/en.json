@@ -82,7 +82,8 @@
       "exploreMore": "Explore More",
       "next": "Next",
       "edit": "Edit",
-      "add": "Add"
+      "add": "Add",
+      "delete": "Delete"
     },
     "toaster": {
       "emailOtpSent": "OTP is sent to your email",
@@ -103,7 +104,16 @@
     },
     "logout": "Logout",
     "currency": "Currency",
+    "currencies": {
+      "EGP": "EGP",
+      "USD": "USD",
+      "EUR": "EUR",
+      "GBP": "GBP"
+    },
     "night": "/night",
+    "price": "{amount} EGP",
+    "pricePerNight": "{amount} EGP / night",
+    "viewStayFor": "View stay for {amount} EGP per night",
     "mediaNotSupported": "Media not supported",
     "cantLoadMedia": "Can't load media",
     "noMediaUploaded": "No media uploaded",
@@ -342,7 +352,8 @@
         "retry":"Retry"
       },
       "buttons": {
-        "search": "Search"
+        "search": "Search",
+        "dateRequired": "Please select dates first."
       },
       "cities": {
         "placeholder": "Select destination",
@@ -411,6 +422,8 @@
     "submittedOn": "Submitted on: {date}",
     "details": {
       "title": "Reservation Details",
+      "seeMore": "See more",
+      "seeLess": "See less",
       "loadError": "Failed to load reservation details.",
       "reviews": "{rating} ({count})",
       "checkInOut": "Check-in - Check-out",
@@ -447,7 +460,7 @@
     "phoneNumber": "Phone number",
     "phonePlaceholder": "Enter mobile number",
     "phoneRequired": "Please enter your phone number.",
-    "phoneInvalid": "Please enter a valid phone number.",
+    "phoneInvalid": "Enter a valid phone number",
     "title": "Reservation Summary",
     "details": "Details",
     "edit": "Edit",

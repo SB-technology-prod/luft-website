@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import NextImage from 'next/image';
 import { useTranslations } from 'next-intl';
 
 import { EditIcon, Plus } from 'lucide-react';
@@ -58,9 +59,13 @@ export default function ProfileImgInput({
               {isLoading ? (
                 <Skeleton className='size-[7.5rem] rounded-full' />
               ) : previewImage ? (
-                <img
+                <NextImage
                   src={previewImage}
+                  alt='Profile'
+                  width={120}
+                  height={120}
                   className='size-[7.5rem] rounded-full border border-grayish-50 object-cover'
+                  unoptimized
                 />
               ) : (
                 <UserImg className='flex size-[7.5rem] text-6xl' />
