@@ -355,6 +355,7 @@
         "search": "Search",
         "dateRequired": "Please select dates first."
       },
+      "dateDisclaimer": "Select your check-in and check-out dates first to choose a city and number of guests.",
       "cities": {
         "placeholder": "Select destination",
         "newYork": "New York",

@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 
 import { format } from 'date-fns';
-import { Search } from 'lucide-react';
+import { Info, Search } from 'lucide-react';
 import { type DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 
@@ -184,7 +184,7 @@ export function HomeSearch() {
                 enabled={!isDateRangeSelected}
                 message={t('buttons.dateRequired')}
               >
-                <div className="relative min-w-0 flex-1 pe-4">
+                <div className="relative min-w-0 flex-1 px-4">
                   <CustomSelect
                     fieldName="guestCount"
                     options={guests}
@@ -304,6 +304,14 @@ export function HomeSearch() {
           </div>
         </form>
       </Form>
+
+      {/* Date required disclaimer */}
+      {!isDateRangeSelected && (
+        <p className='flex items-center gap-2 text-sm text-grayish-400 max-md:justify-center md:ps-6'>
+          <Info className='size-4 shrink-0' />
+          {t('dateDisclaimer')}
+        </p>
+      )}
     </div>
 
   );
