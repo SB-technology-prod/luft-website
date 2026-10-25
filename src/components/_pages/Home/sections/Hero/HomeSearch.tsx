@@ -92,7 +92,7 @@ export function HomeSearch() {
 
   return (
     <div className='mx-auto w-full space-y-6'>
-      {/* Tabs */}
+      {/* Tabs: hidden for now, will be enabled later
       <div className='flex items-center gap-2'>
         <button className='flex h-10 items-center gap-2 rounded-full border border-grayish-50 bg-white px-5 text-sm font-medium text-grayish-900'>
           <svg
@@ -128,7 +128,7 @@ export function HomeSearch() {
           </svg>
           {t('tabs.services')}
         </button>
-      </div>
+      </div> */}
 
       {/* Desktop Search Bar */}
       <Form {...form}>

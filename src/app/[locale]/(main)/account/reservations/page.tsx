@@ -6,7 +6,7 @@ import CircleChevronRightIcon from '@/components/icons/CircleChevronRightIcon';
 
 import {
   ReservationsTabsContent,
-  ReservationsTabsList,
+  // ReservationsTabsList,
   ReservationsTabsProvider,
 } from './_components/ReservationsTabs';
 
@@ -38,9 +38,10 @@ export default async function ReservationsPage({
 
         {/* Tabs + content */}
         <div className='flex w-full flex-col gap-6 md:flex-row md:items-start md:gap-[72px] lg:gap-[103px]'>
+          {/* Tabs: hidden for now, will be enabled later
           <div className='shrink-0 md:w-40'>
             <ReservationsTabsList />
-          </div>
+          </div> */}
 
           <div className='min-w-0 flex-1'>
             <ReservationsTabsContent />
