@@ -392,6 +392,14 @@
         "title": "ذا سيرين إسكيب",
         "description": "ملاذ هادئ مع إطلالات خلابة."
       }
+    },
+    "exploreCollections": {
+      "title": "استكشف مجموعاتنا",
+      "subtitle": "إقامات مختارة بعناية ومنظمة في مجموعات لمساعدتك على إيجاد الإقامة المثالية.",
+      "moreCount": "+{count}",
+      "moreCollections": "{count, plural, one {مجموعة أخرى} other {مجموعات أخرى}}",
+      "moreDescription": "اعثر على ما يناسب مزاجك تماماً.",
+      "error": "تعذر تحميل المجموعات"
     }
   },
   "emptyStates": {
