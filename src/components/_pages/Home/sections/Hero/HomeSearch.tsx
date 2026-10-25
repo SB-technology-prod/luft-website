@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 
 import { format } from 'date-fns';
-import { Search } from 'lucide-react';
+import { Info, Search } from 'lucide-react';
 import { type DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 
@@ -92,7 +92,7 @@ export function HomeSearch() {
 
   return (
     <div className='mx-auto w-full space-y-6'>
-      {/* Tabs */}
+      {/* Tabs: hidden for now, will be enabled later
       <div className='flex items-center gap-2'>
         <button className='flex h-10 items-center gap-2 rounded-full border border-grayish-50 bg-white px-5 text-sm font-medium text-grayish-900'>
           <svg
@@ -128,7 +128,7 @@ export function HomeSearch() {
           </svg>
           {t('tabs.services')}
         </button>
-      </div>
+      </div> */}
 
       {/* Desktop Search Bar */}
       <Form {...form}>
@@ -184,7 +184,7 @@ export function HomeSearch() {
                 enabled={!isDateRangeSelected}
                 message={t('buttons.dateRequired')}
               >
-                <div className="relative min-w-0 flex-1 pe-4">
+                <div className="relative min-w-0 flex-1 px-4">
                   <CustomSelect
                     fieldName="guestCount"
                     options={guests}
@@ -304,6 +304,14 @@ export function HomeSearch() {
           </div>
         </form>
       </Form>
+
+      {/* Date required disclaimer */}
+      {!isDateRangeSelected && (
+        <p className='flex items-center gap-2 text-sm text-grayish-400 max-md:justify-center md:ps-6'>
+          <Info className='size-4 shrink-0' />
+          {t('dateDisclaimer')}
+        </p>
+      )}
     </div>
 
   );

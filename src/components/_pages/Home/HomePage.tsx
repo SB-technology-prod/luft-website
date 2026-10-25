@@ -5,6 +5,7 @@ import PromiseSectionPreview from '@/components/sections/PromiseSection/PromiseS
 import TestimonialsSection from '@/components/sections/TestimonialsSection/TestimonialsSection';
 import Loader from '@/components/shared/Loader';
 
+import ExploreCollections from './sections/ExploreCollections/ExploreCollections';
 import HeroSectionPreview from './sections/Hero/HeroSection';
 import RecommendedProperties from './sections/RecommendedProperties/RecommendedProperties';
 
@@ -31,6 +32,9 @@ export default function HomePage({
           />
         </div>
       </div>
+      <Suspense fallback={<Loader />}>
+        <ExploreCollections />
+      </Suspense>
       <div className='container my-20 md:my-[7.5rem] xl:my-[8.75rem]'>
         <PromiseSectionPreview {...promise} />
       </div>

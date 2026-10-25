@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import HandBellIcon from '@/components/icons/HandBellIcon';
+// import HandBellIcon from '@/components/icons/HandBellIcon';
 import HomeIcon from '@/components/icons/HomeIcon';
 import Spinner from '@/components/shared/Spinner';
 import StatusLayout from '@/components/shared/StatusLayout';
@@ -75,13 +75,14 @@ export function ReservationsTabsList() {
         <span>{t('stays')}</span>
       </TabsTrigger>
 
+      {/* Services tab: hidden for now, will be enabled later
       <TabsTrigger
         value='services'
         className='flex flex-1 items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium text-grayish-500 transition-all data-[state=active]:bg-white data-[state=active]:text-grayish-900 data-[state=active]:shadow-sm'
       >
         <HandBellIcon className='size-4' />
         <span>{t('services')}</span>
-      </TabsTrigger>
+      </TabsTrigger> */}
     </TabsList>
   );
 }
@@ -182,12 +183,13 @@ export function ReservationsTabsContent() {
         )}
       </TabsContent>
 
+      {/* Services tab: hidden for now, will be enabled later
       <TabsContent value='services'>
         <div className='flex flex-col items-center justify-center py-16 text-grayish-400'>
           <HandBellIcon className='mb-3 size-10' />
           <p className='text-sm'>{t('emptyServices')}</p>
         </div>
-      </TabsContent>
+      </TabsContent> */}
     </>
   );
 }
