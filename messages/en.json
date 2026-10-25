@@ -318,7 +318,8 @@
       },
       "toast": {
         "success": "Message sent successfully",
-        "error": "Failed to send message"
+        "error": "Failed to send message",
+        "cancellationDisclaimer": "Please fill out the contact form to send a cancellation request."
       }
     },
     "homeSearch": {

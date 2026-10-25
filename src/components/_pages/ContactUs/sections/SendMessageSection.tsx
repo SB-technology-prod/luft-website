@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -60,6 +62,30 @@ export default function SendMessageSection() {
       .max(2000, { message: tSendMessage('validations.max', { max: 2000 }) }),
   });
 
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const hasNotifiedCancellation = useRef(false);
+
+  // only when coming from the cancel reservation flow: bring the form into view and explain why
+  useEffect(() => {
+    if (!isCancellationRequest) return;
+
+    // wait a frame so the navigation scroll-to-top doesn't override ours
+    const frame = requestAnimationFrame(() =>
+      sectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      }),
+    );
+
+    // guard the toast against the effect re-running (e.g. strict mode)
+    if (!hasNotifiedCancellation.current) {
+      hasNotifiedCancellation.current = true;
+      toast.info(tSendMessage('toast.cancellationDisclaimer'));
+    }
+
+    return () => cancelAnimationFrame(frame);
+  }, [isCancellationRequest, tSendMessage]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,7 +109,10 @@ export default function SendMessageSection() {
   });
 
   return (
-    <div className='flex flex-col gap-6 md:gap-8 lg:gap-12'>
+    <div
+      ref={sectionRef}
+      className='flex scroll-mt-28 flex-col gap-6 md:gap-8 lg:gap-12'
+    >
       <h4 className='text-[1.75rem] font-medium leading-9 text-grayish-900'>
         {tSendMessage('title')}
       </h4>
