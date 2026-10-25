@@ -318,7 +318,8 @@
       },
       "toast": {
         "success": "Message sent successfully",
-        "error": "Failed to send message"
+        "error": "Failed to send message",
+        "cancellationDisclaimer": "Please fill out the contact form to send a cancellation request."
       }
     },
     "homeSearch": {
@@ -355,6 +356,7 @@
         "search": "Search",
         "dateRequired": "Please select dates first."
       },
+      "dateDisclaimer": "Select your check-in and check-out dates first to choose a city and number of guests.",
       "cities": {
         "placeholder": "Select destination",
         "newYork": "New York",
@@ -390,6 +392,14 @@
         "title": "The Serene Escape",
         "description": "A peaceful retreat with stunning views."
       }
+    },
+    "exploreCollections": {
+      "title": "Explore Our Collections",
+      "subtitle": "Handpicked stays organized into collections to help you find the perfect one.",
+      "moreCount": "{count}+",
+      "moreCollections": "{count, plural, one {More Collection} other {More Collections}}",
+      "moreDescription": "Find exactly what you’re in the mood for.",
+      "error": "Failed to load collections"
     }
   },
   "emptyStates": {
